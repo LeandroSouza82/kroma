@@ -1,5 +1,11 @@
 import { TIPOS, descreverPagamento, formatarBRL } from "./projectOptions.js";
 import { MANUTENCOES } from "./maintenancePlans.js";
+import {
+  GESTAO_HOSPEDAGEM,
+  CUSTOS_HOSPEDAGEM,
+  TITULARIDADE_HOSPEDAGEM,
+  ENCERRAMENTO_HOSPEDAGEM,
+} from "./hostingOptions.js";
 
 const institucional = TIPOS.find((item) => item.id === "empresarial");
 
@@ -205,6 +211,18 @@ export const PERGUNTAS = [
     answer: [
       "Sim, você pode solicitar somente manutenção. A análise inicial verifica a tecnologia, os acessos e a situação do site antes de confirmar o atendimento.",
       "O pedido de manutenção não adiciona uma taxa de criação. Correções estruturais, migrações e reformulações, se necessárias, são orçadas separadamente antes do início.",
+    ],
+  },
+  {
+    id: "gestao-hospedagem",
+    category: "Domínio e hospedagem",
+    question: "A Kroma Web pode cuidar do domínio e da hospedagem?",
+    answer: [
+      GESTAO_HOSPEDAGEM,
+      CUSTOS_HOSPEDAGEM,
+      TITULARIDADE_HOSPEDAGEM,
+      ENCERRAMENTO_HOSPEDAGEM,
+      "Escolha Quero que a Kroma Web cuide no simulador ou no formulário de contato. Essa preferência acompanha o pedido de proposta e a mensagem do WhatsApp; ela não confirma uma contratação nem gera cobrança.",
     ],
   },
   {

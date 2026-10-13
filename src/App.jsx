@@ -6,6 +6,7 @@ import BentoSolutions from "./components/BentoSolutions";
 import SiteModelsGallery from "./components/SiteModelsGallery";
 import { anexarModeloProposta } from "./utils/siteModelReference";
 import { obterModeloSite } from "./data/siteModels";
+import { anexarHospedagemProposta } from "./data/hostingOptions";
 import CommercialPlans from "./components/CommercialPlans";
 import InteractiveRSVP from "./components/InteractiveRSVP";
 import ProjectCalculator from "./components/ProjectCalculator";
@@ -26,11 +27,15 @@ const propostaInicial = {
 export default function App() {
   const [proposta, setProposta] = useState(propostaInicial);
   const [modeloId, setModeloId] = useState("");
+  const [hospedagemId, setHospedagemId] = useState("");
   const siteUrl =
     typeof window === "undefined"
       ? ""
       : window.location.origin + import.meta.env.BASE_URL;
-  const propostaComModelo = anexarModeloProposta(proposta, modeloId, siteUrl);
+  const propostaCompleta = anexarHospedagemProposta(
+    anexarModeloProposta(proposta, modeloId, siteUrl),
+    hospedagemId,
+  );
   const modelo = modeloId ? obterModeloSite(modeloId) : null;
 
   const solicitarProposta = (dados) =>
@@ -50,13 +55,19 @@ export default function App() {
         />
         <CommercialPlans onSolicitar={solicitarProposta} />
         <InteractiveRSVP />
-        <ProjectCalculator onSolicitar={solicitarProposta} />
+        <ProjectCalculator
+          onSolicitar={solicitarProposta}
+          hospedagemId={hospedagemId}
+          onHospedagemChange={setHospedagemId}
+        />
         <ClientGuide />
         <LeadFormSection
           key={proposta.id}
-          proposta={propostaComModelo}
+          proposta={propostaCompleta}
           modelo={modelo}
           onRemoverModelo={() => setModeloId("")}
+          hospedagemId={hospedagemId}
+          onHospedagemChange={setHospedagemId}
         />
       </main>
       <Footer />

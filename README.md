@@ -32,6 +32,7 @@ Todos os quatro cards de criação apresentam o botão azul Pagar no Mercado Pag
 - src/data/offerDetails.js: escopo, inclusões, exclusões e condições dos planos, usados nos detalhes e no pedido de proposta.
 - src/data/clientGuide.js: etapas de contratação e perguntas pesquisáveis por assunto, com valores derivados da oferta.
 - src/data/promotion.js: ativação, período em Brasília, preço, limites e link de pagamento da campanha de landing page.
+- src/data/hostingOptions.js: opções de gestão da hospedagem e do domínio, custos separados, titularidade e encerramento. HostingOptions reutiliza a mesma escolha no simulador e no contato.
 - src/data/siteModels.js: códigos estáveis, descrições, estrutura e caminhos das imagens da galeria.
 - src/utils/siteModelReference.js: referência compartilhada entre cópia, WhatsApp e escopo do pedido.
 - src/utils/projectProposal.js: condições compartilhadas entre planos, simulador e atendimento.
@@ -80,6 +81,12 @@ Os links foram associados na ordem enviada pelo vendedor, que informou os valore
 Esses botões aparecem nas abas Pix e cartão, pois `paymentAmount` corresponde a ambos os preços. `paymentInterestFree` identifica a condição sem juros nos cartões e na nova pergunta do guia. Métodos e parcelamento são escolhidos no Mercado Pago; os links cobram o escopo inicial, sem adicionar manutenção ou recursos do simulador. Se um preço mudar, o link só continua disponível para a forma de pagamento cujo total coincida com a cobrança externa.
 
 Os dois checkouts retornaram erro de acesso neste navegador; seus valores e condições foram informados pelo vendedor, sem pagamento de teste ou confirmação automática no site.
+
+## Gestão da hospedagem e do domínio
+
+O cliente pode deixar a escolha para o atendimento, pedir que a Kroma Web cuide ou usar as próprias contas. A seleção é compartilhada entre simulador e formulário de contato, permanece ao trocar de plano e acompanha o escopo da proposta e a mensagem do WhatsApp. Mudar essa preferência não limpa os campos preenchidos nem confirma contratação.
+
+Contratação, gestão, hospedagem, domínio e renovações têm orçamento próprio, sem valor inventado ou inclusão automática nos preços de criação e manutenção de conteúdo. O domínio permanece em nome do cliente; a conta de hospedagem, os acessos e as condições de transferência são definidos na proposta. A opção não altera as estimativas, mensalidades, links fixos de pagamento ou o esquema do banco: o pedido usa o campo escopo existente. A informação aparece junto aos planos, nos detalhes das ofertas e em uma pergunta do guia.
 
 ## Galeria de modelos
 

@@ -1,5 +1,6 @@
 import { obterTipoProjeto } from "./projectOptions.js";
 import { MANUTENCOES } from "./maintenancePlans.js";
+import { GESTAO_HOSPEDAGEM } from "./hostingOptions.js";
 
 export const CONDICOES_CRIACAO = [
   "Criação é um serviço pontual. A manutenção mensal é opcional e cobrada separadamente.",
@@ -7,6 +8,7 @@ export const CONDICOES_CRIACAO = [
   "Cada rodada de ajustes reúne as correções em uma lista, dentro do escopo aprovado. Novas páginas, funções ou mudanças de direção exigem outro orçamento.",
   "A proposta confirma escopo, cronograma e pagamento antes do início. O prazo considera o recebimento dos materiais e o retorno do cliente.",
   "Domínio, hospedagem e serviços externos têm custos próprios. Responsáveis, valores e renovações são informados antes da contratação.",
+  GESTAO_HOSPEDAGEM,
 ];
 export const CONDICOES_MANUTENCAO = [
   "Uma solicitação corresponde a uma pequena atualização em conteúdo existente: um texto, uma foto, um horário ou um link.",
@@ -15,6 +17,7 @@ export const CONDICOES_MANUTENCAO = [
   "Atendimento por WhatsApp, sem plantão 24 horas. Prazo das atualizações e canal de envio são registrados na proposta.",
   "A cobrança é mensal, separada da criação, e começa após a entrega ou o início do acompanhamento acordado. Pagamento por Pix ou cartão a combinar.",
   "Vencimento, renovação e cancelamento são informados na proposta antes da adesão. Domínio, hospedagem e taxas externas não estão incluídos.",
+  GESTAO_HOSPEDAGEM,
 ];
 
 const DESCRICOES = {

@@ -11,6 +11,8 @@ import {
 import { MANUTENCOES } from "../data/maintenancePlans";
 import { criarPropostaCriacao } from "../utils/projectProposal";
 import OfferInfoDialog from "./OfferInfoDialog";
+import HostingOptions from "./HostingOptions";
+import { obterOpcaoHospedagem } from "../data/hostingOptions";
 
 const opcao = (ativa) =>
   "rounded-xl border px-4 py-3 text-left text-sm font-medium transition-colors " +
@@ -30,7 +32,11 @@ function Passo({ numero, titulo, children }) {
     </fieldset>
   );
 }
-export default function ProjectCalculator({ onSolicitar }) {
+export default function ProjectCalculator({
+  onSolicitar,
+  hospedagemId,
+  onHospedagemChange,
+}) {
   const [tipoId, setTipoId] = useState(TIPOS[0].id);
   const [recursoIds, setRecursoIds] = useState([]);
   const [prazoId, setPrazoId] = useState(PRAZOS[0].id);
@@ -46,6 +52,7 @@ export default function ProjectCalculator({ onSolicitar }) {
   });
   const tipo = TIPOS.find((item) => item.id === tipoId);
   const parcelas = calcularParcelamento(proposta.estimativa);
+  const hospedagem = obterOpcaoHospedagem(hospedagemId);
   const recursos = RECURSOS.filter((item) => recursoIds.includes(item.id));
   const alternar = (id) =>
     setRecursoIds((atuais) =>
@@ -187,6 +194,12 @@ export default function ProjectCalculator({ onSolicitar }) {
               </button>
             )}
           </div>
+          <HostingOptions
+            id="simulador-hospedagem"
+            label="6 · Domínio e hospedagem (opcional)"
+            value={hospedagemId}
+            onChange={onHospedagemChange}
+          />
         </div>
         <aside
           className="h-fit rounded-2xl border border-accent-light/25 bg-surface p-7 lg:sticky lg:top-28"
@@ -237,6 +250,17 @@ export default function ProjectCalculator({ onSolicitar }) {
             </p>
             <p className="mt-1 text-xs leading-relaxed text-white/45">
               Cobrança separada da criação.
+            </p>
+          </div>
+          <div className="mt-6 rounded-xl border border-line bg-base p-4">
+            <p className="text-xs uppercase tracking-wide text-white/40">
+              Domínio e hospedagem
+            </p>
+            <p className="mt-2 text-base font-semibold text-white">
+              {hospedagem?.summary || "A definir no atendimento"}
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-white/60">
+              Orçamento separado, confirmado antes da contratação.
             </p>
           </div>
           <button

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { TIPOS, formatarBRL } from "../data/projectOptions";
 import { criarLead, linkWhatsApp } from "../services/supabaseClient";
 import { montarMensagemContato } from "../utils/projectProposal";
+import HostingOptions from "./HostingOptions";
 
 const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -36,7 +37,13 @@ function Campo({ id, label, erro, children }) {
   );
 }
 
-export default function LeadFormSection({ proposta, modelo, onRemoverModelo }) {
+export default function LeadFormSection({
+  proposta,
+  modelo,
+  onRemoverModelo,
+  hospedagemId,
+  onHospedagemChange,
+}) {
   const [form, setForm] = useState({
     nome: "",
     contato: "",
@@ -126,10 +133,14 @@ export default function LeadFormSection({ proposta, modelo, onRemoverModelo }) {
               </div>
             </div>
           )}
-          {(proposta.estimativa > 0 || proposta.mensalidade > 0) && (
+          {(proposta.estimativa > 0 ||
+            proposta.mensalidade > 0 ||
+            proposta.hospedagemId) && (
             <div className="mt-8 max-w-lg rounded-xl border border-line bg-surface p-5 text-sm">
               <p className="text-white/40">Condições selecionadas</p>
-              <p className="mt-1 font-medium text-white">{proposta.tipo}</p>
+              <p className="mt-1 font-medium text-white">
+                {proposta.tipo || "Domínio e hospedagem"}
+              </p>
               {proposta.estimativa > 0 && (
                 <p className="mt-3 font-semibold text-accent-light">
                   Criação: {proposta.pagamento}
@@ -138,6 +149,12 @@ export default function LeadFormSection({ proposta, modelo, onRemoverModelo }) {
               {proposta.mensalidade > 0 && (
                 <p className="mt-2 font-semibold text-accent-light">
                   Manutenção: {formatarBRL(proposta.mensalidade)}/mês
+                </p>
+              )}
+              {proposta.hospedagemId && (
+                <p className="mt-3 text-white/75">
+                  Domínio e hospedagem: {proposta.hospedagemLabel}. Valor definido
+                  na proposta, separado da criação e da manutenção.
                 </p>
               )}
               <details className="mt-4 border-t border-line pt-4">
@@ -253,6 +270,11 @@ export default function LeadFormSection({ proposta, modelo, onRemoverModelo }) {
                   ))}
                 </select>
               </Campo>
+              <HostingOptions
+                id="lead-hospedagem"
+                value={hospedagemId}
+                onChange={onHospedagemChange}
+              />
               <Campo
                 id="lead-mensagem"
                 label={

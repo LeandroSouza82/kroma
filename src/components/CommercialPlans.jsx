@@ -315,6 +315,24 @@ export default function CommercialPlans({ onSolicitar }) {
               : "Valores iniciais para o escopo descrito. Domínio, hospedagem e taxas de serviços externos são combinados na proposta. Integrações e recursos adicionais podem alterar o orçamento."}
           </p>
         </div>
+        <div className="mt-8 rounded-2xl border border-blue-100 bg-blue-50 p-5 sm:flex sm:items-center sm:justify-between sm:gap-6">
+          <div>
+            <p className="text-base font-semibold text-slate-950">
+              Quer que a Kroma Web cuide da hospedagem e do domínio?
+            </p>
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
+              Podemos cuidar da contratação, configuração e gestão. Os custos
+              são definidos na proposta, separados da criação e da manutenção.
+              O domínio fica em nome do cliente.
+            </p>
+          </div>
+          <a
+            href="#simulador-hospedagem"
+            className="mt-4 inline-block shrink-0 text-sm font-semibold text-blue-700 underline underline-offset-4 sm:mt-0"
+          >
+            Escolher essa opção ↗
+          </a>
+        </div>
         <div className="mt-8 flex flex-col gap-3 border-t border-slate-200 pt-6 text-sm sm:flex-row sm:items-center sm:justify-between">
           <p className="text-slate-600">
             Página, manutenção, domínio: entenda cada parte antes de contratar.
