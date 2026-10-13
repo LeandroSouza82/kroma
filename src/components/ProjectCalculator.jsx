@@ -15,6 +15,9 @@ import HostingOptions from "./HostingOptions";
 import {
   obterOpcaoHospedagem,
   anexarHospedagemProposta,
+  HOSPEDAGEM_BASE,
+  COTACAO_DOLAR,
+  BANCO_DADOS,
 } from "../data/hostingOptions";
 
 const opcao = (ativa) =>
@@ -268,9 +271,17 @@ export default function ProjectCalculator({
             <p className="mt-1 text-xs leading-relaxed text-white/60">
               {proposta.hospedagemMensalidade > 0
                 ? formatarBRL(proposta.hospedagemMensalidade, true) +
-                  "/mês · cobrança separada da criação e da manutenção."
+                  "/mês estimados · cobrança separada da criação e da manutenção."
                 : "Orçamento separado, confirmado antes da contratação."}
             </p>
+            {proposta.hospedagemMensalidade > 0 && (
+              <p className="mt-2 text-xs leading-relaxed text-white/60">
+                Hospedagem:{" "}
+                {formatarBRL(HOSPEDAGEM_BASE.hospedagemMensal, true)}/mês +
+                domínio: {formatarBRL(HOSPEDAGEM_BASE.dominioMensal, true)}/mês
+                ({formatarBRL(HOSPEDAGEM_BASE.dominioAnual, true)}/ano ÷ 12).
+              </p>
+            )}
           </div>
           {proposta.bancoDadosMensalidade > 0 && (
             <div className="mt-6 rounded-xl border border-line bg-base p-4">
@@ -281,13 +292,17 @@ export default function ProjectCalculator({
                 {formatarBRL(proposta.bancoDadosMensalidade, true)}/mês
               </p>
               <p className="mt-1 text-xs leading-relaxed text-white/60">
-                Pacote básico, com limites definidos na proposta.
+                US$ {BANCO_DADOS.valorMensalUsd} ×{" "}
+                {formatarBRL(COTACAO_DOLAR.valor, true)}. Referência de{" "}
+                {COTACAO_DOLAR.data}. Pode aumentar ou diminuir conforme o
+                dólar; taxas e excedentes à parte.
               </p>
             </div>
           )}
           {proposta.hospedagemMensalidade > 0 && (
             <p className="mt-4 text-sm font-semibold text-accent-light">
-              Total mensal: {formatarBRL(proposta.mensalidadeTotal, true)}/mês
+              Total mensal estimado:{" "}
+              {formatarBRL(proposta.mensalidadeTotal, true)}/mês
             </p>
           )}
           <button

@@ -9,6 +9,11 @@ import { MANUTENCOES } from "../data/maintenancePlans";
 import {
   RESUMO_HOSPEDAGEM,
   RESUMO_BANCO_DADOS,
+  HOSPEDAGEM_BASE,
+  COTACAO_DOLAR,
+  BANCO_DADOS,
+  DETALHAMENTO_HOSPEDAGEM,
+  DETALHAMENTO_CAMBIO,
   calcularMensalidades,
 } from "../data/hostingOptions";
 import OfferInfoDialog from "./OfferInfoDialog";
@@ -46,14 +51,29 @@ function MonthlyCosts({ item, manutencao }) {
       <p className="text-xs font-semibold text-blue-800">
         Publicação com a Kroma: + {RESUMO_HOSPEDAGEM}
       </p>
-      {custos.bancoDadosMensalidade > 0 && (
-        <p className="mt-2 text-xs font-semibold text-blue-800">
-          Banco de dados: + {RESUMO_BANCO_DADOS}
-        </p>
+      <p className="mt-2 text-xs leading-relaxed text-slate-600">
+        Hospedagem: {formatarBRL(HOSPEDAGEM_BASE.hospedagemMensal, true)}/mês.
+        Domínio: {formatarBRL(HOSPEDAGEM_BASE.dominioAnual, true)}/ano,
+        equivalente a {formatarBRL(HOSPEDAGEM_BASE.dominioMensal, true)}/mês.
+      </p>
+      {(custos.bancoDadosMensalidade > 0 || manutencao) && (
+        <>
+          <p className="mt-2 text-xs font-semibold text-blue-800">
+            {manutencao ? "Se houver banco de dados: + " : "Banco de dados: + "}
+            {RESUMO_BANCO_DADOS}
+          </p>
+          <p className="mt-2 text-xs leading-relaxed text-slate-600">
+            Dólar de referência: {formatarBRL(COTACAO_DOLAR.valor, true)} em{" "}
+            {COTACAO_DOLAR.data}. Pode aumentar ou diminuir com o câmbio; taxas
+            e excedentes à parte.
+          </p>
+        </>
       )}
       {(manutencao || custos.bancoDadosMensalidade > 0) && (
         <p className="mt-2 text-sm font-semibold text-slate-950">
-          {manutencao ? "Total para site simples: " : "Total mensal: "}
+          {manutencao
+            ? "Total estimado para site simples: "
+            : "Total mensal estimado: "}
           {formatarBRL(custos.mensalidadeTotal, true)}/mês
         </p>
       )}
@@ -71,9 +91,9 @@ function MonthlyCosts({ item, manutencao }) {
         </p>
       )}
       <p className="mt-2 text-xs leading-relaxed text-slate-600">
-        Domínio incluído, sem cobrança anual adicional. Manutenção opcional e
-        serviços extras à parte. Você pode contratar esses serviços pela Kroma
-        ou usar suas contas. Veja os limites em Informações.
+        Domínio já considerado no total, sem cobrança anual adicional.
+        Manutenção opcional e serviços extras à parte. Você pode contratar esses
+        serviços pela Kroma ou usar suas contas. Veja os limites em Informações.
       </p>
     </div>
   );
@@ -372,7 +392,7 @@ export default function CommercialPlans({ onSolicitar }) {
             </p>
             <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
               {RESUMO_HOSPEDAGEM} No sistema com banco de dados, o total básico
-              é{" "}
+              estimado é{" "}
               {formatarBRL(
                 calcularMensalidades({ tipoId: "sistema" }, "kroma")
                   .mensalidadeTotal,
@@ -389,6 +409,47 @@ export default function CommercialPlans({ onSolicitar }) {
             Escolher essa opção ↗
           </a>
         </div>
+        <details className="mt-5 rounded-xl border border-slate-200 bg-white p-5 text-sm leading-relaxed text-slate-600">
+          <summary className="cursor-pointer font-semibold text-blue-700">
+            Veja a conta: hospedagem, domínio e variação do dólar
+          </summary>
+          <p className="mt-4">{DETALHAMENTO_HOSPEDAGEM}</p>
+          <p className="mt-3">{DETALHAMENTO_CAMBIO}</p>
+          <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+            <a
+              href={HOSPEDAGEM_BASE.hospedagemUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-700 underline"
+            >
+              Tabela da Locaweb Go ↗
+            </a>
+            <a
+              href={HOSPEDAGEM_BASE.dominioUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-700 underline"
+            >
+              Domínio no Registro.br ↗
+            </a>
+            <a
+              href={BANCO_DADOS.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-700 underline"
+            >
+              Preço do Supabase ↗
+            </a>
+            <a
+              href={COTACAO_DOLAR.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-700 underline"
+            >
+              Fonte da cotação usada ↗
+            </a>
+          </div>
+        </details>
         <div className="mt-8 flex flex-col gap-3 border-t border-slate-200 pt-6 text-sm sm:flex-row sm:items-center sm:justify-between">
           <p className="text-slate-600">
             Página, manutenção, domínio: entenda cada parte antes de contratar.

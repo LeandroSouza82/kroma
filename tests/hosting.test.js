@@ -4,6 +4,8 @@ import {
   anexarHospedagemProposta,
   obterOpcaoHospedagem,
   calcularMensalidades,
+  converterBancoDados,
+  HOSPEDAGEM_BASE,
 } from "../src/data/hostingOptions.js";
 import {
   criarPropostaCriacao,
@@ -79,6 +81,9 @@ test("o guia explica a gestão, os custos separados, a titularidade e a saída",
 });
 
 test("a infraestrutura soma hospedagem e banco sem alterar criação, parcelas ou manutenção", () => {
+  assert.equal(HOSPEDAGEM_BASE.hospedagemMensal, 20.9);
+  assert.equal(HOSPEDAGEM_BASE.dominioAnual, 40);
+  assert.equal(HOSPEDAGEM_BASE.dominioMensal, 3.33);
   for (const tipo of TIPOS) {
     for (const pagamentoId of ["pix", "cartao"]) {
       for (const manutencaoId of ["", ...MANUTENCOES.map((item) => item.id)]) {
@@ -89,15 +94,16 @@ test("a infraestrutura soma hospedagem e banco sem alterar criação, parcelas o
         });
         const original = structuredClone(base);
         const proposta = anexarHospedagemProposta(base, "kroma");
-        assert.equal(proposta.hospedagemMensalidade, 39.9);
+        assert.equal(proposta.hospedagemMensalidade, 24.23);
         assert.equal(
           proposta.bancoDadosMensalidade,
-          tipo.id === "sistema" ? 119 : 0,
+          tipo.id === "sistema" ? 125.5 : 0,
         );
         assert.equal(
           proposta.mensalidadeTotal,
           Math.round(
-            (base.mensalidade + 39.9 + (tipo.id === "sistema" ? 119 : 0)) * 100,
+            (base.mensalidade + 24.23 + (tipo.id === "sistema" ? 125.5 : 0)) *
+              100,
           ) / 100,
         );
         assert.equal(proposta.estimativa, original.estimativa);
@@ -109,12 +115,12 @@ test("a infraestrutura soma hospedagem e banco sem alterar criação, parcelas o
   }
   assert.equal(
     calcularMensalidades({ tipoId: "sistema" }, "kroma").mensalidadeTotal,
-    158.9,
+    149.73,
   );
   for (const [mensalidade, simples, sistema] of [
-    [98.9, 138.8, 257.8],
-    [149.9, 189.8, 308.8],
-    [248.9, 288.8, 407.8],
+    [98.9, 123.13, 248.63],
+    [149.9, 174.13, 299.63],
+    [248.9, 273.13, 398.63],
   ]) {
     assert.equal(
       calcularMensalidades({ tipoId: "empresarial", mensalidade }, "kroma")
@@ -129,6 +135,22 @@ test("a infraestrutura soma hospedagem e banco sem alterar criação, parcelas o
   }
 });
 
+test("o banco acompanha altas e quedas do dólar sem alterar domínio ou hospedagem", () => {
+  assert.equal(converterBancoDados(), 125.5);
+  assert.equal(converterBancoDados(4), 100);
+  assert.equal(converterBancoDados(6), 150);
+  assert.equal(
+    calcularMensalidades({ tipoId: "sistema" }, "kroma", 4).mensalidadeTotal,
+    124.23,
+  );
+  assert.equal(
+    calcularMensalidades({ tipoId: "sistema" }, "kroma", 6).mensalidadeTotal,
+    174.23,
+  );
+  for (const cotacao of [0, -1, NaN, Infinity])
+    assert.throws(() => converterBancoDados(cotacao), RangeError);
+});
+
 test("um adicional de dados usa um banco por projeto e contas próprias não cobram pacotes da Kroma", () => {
   const base = criarPropostaCriacao({
     tipoId: "empresarial",
@@ -136,15 +158,15 @@ test("um adicional de dados usa um banco por projeto e contas próprias não cob
     manutencaoId: "acompanhamento",
   });
   const proposta = anexarHospedagemProposta(base, "kroma");
-  assert.equal(proposta.bancoDadosMensalidade, 119);
-  assert.equal(proposta.mensalidadeTotal, 308.8);
+  assert.equal(proposta.bancoDadosMensalidade, 125.5);
+  assert.equal(proposta.mensalidadeTotal, 299.63);
   assert.equal(proposta.estimativa, 1049.8);
   assert.equal(
     calcularMensalidades(
       { tipoId: "sistema", recursoIds: ["supabase"] },
       "kroma",
     ).bancoDadosMensalidade,
-    119,
+    125.5,
   );
   const propria = anexarHospedagemProposta(base, "cliente");
   assert.equal(propria.hospedagemMensalidade, 0);
@@ -152,7 +174,7 @@ test("um adicional de dados usa um banco por projeto e contas próprias não cob
   assert.equal(propria.mensalidadeTotal, 149.9);
   assert.doesNotMatch(
     propria.escopo,
-    /Total mensal dos serviços selecionados|banco de dados gerenciado com Supabase/,
+    /Total mensal estimado dos serviços selecionados|banco de dados gerenciado com Supabase/,
   );
   assert.equal(anexarHospedagemProposta(base, ""), base);
 });
@@ -164,15 +186,15 @@ test("o atendimento informa domínio incluído e banco separado, inclusive na la
       agora: Date.parse("2026-10-20T12:00:00-03:00"),
     });
     const proposta = anexarHospedagemProposta(base, "kroma");
-    assert.match(proposta.escopo, /39,90\/mês/);
+    assert.match(proposta.escopo, /24,23\/mês/);
     assert.match(proposta.escopo, /40,00\/ano/);
     assert.match(proposta.escopo, /Não há uma segunda cobrança anual/);
     assert.equal(
       proposta.mensalidadeTotal,
-      tipoId === "sistema" ? 158.9 : 39.9,
+      tipoId === "sistema" ? 149.73 : 24.23,
     );
     if (tipoId === "sistema")
-      assert.match(proposta.escopo, /119,00\/mês.*158,90\/mês/);
+      assert.match(proposta.escopo, /125,50\/mês.*149,73\/mês/);
     if (tipoId === PROMOCAO.offer.id) assert.equal(proposta.estimativa, 299);
   }
   const resposta = filtrarPerguntas("quanto pago mês publicado").find(
@@ -181,6 +203,6 @@ test("o atendimento informa domínio incluído e banco separado, inclusive na la
   assert.ok(resposta);
   assert.match(
     resposta.answer.join(" "),
-    /158,90\/mês.*138,80\/mês.*189,80\/mês.*288,80\/mês.*257,80\/mês.*308,80\/mês.*407,80\/mês/,
+    /149,73\/mês.*123,13\/mês.*174,13\/mês.*273,13\/mês.*248,63\/mês.*299,63\/mês.*398,63\/mês/,
   );
 });

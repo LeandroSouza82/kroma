@@ -9,6 +9,7 @@ import {
   CONDICOES_BANCO_DADOS,
   RESUMO_HOSPEDAGEM,
   RESUMO_BANCO_DADOS,
+  DETALHAMENTO_HOSPEDAGEM,
   DOMINIO_INCLUIDO,
   calcularMensalidades,
 } from "./hostingOptions.js";
@@ -239,6 +240,7 @@ export const PERGUNTAS = [
     question: "Quanto pago por mês para ter o site publicado com a Kroma Web?",
     answer: [
       RESUMO_HOSPEDAGEM,
+      DETALHAMENTO_HOSPEDAGEM,
       DOMINIO_INCLUIDO,
       "Sistema / dashboard e projetos com banco de dados acrescentam " +
         RESUMO_BANCO_DADOS +

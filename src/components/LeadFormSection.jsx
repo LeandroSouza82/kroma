@@ -165,19 +165,22 @@ export default function LeadFormSection({
                   Domínio e hospedagem: {proposta.hospedagemLabel}.{" "}
                   {proposta.hospedagemMensalidade > 0
                     ? formatarBRL(proposta.hospedagemMensalidade, true) +
-                      "/mês, separado da criação e da manutenção."
+                      "/mês estimados, separado da criação e da manutenção."
                     : "Valor definido na proposta, separado da criação e da manutenção."}
                 </p>
               )}
               {proposta.bancoDadosMensalidade > 0 && (
                 <p className="mt-3 text-white/75">
                   Banco de dados · Supabase:{" "}
-                  {formatarBRL(proposta.bancoDadosMensalidade, true)}/mês.
+                  {formatarBRL(proposta.bancoDadosMensalidade, true)}/mês
+                  estimados. Pode aumentar ou diminuir conforme o dólar; taxas e
+                  excedentes à parte.
                 </p>
               )}
               {proposta.hospedagemMensalidade > 0 && (
                 <p className="mt-3 font-semibold text-accent-light">
-                  Total mensal: {formatarBRL(proposta.mensalidadeTotal, true)}
+                  Total mensal estimado:{" "}
+                  {formatarBRL(proposta.mensalidadeTotal, true)}
                   /mês
                 </p>
               )}

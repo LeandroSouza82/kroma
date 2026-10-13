@@ -5,9 +5,11 @@ import {
   TITULARIDADE_HOSPEDAGEM,
   ENCERRAMENTO_HOSPEDAGEM,
   RESUMO_HOSPEDAGEM,
+  DETALHAMENTO_HOSPEDAGEM,
   DOMINIO_INCLUIDO,
   LIMITES_HOSPEDAGEM,
   RESUMO_BANCO_DADOS,
+  DETALHAMENTO_CAMBIO,
   LIMITES_BANCO_DADOS,
   precisaBancoDados,
 } from "../data/hostingOptions";
@@ -62,6 +64,9 @@ export default function HostingOptions({
             {RESUMO_HOSPEDAGEM}
           </p>
           <p className="mt-2 text-xs leading-relaxed text-white/65">
+            {DETALHAMENTO_HOSPEDAGEM}
+          </p>
+          <p className="mt-2 text-xs leading-relaxed text-white/65">
             {DOMINIO_INCLUIDO}
           </p>
           <p className="mt-2 text-xs leading-relaxed text-white/65">
@@ -71,6 +76,9 @@ export default function HostingOptions({
             <>
               <p className="mt-3 text-sm font-semibold text-accent-light">
                 Banco de dados: + {RESUMO_BANCO_DADOS}
+              </p>
+              <p className="mt-2 text-xs leading-relaxed text-white/65">
+                {DETALHAMENTO_CAMBIO}
               </p>
               <p className="mt-2 text-xs leading-relaxed text-white/65">
                 {LIMITES_BANCO_DADOS}

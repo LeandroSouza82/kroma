@@ -1,24 +1,83 @@
 import { formatarBRL } from "./projectOptions.js";
 
-export const HOSPEDAGEM_BASE = { valorMensal: 39.9, dominioAnual: 40 };
-export const BANCO_DADOS = { tipoId: "sistema", valorMensal: 119 };
+const arredondarCentavos = (valor) => Math.round(valor * 100) / 100;
+export const COTACAO_DOLAR = {
+  valor: 5.02,
+  data: "13/10/2026",
+  fonte: "UOL Economia · fechamento comercial de venda",
+  url: "https://economia.uol.com.br/cotacoes/noticias/redacao/2026/10/13/dolar-fecha-em-alta-a-r-502-bolsa-recua-apos-recordes-recentes.htm",
+};
+const hospedagemMensal = 20.9;
+const dominioAnual = 40;
+export const HOSPEDAGEM_BASE = {
+  hospedagemMensal,
+  dominioAnual,
+  dominioMensal: arredondarCentavos(dominioAnual / 12),
+  valorMensal: arredondarCentavos(
+    hospedagemMensal + arredondarCentavos(dominioAnual / 12),
+  ),
+  fornecedor: "Locaweb Go · referência de renovação anual",
+  hospedagemUrl:
+    "https://sources.locaweb.com.br/site/downloads/proposta_hospedagem.pdf",
+  dominioUrl: "https://registro.br/dominio/",
+};
+export const BANCO_DADOS = {
+  tipoId: "sistema",
+  valorMensalUsd: 25,
+  url: "https://supabase.com/pricing",
+};
+export function converterBancoDados(cotacao = COTACAO_DOLAR.valor) {
+  if (!Number.isFinite(cotacao) || cotacao <= 0)
+    throw new RangeError("Cotação de dólar inválida.");
+  return arredondarCentavos(BANCO_DADOS.valorMensalUsd * cotacao);
+}
 export const RESUMO_HOSPEDAGEM =
   formatarBRL(HOSPEDAGEM_BASE.valorMensal, true) +
-  "/mês · hospedagem, um domínio .com.br e gestão básica pela Kroma Web.";
+  "/mês estimados · hospedagem e um domínio .com.br, com gestão pela Kroma Web.";
+export const DETALHAMENTO_HOSPEDAGEM =
+  "Hospedagem: " +
+  formatarBRL(HOSPEDAGEM_BASE.hospedagemMensal, true) +
+  "/mês de referência (" +
+  formatarBRL(HOSPEDAGEM_BASE.hospedagemMensal * 12, true) +
+  "/ano na renovação anual da Locaweb Go). Domínio .com.br: " +
+  formatarBRL(HOSPEDAGEM_BASE.dominioAnual, true) +
+  "/ano ÷ 12 = aproximadamente " +
+  formatarBRL(HOSPEDAGEM_BASE.dominioMensal, true) +
+  "/mês. Soma mensal estimada: " +
+  formatarBRL(HOSPEDAGEM_BASE.valorMensal, true) +
+  ". Valores de referência consultados em 13/10/2026; promoções e alterações do fornecedor podem mudar o custo.";
 export const DOMINIO_INCLUIDO =
   "O registro e a renovação de um domínio .com.br, de referência " +
   formatarBRL(HOSPEDAGEM_BASE.dominioAnual, true) +
-  "/ano, estão incluídos nesse pacote mensal. Não há uma segunda cobrança anual desse domínio. O nome precisa estar disponível e fica registrado em nome do cliente.";
+  "/ano, já estão considerados no equivalente mensal de " +
+  formatarBRL(HOSPEDAGEM_BASE.dominioMensal, true) +
+  ". Não há uma segunda cobrança anual desse domínio quando seu custo é repassado mensalmente. O nome precisa estar disponível e fica registrado em nome do cliente.";
 export const LIMITES_HOSPEDAGEM =
-  "Pacote básico para um site, com configuração, publicação e gestão da hospedagem e do domínio. Manutenção de conteúdo, desenvolvimento de funções, e-mail profissional, APIs e recursos extras são separados. Recursos da hospedagem, início da cobrança e condições de renovação e cancelamento constam da proposta.";
+  "Referência para um site com hospedagem básica e um domínio .com.br. O fornecedor cobra o plano anual antecipadamente; o valor mensal mostrado é seu equivalente para orçamento. O repasse, a configuração, a publicação, os recursos e as condições de início, renovação e cancelamento são registrados na proposta. Manutenção de conteúdo, desenvolvimento de funções, e-mail profissional, APIs e recursos extras são separados.";
 export const RESUMO_BANCO_DADOS =
-  formatarBRL(BANCO_DADOS.valorMensal, true) +
-  "/mês · banco de dados gerenciado com Supabase, separado da hospedagem.";
+  formatarBRL(converterBancoDados(), true) +
+  "/mês estimados · Supabase Pro, a partir de US$ " +
+  BANCO_DADOS.valorMensalUsd +
+  "/mês, separado da hospedagem.";
+export const DETALHAMENTO_CAMBIO =
+  "Conversão de referência: US$ " +
+  BANCO_DADOS.valorMensalUsd +
+  " × " +
+  formatarBRL(COTACAO_DOLAR.valor, true) +
+  " = " +
+  formatarBRL(converterBancoDados(), true) +
+  "/mês. Cotação usada: " +
+  COTACAO_DOLAR.data +
+  " · " +
+  COTACAO_DOLAR.fonte +
+  ". O custo em reais pode aumentar ou diminuir com o dólar. Esta é uma referência datada, recalculada para o câmbio da cobrança; não é um preço fixo garantido. A cotação da operadora do pagamento, impostos e taxas, uso excedente e alterações do plano podem alterar o total e são discriminados na proposta.";
 export const LIMITES_BANCO_DADOS =
-  "Valor comercial da Kroma Web para um banco de dados no escopo básico contratado. A implementação das funções e da integração com os dados não está incluída na mensalidade. Capacidade, tráfego, backups e eventuais recursos excedentes são definidos na proposta antes da contratação. O preço do fornecedor em dólar, o câmbio e a ampliação de recursos podem exigir revisão do pacote, informada antes da renovação.";
+  "Referência do Supabase Pro para o primeiro projeto com configuração básica. Projetos adicionais, capacidade ampliada e uso excedente têm custos próprios. Capacidade, tráfego, backups e recursos são confirmados antes da contratação. A mensalidade do serviço não inclui o desenvolvimento das funções nem da integração com os dados.";
 export const CONDICOES_HOSPEDAGEM =
   "Ao contratar a gestão pela Kroma Web: " +
   RESUMO_HOSPEDAGEM +
+  " " +
+  DETALHAMENTO_HOSPEDAGEM +
   " " +
   DOMINIO_INCLUIDO +
   " " +
@@ -26,6 +85,8 @@ export const CONDICOES_HOSPEDAGEM =
 export const CONDICOES_BANCO_DADOS =
   "Sistema / dashboard ou projeto com banco de dados, sob gestão da Kroma Web: " +
   RESUMO_BANCO_DADOS +
+  " " +
+  DETALHAMENTO_CAMBIO +
   " " +
   LIMITES_BANCO_DADOS;
 
@@ -71,13 +132,17 @@ export function precisaBancoDados(proposta) {
   );
 }
 
-export function calcularMensalidades(proposta, hospedagemId) {
+export function calcularMensalidades(
+  proposta,
+  hospedagemId,
+  cotacao = COTACAO_DOLAR.valor,
+) {
   const opcao = obterOpcaoHospedagem(hospedagemId);
   const hospedagemMensalidade =
     opcao?.id === "kroma" ? HOSPEDAGEM_BASE.valorMensal : 0;
   const bancoDadosMensalidade =
     opcao?.id === "kroma" && precisaBancoDados(proposta)
-      ? BANCO_DADOS.valorMensal
+      ? converterBancoDados(cotacao)
       : 0;
   const mensalidadeTotal =
     Math.round(
@@ -105,7 +170,7 @@ export function anexarHospedagemProposta(proposta, hospedagemId = "") {
       custos.hospedagemMensalidade > 0 && CONDICOES_HOSPEDAGEM,
       custos.bancoDadosMensalidade > 0 && CONDICOES_BANCO_DADOS,
       custos.hospedagemMensalidade > 0 &&
-        "Total mensal dos serviços selecionados: " +
+        "Total mensal estimado dos serviços selecionados: " +
           formatarBRL(custos.mensalidadeTotal, true) +
           "/mês",
       TITULARIDADE_HOSPEDAGEM,
