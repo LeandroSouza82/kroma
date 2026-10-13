@@ -23,6 +23,10 @@ Confira o plano da conta antes da publicação comercial. O [Hobby](https://verc
 
 ## Onde editar a oferta
 
+Os cards começam com a borda azul no plano recomendado. Clicar em um card ou selecionar seu controle de rádio move a borda para esse plano. A escolha de criação permanece ao alternar entre Pix e cartão; a manutenção tem uma seleção independente. A seleção visual não envia proposta nem inicia cobrança.
+
+Todos os quatro cards de criação apresentam Pagar no Mercado Pago. Quando existe um link com o valor da forma de pagamento escolhida, o botão abre essa cobrança. Se o link ainda não foi fornecido, o botão fica desativado, com orientação para solicitar a proposta e receber o link no atendimento. No momento, faltam as cobranças de R$489,90 e R$689,90 do evento e a de R$998,90 do institucional no cartão. Os links de outros valores não são reutilizados. Os planos de manutenção permanecem com contratação por proposta.
+
 - src/data/projectOptions.js: tipos de projeto, preços Pix/cartão, adicionais, prazo e número de parcelas.
 - src/data/maintenancePlans.js: mensalidades, limites e descrição dos planos de manutenção.
 - src/data/offerDetails.js: escopo, inclusões, exclusões e condições dos planos, usados nos detalhes e no pedido de proposta.

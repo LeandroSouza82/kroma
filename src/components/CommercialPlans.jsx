@@ -35,6 +35,19 @@ export default function CommercialPlans({ onSolicitar }) {
   const [aba, setAba] = useState("pix");
   const [oferta, setOferta] = useState(null);
   const manutencao = aba === "manutencao";
+  const [criacaoSelecionada, setCriacaoSelecionada] = useState(
+    () => (TIPOS.find((item) => item.featured) || TIPOS[0]).id,
+  );
+  const [manutencaoSelecionada, setManutencaoSelecionada] = useState(
+    () => (MANUTENCOES.find((item) => item.featured) || MANUTENCOES[0]).id,
+  );
+  const cardSelecionado = manutencao
+    ? manutencaoSelecionada
+    : criacaoSelecionada;
+  const selecionarCard = (id) => {
+    if (manutencao) setManutencaoSelecionada(id);
+    else setCriacaoSelecionada(id);
+  };
   const selecionar = (proposta) => {
     onSolicitar(proposta);
     document.getElementById("contato")?.scrollIntoView({ behavior: "smooth" });
@@ -128,15 +141,31 @@ export default function CommercialPlans({ onSolicitar }) {
             {(manutencao ? MANUTENCOES : TIPOS).map((item) => (
               <article
                 key={item.id}
+                aria-labelledby={"plano-titulo-" + item.id}
+                onClick={() => selecionarCard(item.id)}
                 className={
                   "pricing-card " +
-                  (item.featured ? "pricing-card-featured" : "")
+                  (cardSelecionado === item.id ? "pricing-card-selected" : "")
                 }
               >
                 <div className="flex flex-wrap items-start justify-between gap-2">
-                  <h3 className="text-lg font-semibold text-slate-950">
-                    {item.label}
-                  </h3>
+                  <div className="flex items-start gap-2.5">
+                    <input
+                      type="radio"
+                      name={manutencao ? "plano-manutencao" : "plano-criacao"}
+                      value={item.id}
+                      checked={cardSelecionado === item.id}
+                      onChange={() => selecionarCard(item.id)}
+                      aria-label={"Selecionar " + item.label}
+                      className="plan-select mt-1 h-4 w-4 shrink-0 accent-blue-600"
+                    />
+                    <h3
+                      id={"plano-titulo-" + item.id}
+                      className="text-lg font-semibold text-slate-950"
+                    >
+                      {item.label}
+                    </h3>
+                  </div>
                   {item.featured && (
                     <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-blue-700">
                       Recomendado
@@ -205,7 +234,7 @@ export default function CommercialPlans({ onSolicitar }) {
                   )}
                 </div>
                 <Features items={item.features} />
-                {obterLinkPagamento(item, aba) && (
+                {obterLinkPagamento(item, aba) ? (
                   <>
                     <a
                       id={"plano-pagar-" + item.id}
@@ -227,7 +256,31 @@ export default function CommercialPlans({ onSolicitar }) {
                         : "Link para o valor à vista. Confira no Mercado Pago as opções de pagamento e eventuais acréscimos."}
                     </p>
                   </>
-                )}
+                ) : !manutencao ? (
+                  <>
+                    <button
+                      id={"plano-pagar-" + item.id}
+                      type="button"
+                      disabled
+                      aria-label={
+                        "Pagar " +
+                        item.label +
+                        " no Mercado Pago (link solicitado no atendimento)"
+                      }
+                      aria-describedby={"plano-pagamento-info-" + item.id}
+                      className="plan-pay plan-pay-pending mt-auto w-full cursor-not-allowed rounded-xl bg-slate-100 px-4 py-3.5 text-sm font-semibold text-slate-600"
+                    >
+                      Pagar no Mercado Pago <span aria-hidden="true">↗</span>
+                    </button>
+                    <p
+                      id={"plano-pagamento-info-" + item.id}
+                      className="mt-3 text-xs leading-relaxed text-slate-600"
+                    >
+                      Solicite uma proposta para receber o link de pagamento
+                      deste plano no atendimento.
+                    </p>
+                  </>
+                ) : null}
                 <button
                   type="button"
                   onClick={() =>
@@ -242,7 +295,7 @@ export default function CommercialPlans({ onSolicitar }) {
                   }
                   className={
                     "plan-request w-full rounded-xl px-4 py-3.5 text-sm font-semibold transition-colors " +
-                    (obterLinkPagamento(item, aba)
+                    (!manutencao
                       ? "mt-3 border border-blue-200 bg-white text-blue-700 hover:bg-blue-50"
                       : item.featured
                         ? "mt-auto bg-blue-600 text-white hover:bg-blue-700"
