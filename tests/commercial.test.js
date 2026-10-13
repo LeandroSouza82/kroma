@@ -19,8 +19,8 @@ import { filtrarPerguntas } from "../src/data/clientGuide.js";
 
 test("os quatro preços dos cards chegam iguais às informações, ao simulador e à mensagem de atendimento", () => {
   for (const [tipoId, pix, cartao, textoPix, textoCartao] of [
-    ["empresarial", 699.9, 998.9, "699,90", "998,90"],
-    ["evento", 489.9, 689.9, "489,90", "689,90"],
+    ["empresarial", 699.9, 854.64, "699,90", "854,64"],
+    ["evento", 489.9, 598.2, "489,90", "598,20"],
     ["ecommerce", 1489.9, 1489.9, "1.489,90", "1.489,90"],
     ["sistema", 2489.9, 2489.9, "2.489,90", "2.489,90"],
   ]) {
@@ -55,27 +55,45 @@ test("os quatro preços dos cards chegam iguais às informações, ao simulador 
   }
 });
 
-test("oferta institucional anuncia 699,90 no Pix e 10 vezes de 99,89 no cartão", () => {
+test("as ofertas menores têm doze parcelas e totais com juros, mantendo os valores Pix", () => {
+  for (const [id, parcela, total, acrescimo] of [
+    ["empresarial", 71.22, 854.64, 154.74],
+    ["evento", 49.85, 598.2, 108.3],
+  ]) {
+    const plano = TIPOS.find((item) => item.id === id);
+    assert.equal(plano.numeroParcelas, 12);
+    assert.equal(plano.paymentBuyerInterest, true);
+    assert.notEqual(plano.paymentInterestFree, true);
+    assert.equal(calcularParcelamento(total, plano.numeroParcelas).parcela, parcela);
+    assert.equal(Math.round((total - plano.base) * 100) / 100, acrescimo);
+    const proposta = criarPropostaCriacao({ tipoId: id, pagamentoId: "cartao" });
+    assert.equal(proposta.numeroParcelas, 12);
+    assert.ok(proposta.pagamento.startsWith("12×"));
+  }
   assert.equal(calcularEstimativa("empresarial"), 699.9);
   assert.equal(
     calcularEstimativa("empresarial", [], "normal", "cartao"),
-    998.9,
+    854.64,
   );
-  assert.equal(calcularParcelamento(998.9).parcela, 99.89);
   assert.match(
-    descreverPagamento(998.9, "cartao"),
-    /10× de R\$\s?99,89.*total R\$\s?998,90/,
+    descreverPagamento(854.64, "cartao", 12),
+    /12× de R\$\s?71,22.*total R\$\s?854,64/,
   );
 });
-test("link de 699,90 é exclusivo do institucional à vista e não cobra outro valor ou plano", () => {
+test("link de 699,90 financia a cobrança base do institucional e não cobra outro plano", () => {
   const institucional = TIPOS.find((item) => item.id === "empresarial");
   assert.equal(
     obterLinkPagamento(institucional, "pix"),
     "https://mpago.li/17uiB8D",
   );
-  assert.equal(obterLinkPagamento(institucional, "cartao"), "");
+  assert.equal(obterLinkPagamento(institucional, "cartao"), institucional.paymentUrl);
   assert.equal(obterLinkPagamento(institucional, "manutencao"), "");
   assert.equal(obterLinkPagamento({ ...institucional, base: 700 }, "pix"), "");
+  assert.equal(obterLinkPagamento({ ...institucional, base: 700 }, "cartao"), "");
+  assert.equal(
+    obterLinkPagamento({ ...institucional, paymentBuyerInterest: false }, "cartao"),
+    "",
+  );
   assert.notEqual(
     obterLinkPagamento(
       TIPOS.find((item) => item.id === "evento"),
@@ -85,13 +103,14 @@ test("link de 699,90 é exclusivo do institucional à vista e não cobra outro v
   );
 });
 
-test("o evento usa seu link de 489,90 somente para a opção desse valor", () => {
+test("o evento usa a cobrança base de 489,90 no Pix ou parcelada pelo Mercado Pago", () => {
   const evento = TIPOS.find((item) => item.id === "evento");
   assert.equal(evento.paymentAmount, 489.9);
   assert.equal(obterLinkPagamento(evento, "pix"), "https://mpago.li/14HxkrF");
-  assert.equal(obterLinkPagamento(evento, "cartao"), "");
+  assert.equal(obterLinkPagamento(evento, "cartao"), evento.paymentUrl);
   assert.equal(obterLinkPagamento(evento, "manutencao"), "");
   assert.equal(obterLinkPagamento({ ...evento, base: 489.89 }, "pix"), "");
+  assert.equal(obterLinkPagamento({ ...evento, base: 489.89 }, "cartao"), "");
 });
 
 test("os dois links maiores cobram o mesmo total à vista ou em dez parcelas sem juros", () => {
@@ -103,9 +122,13 @@ test("os dois links maiores cobram o mesmo total à vista ou em dez parcelas sem
     assert.equal(plano.base, valor);
     assert.equal(plano.cartao, valor);
     assert.equal(plano.paymentInterestFree, true);
+    assert.equal(plano.numeroParcelas, 10);
     assert.equal(calcularParcelamento(valor).parcela, parcela);
     assert.equal(obterLinkPagamento(plano, "pix"), link);
     assert.equal(obterLinkPagamento(plano, "cartao"), link);
+    const proposta = criarPropostaCriacao({ tipoId: id, pagamentoId: "cartao" });
+    assert.equal(proposta.numeroParcelas, 10);
+    assert.ok(proposta.pagamento.startsWith("10×"));
     assert.equal(
       obterLinkPagamento({ ...plano, cartao: valor + 1 }, "cartao"),
       "",
@@ -135,7 +158,7 @@ test("os adicionais e a prioridade seguem a forma de pagamento escolhida", () =>
       "expresso",
       "cartao",
     ),
-    4366.05,
+    4178.51,
   );
 });
 test("um adicional duplicado não é cobrado duas vezes", () => {
@@ -147,9 +170,9 @@ test("manutenção opcional permanece separada do total de criação", () => {
     pagamentoId: "cartao",
     manutencaoId: "acompanhamento",
   });
-  assert.equal(proposta.estimativa, 998.9);
+  assert.equal(proposta.estimativa, 854.64);
   assert.equal(proposta.mensalidade, 149.9);
-  assert.match(proposta.escopo, /Pagamento da criação:.*10×/);
+  assert.match(proposta.escopo, /Pagamento da criação:.*12×/);
   assert.match(proposta.escopo, /Acompanhamento.*149,90\/mês/);
 });
 test("criação começa sem mensalidade adicionada automaticamente", () => {
@@ -179,7 +202,7 @@ test("mensagem de atendimento preserva método, total e manutenção escolhidos"
     proposta,
   );
   assert.match(mensagem, /Nome: Cliente/);
-  assert.match(mensagem, /10× de R\$\s?99,89.*total R\$\s?998,90/);
+  assert.match(mensagem, /12× de R\$\s?71,22.*total R\$\s?854,64/);
   assert.match(mensagem, /Evolução.*248,90\/mês/);
 });
 test("configurações desconhecidas não geram um orçamento parcial", () => {
@@ -203,11 +226,11 @@ test("configurações desconhecidas não geram um orçamento parcial", () => {
 test("a prioridade preserva os centavos do novo preço no cartão", () => {
   assert.equal(
     calcularEstimativa("empresarial", [], "expresso", "cartao"),
-    1298.57,
+    1111.03,
   );
   assert.match(
-    descreverPagamento(1298.57, "cartao"),
-    /9× de.*129,86.*1× de.*129,83.*1\.298,57/,
+    descreverPagamento(1111.03, "cartao", 12),
+    /11× de.*92,59.*1× de.*92,54.*1\.111,03/,
   );
 });
 
@@ -216,15 +239,22 @@ test("parcelas com arredondamento somam exatamente o total, inclusive com adicio
     for (const prazo of ["normal", "expresso"]) {
       for (const recursos of [[], RECURSOS.map((item) => item.id)]) {
         const total = calcularEstimativa(tipo.id, recursos, prazo, "cartao");
-        const parcelas = calcularParcelamento(total);
+        const parcelas = calcularParcelamento(total, tipo.numeroParcelas);
         assert.equal(
-          Math.round(parcelas.parcela * 100) * (MAX_PARCELAS - 1) +
+          Math.round(parcelas.parcela * 100) * (tipo.numeroParcelas - 1) +
             Math.round(parcelas.ultima * 100),
           Math.round(total * 100),
         );
       }
     }
   }
+});
+
+test("o padrão de dez parcelas permanece e quantidades inválidas são rejeitadas", () => {
+  assert.equal(MAX_PARCELAS, 10);
+  assert.equal(calcularParcelamento(100).parcela, 10);
+  for (const quantidade of [0, -1, 1.5, NaN])
+    assert.throws(() => calcularParcelamento(100, quantidade), RangeError);
 });
 
 test("o atendimento leva os limites da oferta e os custos externos separados", () => {
@@ -261,7 +291,7 @@ test("a manutenção informa quantidade, limites e ausência de acúmulo", () =>
 test("dúvidas aceitam busca por termos, acentos e assunto sem perder os valores", () => {
   const preco = filtrarPerguntas("INSTITUCIONAL pagar", "Pagamento");
   assert.equal(preco.length, 1);
-  assert.match(preco[0].answer.join(" "), /699,90.*99,89.*998,90/);
+  assert.match(preco[0].answer.join(" "), /699,90.*71,22.*854,64/);
   const resultados = filtrarPerguntas("manutencao", "Manutenção");
   assert.ok(resultados.length > 0);
   assert.ok(resultados.every((item) => item.category === "Manutenção"));

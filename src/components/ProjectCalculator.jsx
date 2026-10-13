@@ -4,7 +4,6 @@ import {
   RECURSOS,
   PRAZOS,
   PAGAMENTOS,
-  MAX_PARCELAS,
   formatarBRL,
   calcularParcelamento,
 } from "../data/projectOptions";
@@ -58,7 +57,7 @@ export default function ProjectCalculator({
   });
   const proposta = anexarHospedagemProposta(propostaBase, hospedagemId);
   const tipo = TIPOS.find((item) => item.id === tipoId);
-  const parcelas = calcularParcelamento(proposta.estimativa);
+  const parcelas = calcularParcelamento(proposta.estimativa, tipo.numeroParcelas);
   const hospedagem = obterOpcaoHospedagem(hospedagemId);
   const recursos = RECURSOS.filter((item) => recursoIds.includes(item.id));
   const alternar = (id) =>
@@ -229,7 +228,7 @@ export default function ProjectCalculator({
               {pagamentoId === "cartao" ? (
                 <>
                   <span className="text-xl font-normal">
-                    {parcelas.iguais ? MAX_PARCELAS : MAX_PARCELAS - 1}×{" "}
+                    {parcelas.iguais ? tipo.numeroParcelas : tipo.numeroParcelas - 1}×{" "}
                   </span>
                   {formatarBRL(parcelas.parcela, true)}
                 </>

@@ -1,6 +1,6 @@
 import { useId } from "react";
 import useNativeDialog from "../hooks/useNativeDialog";
-import { MAX_PARCELAS, formatarBRL } from "../data/projectOptions";
+import { formatarBRL } from "../data/projectOptions";
 import { detalharOferta } from "../data/offerDetails";
 
 function DetailList({ title, items }) {
@@ -83,12 +83,19 @@ export default function OfferInfoDialog({ oferta, onFechar, onSolicitar }) {
             <div>
               <p className="text-sm text-slate-600">Cartão de crédito</p>
               <p className="mt-1 text-2xl font-semibold text-slate-950">
-                {MAX_PARCELAS}×{" "}
-                {formatarBRL(detalhes.cartao / MAX_PARCELAS, true)}
+                Até {detalhes.numeroParcelas}×{" "}
+                {formatarBRL(detalhes.cartao / detalhes.numeroParcelas, true)}
               </p>
               <p className="mt-1 text-xs text-slate-600">
                 Total: {formatarBRL(detalhes.cartao)}
+                {detalhes.paymentInterestFree ? " · sem juros" : ""}
               </p>
+              {detalhes.cartao > detalhes.base && (
+                <p className="mt-1 text-xs text-slate-600">
+                  Com juros: {formatarBRL(detalhes.cartao - detalhes.base, true)} de
+                  acréscimo sobre o Pix.
+                </p>
+              )}
             </div>
           </div>
         )}

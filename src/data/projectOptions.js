@@ -1,5 +1,6 @@
 import { PROMOCAO, promocaoAtiva } from "./promotion.js";
 
+// Padrão para cálculos sem uma condição específica por oferta.
 export const MAX_PARCELAS = 10;
 
 // Fonte única dos valores anunciados; o escopo final é definido na proposta.
@@ -8,9 +9,11 @@ export const TIPOS = [
     id: "empresarial",
     label: "Site institucional",
     base: 699.9,
-    cartao: 998.9,
+    cartao: 854.64,
+    numeroParcelas: 12,
     paymentUrl: "https://mpago.li/17uiB8D",
     paymentAmount: 699.9,
+    paymentBuyerInterest: true,
     limits: { pages: 1, sections: 5, images: 10, revisions: 1 },
     featured: true,
     description:
@@ -26,9 +29,11 @@ export const TIPOS = [
     id: "evento",
     label: "Evento / convite digital",
     base: 489.9,
-    cartao: 689.9,
+    cartao: 598.2,
+    numeroParcelas: 12,
     paymentUrl: "https://mpago.li/14HxkrF",
     paymentAmount: 489.9,
+    paymentBuyerInterest: true,
     limits: { pages: 1, sections: 4, images: 8, revisions: 1 },
     description:
       "Um endereço especial para reunir as informações do seu evento.",
@@ -44,6 +49,7 @@ export const TIPOS = [
     label: "Loja / catálogo digital",
     base: 1489.9,
     cartao: 1489.9,
+    numeroParcelas: 10,
     paymentUrl: "https://mpago.li/1nD3Ykj",
     paymentAmount: 1489.9,
     paymentInterestFree: true,
@@ -62,6 +68,7 @@ export const TIPOS = [
     label: "Sistema / dashboard",
     base: 2489.9,
     cartao: 2489.9,
+    numeroParcelas: 10,
     paymentUrl: "https://mpago.li/22AgdjZ",
     paymentAmount: 2489.9,
     paymentInterestFree: true,
@@ -79,7 +86,11 @@ export const TIPOS = [
 
 export const PAGAMENTOS = [
   { id: "pix", label: "Pix", description: "Valor à vista" },
-  { id: "cartao", label: "Cartão de crédito", description: "Em 10 parcelas" },
+  {
+    id: "cartao",
+    label: "Cartão de crédito",
+    description: "Parcelas conforme o plano",
+  },
 ];
 export const RECURSOS = [
   {
@@ -129,7 +140,12 @@ export function obterLinkPagamento(plano, pagamentoId) {
     !plano?.paymentUrl
   )
     return "";
-  const valor = pagamentoId === "cartao" ? plano.cartao : plano.base;
+  // Nos links com juros para o comprador, o Mercado Pago financia a cobrança
+  // base. O total parcelado anunciado não vira uma segunda cobrança.
+  const valor =
+    pagamentoId === "cartao" && !plano.paymentBuyerInterest
+      ? plano.cartao
+      : plano.base;
   if (plano.paymentAmount !== valor) return "";
   return plano.paymentUrl;
 }
@@ -169,10 +185,12 @@ export const formatarBRL = (valor, centavos = false) =>
     minimumFractionDigits: centavos || !Number.isInteger(valor) ? 2 : 0,
     maximumFractionDigits: 2,
   });
-export function calcularParcelamento(total) {
+export function calcularParcelamento(total, numeroParcelas = MAX_PARCELAS) {
+  if (!Number.isInteger(numeroParcelas) || numeroParcelas < 1)
+    throw new RangeError("Número de parcelas inválido.");
   const totalCentavos = Math.round(total * 100);
-  const parcelaCentavos = Math.round(totalCentavos / MAX_PARCELAS);
-  const ultimaCentavos = totalCentavos - parcelaCentavos * (MAX_PARCELAS - 1);
+  const parcelaCentavos = Math.round(totalCentavos / numeroParcelas);
+  const ultimaCentavos = totalCentavos - parcelaCentavos * (numeroParcelas - 1);
   return {
     parcela: parcelaCentavos / 100,
     ultima: ultimaCentavos / 100,
@@ -180,12 +198,16 @@ export function calcularParcelamento(total) {
   };
 }
 
-export function descreverPagamento(total, pagamentoId) {
+export function descreverPagamento(
+  total,
+  pagamentoId,
+  numeroParcelas = MAX_PARCELAS,
+) {
   if (pagamentoId !== "cartao") return formatarBRL(total) + " à vista no Pix";
-  const parcelas = calcularParcelamento(total);
+  const parcelas = calcularParcelamento(total, numeroParcelas);
   const descricao = parcelas.iguais
-    ? MAX_PARCELAS + "× de " + formatarBRL(parcelas.parcela, true)
-    : (MAX_PARCELAS - 1) +
+    ? numeroParcelas + "× de " + formatarBRL(parcelas.parcela, true)
+    : (numeroParcelas - 1) +
       "× de " +
       formatarBRL(parcelas.parcela, true) +
       " + 1× de " +

@@ -54,7 +54,7 @@ export const PERGUNTAS = [
           (item) =>
             item.label +
             ": " +
-            descreverPagamento(item.cartao, "cartao") +
+            descreverPagamento(item.cartao, "cartao", item.numeroParcelas) +
             ", sem juros para o comprador.",
         )
         .join(" "),
@@ -70,12 +70,14 @@ export const PERGUNTAS = [
       "O escopo inicial custa " +
         descreverPagamento(institucional.base, "pix") +
         " ou " +
-        descreverPagamento(institucional.cartao, "cartao") +
+        descreverPagamento(institucional.cartao, "cartao", institucional.numeroParcelas) +
         ". O total no cartão é diferente do valor à vista e aparece antes de você solicitar a proposta.",
-      "O botão Pagar no Mercado Pago do institucional à vista abre um link de " +
+      "O botão Pagar no Mercado Pago do institucional abre um link com cobrança base de " +
         formatarBRL(institucional.base) +
-        " para o escopo inicial. Você escolhe a forma de pagamento no Mercado Pago e confere as condições antes de confirmar. Parcelamento nesse ambiente pode ter acréscimo.",
-      "Adicionais e prioridade alteram a estimativa. Manutenção, domínio, hospedagem e taxas externas são separados. As propostas com adicionais, o preço anunciado na aba cartão e a manutenção têm pagamento confirmado no atendimento. Enquanto estiver vigente, a oferta promocional de landing page tem um link próprio no banner.",
+        " para o escopo inicial. Você escolhe Pix ou até 12 parcelas com juros no Mercado Pago. O acréscimo do parcelamento anunciado é " +
+        formatarBRL(institucional.cartao - institucional.base, true) +
+        "; confira as condições e o total no checkout antes de confirmar.",
+      "Adicionais e prioridade alteram a estimativa e têm pagamento confirmado no atendimento. Manutenção, domínio, hospedagem e taxas externas são separados. Enquanto estiver vigente, a oferta promocional de landing page tem um link próprio no banner.",
     ],
   },
   {

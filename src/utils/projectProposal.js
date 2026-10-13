@@ -32,7 +32,11 @@ export function criarPropostaCriacao({
   if (manutencaoId && !manutencao)
     throw new RangeError("Plano de manutenção inválido.");
   const recursos = RECURSOS.filter((item) => recursoIds.includes(item.id));
-  const pagamento = descreverPagamento(estimativa, pagamentoId);
+  const pagamento = descreverPagamento(
+    estimativa,
+    pagamentoId,
+    tipo.numeroParcelas,
+  );
   const detalhes = detalharOferta(tipoId);
   const escopo = [
     "Escopo base: " + detalhes.overview,
@@ -69,6 +73,7 @@ export function criarPropostaCriacao({
     estimativa,
     pagamentoId,
     pagamento,
+    numeroParcelas: tipo.numeroParcelas,
     manutencaoId,
     mensalidade: manutencao?.valor || 0,
     mensagem: [

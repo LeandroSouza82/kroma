@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   TIPOS,
-  MAX_PARCELAS,
   formatarBRL,
   obterLinkPagamento,
 } from "../data/projectOptions";
@@ -197,7 +196,7 @@ export default function CommercialPlans({ onSolicitar }) {
               ? "Acompanhamento opcional, com pagamento mensal por Pix ou cartão a combinar."
               : aba === "pix"
                 ? "Valor à vista no Pix. Escopo e condições confirmados na proposta."
-                : "Parcelamento em 10 vezes. O valor total no cartão aparece em cada plano."}
+                : "Parcelamento em até 12 vezes, conforme o plano. O total e os acréscimos aparecem em cada card."}
           </p>
           <div
             className={
@@ -256,9 +255,9 @@ export default function CommercialPlans({ onSolicitar }) {
                         ) : aba === "cartao" ? (
                           <>
                             <span className="text-lg font-normal">
-                              {MAX_PARCELAS}×{" "}
+                              {item.numeroParcelas}×{" "}
                             </span>
-                            {formatarBRL(item.cartao / MAX_PARCELAS, true)}
+                            {formatarBRL(item.cartao / item.numeroParcelas, true)}
                           </>
                         ) : (
                           formatarBRL(item.base)
@@ -273,6 +272,14 @@ export default function CommercialPlans({ onSolicitar }) {
                               (item.paymentInterestFree ? " · sem juros" : "")
                             : "à vista no Pix"}
                       </p>
+                      {!manutencao &&
+                        aba === "cartao" &&
+                        item.cartao > item.base && (
+                          <p className="mt-2 text-xs text-slate-600">
+                            Com juros: {formatarBRL(item.cartao - item.base, true)} de
+                            acréscimo sobre o Pix.
+                          </p>
+                        )}
                     </div>
                     <button
                       type="button"
@@ -321,7 +328,7 @@ export default function CommercialPlans({ onSolicitar }) {
                     >
                       {item.paymentInterestFree
                         ? "À vista ou em até 10 parcelas sem juros. Você escolhe a forma de pagamento no Mercado Pago e confere o total antes de confirmar."
-                        : "Link para o valor à vista. Confira no Mercado Pago as opções de pagamento e eventuais acréscimos."}{" "}
+                        : "Escolha Pix ou até " + item.numeroParcelas + " parcelas com juros no Mercado Pago. Confira as condições e o total antes de confirmar."}{" "}
                       Este link paga somente a criação. As mensalidades são
                       contratadas separadamente.
                     </p>

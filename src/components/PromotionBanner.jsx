@@ -1,5 +1,5 @@
 import { useEffect, useId, useState } from "react";
-import { MAX_PARCELAS, formatarBRL } from "../data/projectOptions";
+import { formatarBRL } from "../data/projectOptions";
 import { PROMOCAO, promocaoAtiva, validadePromocao } from "../data/promotion";
 import { detalharOferta } from "../data/offerDetails";
 import { criarPropostaCriacao } from "../utils/projectProposal";
@@ -142,10 +142,10 @@ function PromotionDialog({ onFechar, onSolicitar }) {
             </button>
           </div>
           <div className="promo-price" aria-live="polite" aria-atomic="true">
-            <p>{cartao ? MAX_PARCELAS + "× de" : "Criação à vista"}</p>
+            <p>{cartao ? "Até " + oferta.numeroParcelas + "× de" : "Criação à vista"}</p>
             <strong>
               {formatarBRL(
-                cartao ? oferta.cartao / MAX_PARCELAS : oferta.base,
+                cartao ? oferta.cartao / oferta.numeroParcelas : oferta.base,
                 cartao,
               )}
             </strong>
@@ -322,8 +322,8 @@ export default function PromotionBanner({ onSolicitar }) {
         <p>
           <span className="promo-strip-label">Oferta de lançamento</span>{" "}
           Landing page por <strong>{formatarBRL(PROMOCAO.offer.base)} no Pix</strong>{" "}
-          · No cartão, {MAX_PARCELAS}× de{" "}
-          {formatarBRL(PROMOCAO.offer.cartao / MAX_PARCELAS, true)}{" "}
+          · No cartão, até {PROMOCAO.offer.numeroParcelas}× de{" "}
+          {formatarBRL(PROMOCAO.offer.cartao / PROMOCAO.offer.numeroParcelas, true)}{" "}
           (total {formatarBRL(PROMOCAO.offer.cartao)})
         </p>
         <span className="promo-strip-date">

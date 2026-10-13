@@ -11,8 +11,9 @@ export const PROMOCAO = {
     id: "landing-promocional",
     label: "Landing page promocional",
     base: 299,
-    // Total de 10× R$36,07 informado pelo vendedor no checkout deste link.
-    cartao: 360.7,
+    // Total de 12× R$30,43 informado pelo vendedor no checkout deste link.
+    cartao: 365.16,
+    numeroParcelas: 12,
     limits: { pages: 1, sections: 3, images: 5, revisions: 1 },
     description:
       "Uma página para divulgar seu negócio, serviço ou campanha e levar interessados ao seu WhatsApp.",
