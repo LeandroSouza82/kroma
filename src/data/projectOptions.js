@@ -27,6 +27,8 @@ export const TIPOS = [
     label: "Evento / convite digital",
     base: 489.9,
     cartao: 689.9,
+    paymentUrl: "https://mpago.li/14HxkrF",
+    paymentAmount: 489.9,
     limits: { pages: 1, sections: 4, images: 8, revisions: 1 },
     description:
       "Um endereço especial para reunir as informações do seu evento.",

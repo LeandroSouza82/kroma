@@ -25,7 +25,7 @@ Confira o plano da conta antes da publicação comercial. O [Hobby](https://verc
 
 Os cards começam com a borda azul no plano recomendado. Clicar em um card ou selecionar seu controle de rádio move a borda para esse plano. A escolha de criação permanece ao alternar entre Pix e cartão; a manutenção tem uma seleção independente. A seleção visual não envia proposta nem inicia cobrança.
 
-Todos os quatro cards de criação apresentam Pagar no Mercado Pago. Quando existe um link com o valor da forma de pagamento escolhida, o botão abre essa cobrança. Se o link ainda não foi fornecido, o botão fica desativado, com orientação para solicitar a proposta e receber o link no atendimento. No momento, faltam as cobranças de R$489,90 e R$689,90 do evento e a de R$998,90 do institucional no cartão. Os links de outros valores não são reutilizados. Os planos de manutenção permanecem com contratação por proposta.
+Todos os quatro cards de criação apresentam o botão azul Pagar no Mercado Pago. Quando existe um link com o valor da forma de pagamento escolhida, o botão abre essa cobrança. Se o link ainda não foi fornecido, o botão permanece azul e desativado, com aviso de que o link ainda não está cadastrado e orientação para solicitar a proposta e recebê-lo no atendimento. O evento de R$489,90 já tem link próprio; faltam as cobranças de R$689,90 do evento no cartão e de R$998,90 do institucional no cartão. Os links de outros valores não são reutilizados. Os planos de manutenção permanecem com contratação por proposta.
 
 - src/data/projectOptions.js: tipos de projeto, preços Pix/cartão, adicionais, prazo e número de parcelas.
 - src/data/maintenancePlans.js: mensalidades, limites e descrição dos planos de manutenção.
@@ -65,6 +65,10 @@ O institucional à vista tem o link `https://mpago.li/17uiB8D`, fornecido pelo v
 O link e o valor externo ficam em `paymentUrl` e `paymentAmount` no plano de `projectOptions.js`. `obterLinkPagamento` compara o valor da cobrança com o preço da forma de pagamento selecionada. No institucional, o link é liberado somente na aba à vista: o total de R$998,90 da aba cartão é diferente e segue por proposta. Evento, manutenção e estimativas com adicionais também não usam essa cobrança de R$699,90.
 
 Não há pré-seleção do método no checkout, coleta de cartão ou confirmação automática de pagamento no site. O checkout retornou erro de acesso no navegador de verificação; o valor foi confirmado pelo vendedor e não conferido diretamente neste ambiente. Acompanhe os pagamentos na conta Mercado Pago e combine escopo, prazo e materiais com o cliente.
+
+## Pagamento do evento
+
+O link `https://mpago.li/14HxkrF` foi associado ao evento de R$489,90 na aba Pix, pelo contexto em que o vendedor o enviou. O botão azul fica habilitado e abre o Mercado Pago em outra aba. O total de R$689,90 anunciado para o cartão exige outro link; essa opção permanece desativada até o cadastro da cobrança correspondente. A escolha do método e as condições finais são conferidas no checkout externo, sem pré-seleção pelo site. Não é anunciada condição sem juros para este link.
 
 ## Pagamento dos dois planos maiores
 

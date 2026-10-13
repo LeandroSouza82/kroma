@@ -268,7 +268,7 @@ export default function CommercialPlans({ onSolicitar }) {
                         " no Mercado Pago (link solicitado no atendimento)"
                       }
                       aria-describedby={"plano-pagamento-info-" + item.id}
-                      className="plan-pay plan-pay-pending mt-auto w-full cursor-not-allowed rounded-xl bg-slate-100 px-4 py-3.5 text-sm font-semibold text-slate-600"
+                      className="plan-pay plan-pay-pending mt-auto w-full cursor-not-allowed rounded-xl bg-blue-600 px-4 py-3.5 text-sm font-semibold text-white"
                     >
                       Pagar no Mercado Pago <span aria-hidden="true">↗</span>
                     </button>
@@ -276,8 +276,9 @@ export default function CommercialPlans({ onSolicitar }) {
                       id={"plano-pagamento-info-" + item.id}
                       className="mt-3 text-xs leading-relaxed text-slate-600"
                     >
-                      Solicite uma proposta para receber o link de pagamento
-                      deste plano no atendimento.
+                      Link de pagamento ainda não cadastrado. Solicite uma
+                      proposta para receber o link de pagamento deste plano no
+                      atendimento.
                     </p>
                   </>
                 ) : null}

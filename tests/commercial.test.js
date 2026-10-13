@@ -17,6 +17,44 @@ import {
 import { detalharOferta } from "../src/data/offerDetails.js";
 import { filtrarPerguntas } from "../src/data/clientGuide.js";
 
+test("os quatro preços dos cards chegam iguais às informações, ao simulador e à mensagem de atendimento", () => {
+  for (const [tipoId, pix, cartao, textoPix, textoCartao] of [
+    ["empresarial", 699.9, 998.9, "699,90", "998,90"],
+    ["evento", 489.9, 689.9, "489,90", "689,90"],
+    ["ecommerce", 1489.9, 1489.9, "1.489,90", "1.489,90"],
+    ["sistema", 2489.9, 2489.9, "2.489,90", "2.489,90"],
+  ]) {
+    const plano = TIPOS.find((item) => item.id === tipoId);
+    const detalhes = detalharOferta(tipoId);
+    assert.equal(plano.base, pix);
+    assert.equal(plano.cartao, cartao);
+    assert.equal(detalhes.base, pix);
+    assert.equal(detalhes.cartao, cartao);
+
+    for (const [pagamentoId, total, texto] of [
+      ["pix", pix, textoPix],
+      ["cartao", cartao, textoCartao],
+    ]) {
+      assert.equal(calcularEstimativa(tipoId, [], "normal", pagamentoId), total);
+      const proposta = criarPropostaCriacao({ tipoId, pagamentoId });
+      assert.equal(proposta.estimativa, total);
+      assert.equal(proposta.mensalidade, 0);
+      const mensagem = montarMensagemContato(
+        {
+          nome: "Cliente de teste",
+          contato: "teste@example.com",
+          tipoProjeto: plano.label,
+          mensagem: "",
+        },
+        proposta,
+      );
+      const precoEsperado = "R$" + texto;
+      assert.ok(proposta.pagamento.replace(/\s/g, "").includes(precoEsperado));
+      assert.ok(mensagem.replace(/\s/g, "").includes(precoEsperado));
+    }
+  }
+});
+
 test("oferta institucional anuncia 699,90 no Pix e 10 vezes de 99,89 no cartão", () => {
   assert.equal(calcularEstimativa("empresarial"), 699.9);
   assert.equal(
@@ -38,13 +76,22 @@ test("link de 699,90 é exclusivo do institucional à vista e não cobra outro v
   assert.equal(obterLinkPagamento(institucional, "cartao"), "");
   assert.equal(obterLinkPagamento(institucional, "manutencao"), "");
   assert.equal(obterLinkPagamento({ ...institucional, base: 700 }, "pix"), "");
-  assert.equal(
+  assert.notEqual(
     obterLinkPagamento(
       TIPOS.find((item) => item.id === "evento"),
       "pix",
     ),
-    "",
+    institucional.paymentUrl,
   );
+});
+
+test("o evento usa seu link de 489,90 somente para a opção desse valor", () => {
+  const evento = TIPOS.find((item) => item.id === "evento");
+  assert.equal(evento.paymentAmount, 489.9);
+  assert.equal(obterLinkPagamento(evento, "pix"), "https://mpago.li/14HxkrF");
+  assert.equal(obterLinkPagamento(evento, "cartao"), "");
+  assert.equal(obterLinkPagamento(evento, "manutencao"), "");
+  assert.equal(obterLinkPagamento({ ...evento, base: 489.89 }, "pix"), "");
 });
 
 test("os dois links maiores cobram o mesmo total à vista ou em dez parcelas sem juros", () => {
