@@ -58,9 +58,20 @@ Os diálogos compartilham a abertura e o retorno de foco; o fechamento é contro
 
 O institucional à vista tem o link `https://mpago.li/17uiB8D`, fornecido pelo vendedor para R$699,90. O botão Pagar no Mercado Pago aparece no cartão desse serviço na aba Pix e abre em outra aba, com noopener/noreferrer. O cliente recebe um aviso para conferir métodos e eventuais acréscimos no checkout. Solicitar proposta permanece disponível, sem cobrança.
 
-O link e o valor externo ficam em `paymentUrl` e `paymentAmount` no plano de `projectOptions.js`. `obterLinkPagamento` libera o link somente para a aba à vista, com valor igual ao preço anunciado. Se o preço mudar, o link deixa de ser apresentado até ser substituído por uma cobrança correspondente. O total de R$998,90 da aba cartão, os demais serviços, a manutenção e as estimativas com adicionais seguem por proposta e não usam essa cobrança de R$699,90.
+O link e o valor externo ficam em `paymentUrl` e `paymentAmount` no plano de `projectOptions.js`. `obterLinkPagamento` compara o valor da cobrança com o preço da forma de pagamento selecionada. No institucional, o link é liberado somente na aba à vista: o total de R$998,90 da aba cartão é diferente e segue por proposta. Evento, manutenção e estimativas com adicionais também não usam essa cobrança de R$699,90.
 
 Não há pré-seleção do método no checkout, coleta de cartão ou confirmação automática de pagamento no site. O checkout retornou erro de acesso no navegador de verificação; o valor foi confirmado pelo vendedor e não conferido diretamente neste ambiente. Acompanhe os pagamentos na conta Mercado Pago e combine escopo, prazo e materiais com o cliente.
+
+## Pagamento dos dois planos maiores
+
+- Catálogo digital: `https://mpago.li/1nD3Ykj`, R$1.489,90 à vista ou em até 10 parcelas sem juros de R$148,99.
+- Sistema/dashboard: `https://mpago.li/22AgdjZ`, R$2.489,90 à vista ou em até 10 parcelas sem juros de R$248,99.
+
+Os links foram associados na ordem enviada pelo vendedor, que informou os valores e o parcelamento sem juros para o comprador. O preço no cartão desses dois planos é o mesmo do Pix. O custo de parcelamento é assumido pela Kroma Web e não é somado ao valor anunciado. A promoção de R$299 e o institucional mantêm suas condições próprias.
+
+Esses botões aparecem nas abas Pix e cartão, pois `paymentAmount` corresponde a ambos os preços. `paymentInterestFree` identifica a condição sem juros nos cartões e na nova pergunta do guia. Métodos e parcelamento são escolhidos no Mercado Pago; os links cobram o escopo inicial, sem adicionar manutenção ou recursos do simulador. Se um preço mudar, o link só continua disponível para a forma de pagamento cujo total coincida com a cobrança externa.
+
+Os dois checkouts retornaram erro de acesso neste navegador; seus valores e condições foram informados pelo vendedor, sem pagamento de teste ou confirmação automática no site.
 
 ## Galeria de modelos
 
@@ -74,6 +85,6 @@ As imagens públicas ficam em public/modelos e têm título, descrição e códi
 
 ## Atendimento e demonstrações
 
-Os planos regulares e o simulador compõem um pedido de orçamento, com pagamento combinado após a confirmação do escopo. O institucional à vista e a promoção de landing page oferecem seus próprios links do Mercado Pago. O site não coleta dados de cartão nem marca pedidos como pagos. As condições escolhidas para uma proposta seguem no campo escopo existente, sem mudança do esquema do banco.
+Os planos regulares e o simulador compõem um pedido de orçamento, com pagamento combinado após a confirmação do escopo. O institucional à vista, os dois planos maiores e a promoção de landing page oferecem seus próprios links do Mercado Pago. O site não coleta dados de cartão nem marca pedidos como pagos. As condições escolhidas para uma proposta seguem no campo escopo existente, sem mudança do esquema do banco.
 
 A demonstração RSVP é explicitamente ilustrativa. Credenciamento real e integrações de pagamentos dependem do projeto contratado. As métricas de desempenho devem ser medidas no ambiente publicado antes de serem anunciadas.

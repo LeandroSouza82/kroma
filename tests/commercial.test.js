@@ -19,7 +19,10 @@ import { filtrarPerguntas } from "../src/data/clientGuide.js";
 
 test("oferta institucional anuncia 699,90 no Pix e 10 vezes de 99,89 no cartão", () => {
   assert.equal(calcularEstimativa("empresarial"), 699.9);
-  assert.equal(calcularEstimativa("empresarial", [], "normal", "cartao"), 998.9);
+  assert.equal(
+    calcularEstimativa("empresarial", [], "normal", "cartao"),
+    998.9,
+  );
   assert.equal(calcularParcelamento(998.9).parcela, 99.89);
   assert.match(
     descreverPagamento(998.9, "cartao"),
@@ -28,13 +31,45 @@ test("oferta institucional anuncia 699,90 no Pix e 10 vezes de 99,89 no cartão"
 });
 test("link de 699,90 é exclusivo do institucional à vista e não cobra outro valor ou plano", () => {
   const institucional = TIPOS.find((item) => item.id === "empresarial");
-  assert.equal(obterLinkPagamento(institucional, "pix"), "https://mpago.li/17uiB8D");
+  assert.equal(
+    obterLinkPagamento(institucional, "pix"),
+    "https://mpago.li/17uiB8D",
+  );
   assert.equal(obterLinkPagamento(institucional, "cartao"), "");
   assert.equal(obterLinkPagamento(institucional, "manutencao"), "");
   assert.equal(obterLinkPagamento({ ...institucional, base: 700 }, "pix"), "");
-  for (const plano of TIPOS.filter((item) => item.id !== institucional.id)) {
-    assert.equal(obterLinkPagamento(plano, "pix"), "");
+  assert.equal(
+    obterLinkPagamento(
+      TIPOS.find((item) => item.id === "evento"),
+      "pix",
+    ),
+    "",
+  );
+});
+
+test("os dois links maiores cobram o mesmo total à vista ou em dez parcelas sem juros", () => {
+  for (const [id, valor, parcela, link] of [
+    ["ecommerce", 1489.9, 148.99, "https://mpago.li/1nD3Ykj"],
+    ["sistema", 2489.9, 248.99, "https://mpago.li/22AgdjZ"],
+  ]) {
+    const plano = TIPOS.find((item) => item.id === id);
+    assert.equal(plano.base, valor);
+    assert.equal(plano.cartao, valor);
+    assert.equal(plano.paymentInterestFree, true);
+    assert.equal(calcularParcelamento(valor).parcela, parcela);
+    assert.equal(obterLinkPagamento(plano, "pix"), link);
+    assert.equal(obterLinkPagamento(plano, "cartao"), link);
+    assert.equal(
+      obterLinkPagamento({ ...plano, cartao: valor + 1 }, "cartao"),
+      "",
+    );
   }
+  const respostas = filtrarPerguntas("sem juros", "Pagamento");
+  assert.equal(respostas.length, 1);
+  assert.match(
+    respostas[0].answer.join(" "),
+    /148,99.*1\.489,90.*248,99.*2\.489,90/,
+  );
 });
 test("os adicionais e a prioridade seguem a forma de pagamento escolhida", () => {
   assert.equal(

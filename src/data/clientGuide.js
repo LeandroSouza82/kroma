@@ -32,6 +32,24 @@ export const CATEGORIAS_FAQ = [
 
 export const PERGUNTAS = [
   {
+    id: "planos-sem-juros",
+    category: "Pagamento",
+    question: "Quais planos têm até 10 parcelas sem juros?",
+    answer: [
+      TIPOS.filter((item) => item.paymentInterestFree)
+        .map(
+          (item) =>
+            item.label +
+            ": " +
+            descreverPagamento(item.cartao, "cartao") +
+            ", sem juros para o comprador.",
+        )
+        .join(" "),
+      "Os botões de pagamento desses planos abrem os links próprios do Mercado Pago. Você escolhe a forma de pagamento e confere o total antes de confirmar. O custo do parcelamento é assumido pela Kroma Web.",
+      "Os valores cobrem o escopo inicial do plano. Adicionais, manutenção, domínio e hospedagem são separados e confirmados no atendimento.",
+    ],
+  },
+  {
     id: "preco-institucional",
     category: "Pagamento",
     question: "Quanto custa o site institucional e como posso pagar?",

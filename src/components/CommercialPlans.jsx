@@ -172,7 +172,9 @@ export default function CommercialPlans({ onSolicitar }) {
                         {manutencao
                           ? "por mês"
                           : aba === "cartao"
-                            ? "Total no cartão: " + formatarBRL(item.cartao)
+                            ? "Total no cartão: " +
+                              formatarBRL(item.cartao) +
+                              (item.paymentInterestFree ? " · sem juros" : "")
                             : "à vista no Pix"}
                       </p>
                     </div>
@@ -220,8 +222,9 @@ export default function CommercialPlans({ onSolicitar }) {
                       id={"plano-pagamento-info-" + item.id}
                       className="mt-3 text-xs leading-relaxed text-slate-600"
                     >
-                      Link para o valor à vista. Confira no Mercado Pago as
-                      opções de pagamento e eventuais acréscimos.
+                      {item.paymentInterestFree
+                        ? "À vista ou em até 10 parcelas sem juros. Você escolhe a forma de pagamento no Mercado Pago e confere o total antes de confirmar."
+                        : "Link para o valor à vista. Confira no Mercado Pago as opções de pagamento e eventuais acréscimos."}
                     </p>
                   </>
                 )}

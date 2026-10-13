@@ -41,7 +41,10 @@ export const TIPOS = [
     id: "ecommerce",
     label: "Loja / catálogo digital",
     base: 1489.9,
-    cartao: 1889.9,
+    cartao: 1489.9,
+    paymentUrl: "https://mpago.li/1nD3Ykj",
+    paymentAmount: 1489.9,
+    paymentInterestFree: true,
     limits: { pages: 1, products: 20, revisions: 1 },
     description:
       "Apresente seus produtos e facilite os pedidos dos seus clientes.",
@@ -56,7 +59,10 @@ export const TIPOS = [
     id: "sistema",
     label: "Sistema / dashboard",
     base: 2489.9,
-    cartao: 2989.9,
+    cartao: 2489.9,
+    paymentUrl: "https://mpago.li/22AgdjZ",
+    paymentAmount: 2489.9,
+    paymentInterestFree: true,
     limits: { screens: 3, flows: 1, revisions: 1 },
     description:
       "Uma interface pensada para o fluxo que a sua operação precisa.",
@@ -117,11 +123,12 @@ export const obterTipoProjeto = (id) =>
 
 export function obterLinkPagamento(plano, pagamentoId) {
   if (
-    pagamentoId !== "pix" ||
-    !plano?.paymentUrl ||
-    plano.paymentAmount !== plano.base
+    !["pix", "cartao"].includes(pagamentoId) ||
+    !plano?.paymentUrl
   )
     return "";
+  const valor = pagamentoId === "cartao" ? plano.cartao : plano.base;
+  if (plano.paymentAmount !== valor) return "";
   return plano.paymentUrl;
 }
 
