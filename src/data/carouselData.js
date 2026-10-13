@@ -1,41 +1,44 @@
 const img = (id) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=2000&q=80`;
-
+  "https://images.unsplash.com/" + id + "?auto=format&fit=crop&w=1600&q=75";
 export const carouselData = [
   {
     id: 1,
-    tag: "Empresas & Presença Corporativa",
-    title: "Sua marca com a autoridade que fecha contratos B2B.",
+    tipoId: "empresarial",
+    tag: "Sites para empresas",
+    title: "Seu negócio merece uma presença melhor.",
     description:
-      "Sites institucionais rápidos, com SEO estruturado e narrativa comercial desenhada para converter visitantes em reuniões.",
-    label: "Corporativo",
+      "Design cuidado, conteúdo claro e contato fácil. Uma presença profissional com um investimento acessível.",
+    label: "Institucional",
     bgImage: img("photo-1497366216548-37526070297c"),
   },
   {
     id: 2,
-    tag: "Plataformas & Dashboards Sob Medida",
-    title: "Sistemas que organizam a operação e escalam com você.",
+    tipoId: "sistema",
+    tag: "Sistemas e dashboards",
+    title: "Uma boa ideia pode simplificar sua operação.",
     description:
-      "Portais de clientes, sistemas internos, SaaS e automações com dados em tempo real e interface de nível produto.",
+      "Fluxos e interfaces pensados para a rotina do seu negócio, com o escopo combinado antes de começar.",
     label: "Sistemas",
     bgImage: img("photo-1551288049-bebda4e38f71"),
   },
   {
     id: 3,
-    tag: "Grandes Eventos & Celebrações",
-    title: "Convites digitais imersivos para momentos inesquecíveis.",
+    tipoId: "evento",
+    tag: "Eventos e convites digitais",
+    title: "O seu evento começa com uma boa experiência.",
     description:
-      "RSVP interativo, credenciais com QR Code e gestão de listas de convidados para casamentos, congressos e eventos de luxo.",
+      "As informações, os momentos e o contato com a organização reunidos em um endereço especial.",
     label: "Eventos",
     bgImage: img("photo-1519741497674-611481863552"),
   },
   {
     id: 4,
-    tag: "E-commerce & Lojas de Alta Conversão",
-    title: "Checkout veloz, catálogo sofisticado e zero fricção.",
+    tipoId: "ecommerce",
+    tag: "Lojas e catálogos digitais",
+    title: "Aproxime seus produtos dos próximos clientes.",
     description:
-      "Lojas virtuais ultra otimizadas, com experiência de compra fluida do primeiro clique ao pagamento aprovado.",
-    label: "E-commerce",
+      "Uma vitrine organizada e um caminho simples para receber pedidos, com integrações definidas na proposta.",
+    label: "Loja digital",
     bgImage: img("photo-1556742049-0cfed4f6a45d"),
   },
 ];

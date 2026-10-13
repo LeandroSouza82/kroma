@@ -38,7 +38,7 @@ function QRCodeMock({ semente }) {
       className="h-full w-full"
       shapeRendering="crispEdges"
       role="img"
-      aria-label="QR Code da credencial"
+      aria-label="Ilustração de QR Code para uma credencial demonstrativa"
     >
       <rect width={TAMANHO_QR} height={TAMANHO_QR} fill="#fff" />
       {gerarCelulas(semente).map(([x, y]) => (
@@ -90,11 +90,11 @@ export default function InteractiveRSVP() {
             Demonstração interativa
           </span>
           <h2 className="mt-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-            Experimente um RSVP real, agora.
+            Uma prévia da experiência do seu evento.
           </h2>
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/60">
-            Esta é a experiência que seus convidados teriam: confirmação em segundos e uma
-            credencial digital com QR Code pronta para o credenciamento na entrada.
+            Experimente a interface de confirmação de presença. Esta demonstração apresenta
+            uma credencial ilustrativa; o sistema do seu evento será definido na proposta.
           </p>
         </div>
 
@@ -129,7 +129,7 @@ export default function InteractiveRSVP() {
               </p>
               <span className="mt-4 inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-300">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                Presença validada
+                Confirmação demonstrativa
               </span>
               <button
                 type="button"

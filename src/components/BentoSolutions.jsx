@@ -1,8 +1,8 @@
 const METRICAS = [
-  { valor: "99+", rotulo: "Lighthouse" },
-  { valor: "<1s", rotulo: "Carregamento" },
-  { valor: "SEO", rotulo: "Estruturado" },
-  { valor: "DB", rotulo: "Banco conectado" },
+  { valor: "Design", rotulo: "Identidade do negócio" },
+  { valor: "Mobile", rotulo: "Layout responsivo" },
+  { valor: "SEO", rotulo: "Boas práticas" },
+  { valor: "Suporte", rotulo: "Acompanhamento opcional" },
 ];
 
 const BARRAS = [38, 62, 45, 78, 56, 92, 70];
@@ -34,7 +34,7 @@ export default function BentoSolutions() {
           Soluções
         </span>
         <h2 className="mt-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-          Qualquer site. Um único padrão de excelência.
+          Uma boa presença, do primeiro clique ao contato.
         </h2>
       </div>
 
@@ -42,8 +42,8 @@ export default function BentoSolutions() {
         <Card
           className="lg:col-span-2"
           eyebrow="Empresas"
-          title="Empresas & Negócios Locais ou Globais"
-          text="Sites institucionais que comunicam autoridade, posicionam sua marca e transformam tráfego em oportunidades reais de negócio."
+          title="Sites para empresas e negócios locais"
+          text="Seu espaço para apresentar os serviços, mostrar seu trabalho e facilitar o contato de quem procura o que você oferece."
         >
           <div className="mt-auto flex flex-wrap gap-2 pt-8">
             <Chip>Institucional</Chip>
@@ -72,21 +72,21 @@ export default function BentoSolutions() {
 
         <Card
           eyebrow="E-commerce"
-          title="Lojas Virtuais Ultra Otimizadas"
-          text="Catálogo sofisticado, checkout veloz e integração com pagamentos para vender sem fricção."
+          title="Lojas e catálogos digitais"
+          text="Seus produtos organizados em uma vitrine própria, com pedidos e pagamentos definidos conforme o projeto."
         />
 
         <Card
           eyebrow="Eventos"
           title="Casamentos, Eventos e Congressos"
-          text="Convites imersivos, RSVP interativo, credenciais com QR Code e controle de listas em tempo real."
+          text="Informações do evento, galerias e contato com a organização. Recursos de confirmação de presença podem ser incluídos na proposta."
         />
 
         <Card
           className="lg:col-span-3"
           eyebrow="Infraestrutura"
-          title="Engenharia técnica de ponta a ponta"
-          text="Performance 99+ no Google Lighthouse, carregamento em menos de 1 segundo, SEO estruturado e conexão nativa com banco de dados."
+          title="Cuidado nos detalhes que fazem diferença"
+          text="Design alinhado à sua marca, atenção ao uso no celular e uma estrutura clara para apresentar o negócio. Recursos e integrações são planejados para cada escopo."
         >
           <dl className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {METRICAS.map(({ valor, rotulo }) => (

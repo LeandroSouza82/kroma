@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TIPOS, formatarBRL } from "../data/projectOptions";
 import { criarLead, linkWhatsApp } from "../services/supabaseClient";
+import { montarMensagemContato } from "../utils/projectProposal";
 
 const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -15,19 +16,6 @@ const validar = ({ nome, contato, tipoProjeto, mensagem }) => {
   if (mensagem.trim().length < 10) erros.mensagem = "Descreva sua ideia em pelo menos 10 caracteres.";
   return erros;
 };
-
-const montarMensagemWhatsApp = ({ nome, contato, tipoProjeto, mensagem }, { escopo, estimativa }) =>
-  [
-    "Olá, Kroma Web! Quero fechar uma proposta.",
-    `Nome: ${nome}`,
-    `Contato: ${contato}`,
-    `Tipo de site: ${tipoProjeto}`,
-    escopo && `Escopo: ${escopo}`,
-    estimativa && `Estimativa: ${formatarBRL(estimativa)}`,
-    `Ideia: ${mensagem}`,
-  ]
-    .filter(Boolean)
-    .join("\n");
 
 const campo =
   "w-full rounded-lg border bg-base px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-white/30 focus:border-accent-light";
@@ -75,7 +63,7 @@ export default function LeadFormSection({ proposta }) {
     });
 
     if (error) {
-      const link = linkWhatsApp(montarMensagemWhatsApp(form, proposta));
+      const link = linkWhatsApp(montarMensagemContato(form, proposta));
       window.open(link, "_blank", "noopener");
       setResultado({ via: "whatsapp", link });
     } else {
@@ -98,14 +86,14 @@ export default function LeadFormSection({ proposta }) {
             Em poucas linhas entendemos seu objetivo e retornamos com escopo, prazo e investimento
             claros.
           </p>
-          {proposta.estimativa > 0 && (
+          {(proposta.estimativa > 0 || proposta.mensalidade > 0) && (
             <div className="mt-8 max-w-lg rounded-xl border border-line bg-surface p-5 text-sm">
-              <p className="text-white/40">Projeto selecionado no simulador</p>
+              <p className="text-white/40">Condições selecionadas</p>
               <p className="mt-1 font-medium text-white">{proposta.tipo}</p>
               <p className="mt-1 text-white/55">{proposta.escopo}</p>
-              <p className="mt-3 font-semibold text-accent-light">
-                {formatarBRL(proposta.estimativa)}
-              </p>
+              {proposta.estimativa > 0 && <p className="mt-3 font-semibold text-accent-light">Criação: {proposta.pagamento}</p>}
+              {proposta.mensalidade > 0 && <p className="mt-2 font-semibold text-accent-light">Manutenção: {formatarBRL(proposta.mensalidade)}/mês</p>}
+              <a href={proposta.contratacao === "manutencao" ? "#planos" : "#simulador"} className="mt-4 inline-block text-xs text-white/55 underline underline-offset-4">Ajustar seleção</a>
             </div>
           )}
         </div>
@@ -129,8 +117,8 @@ export default function LeadFormSection({ proposta }) {
               </h3>
               <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-white/55">
                 {resultado.via === "supabase"
-                  ? "Nossa equipe analisará sua ideia e entrará em contato em breve."
-                  : "Abrimos o WhatsApp com sua mensagem pronta. Se a janela não abriu, use o botão abaixo."}
+                  ? "Vamos analisar sua ideia e conversar sobre o escopo e as condições."
+                  : "Sua consulta está pronta. Use o botão abaixo para enviar a mensagem pelo WhatsApp."}
               </p>
               {resultado.via === "whatsapp" && (
                 <a
@@ -169,10 +157,12 @@ export default function LeadFormSection({ proposta }) {
                   id="lead-tipo"
                   name="tipoProjeto"
                   value={form.tipoProjeto}
+                  disabled={Boolean(proposta.tipo)}
                   onChange={atualizar}
                   className={classeCampo("tipoProjeto")}
                 >
                   <option value="">Selecione</option>
+                  <option value="Manutenção de site">Manutenção de site</option>
                   {TIPOS.map((t) => (
                     <option key={t.id} value={t.label}>
                       {t.label}
@@ -198,6 +188,8 @@ export default function LeadFormSection({ proposta }) {
               >
                 {enviando ? "Enviando..." : "Enviar solicitação"}
               </button>
+              <p className="text-xs leading-relaxed text-white/45">Este pedido inicia uma conversa sobre o orçamento. O pagamento será combinado após a confirmação do escopo.</p>
+              <a href={linkWhatsApp("Olá, Kroma Web! Gostaria de conversar sobre um projeto.")} target="_blank" rel="noopener noreferrer" className="block text-center text-sm text-accent-light underline underline-offset-4">Prefiro conversar pelo WhatsApp</a>
             </form>
           )}
         </div>

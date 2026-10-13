@@ -1,0 +1,198 @@
+import { useState } from "react";
+import { TIPOS, MAX_PARCELAS, formatarBRL } from "../data/projectOptions";
+import { MANUTENCOES } from "../data/maintenancePlans";
+import {
+  criarPropostaCriacao,
+  criarPropostaManutencao,
+} from "../utils/projectProposal";
+
+const ABAS = [
+  { id: "pix", label: "À vista no Pix" },
+  { id: "cartao", label: "Parcelado no cartão" },
+  { id: "manutencao", label: "Manutenção mensal" },
+];
+function Features({ items }) {
+  return (
+    <ul className="mt-7 space-y-3 text-sm text-slate-600">
+      {items.map((item) => (
+        <li key={item} className="flex gap-2.5">
+          <span className="text-blue-600" aria-hidden="true">
+            ✓
+          </span>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+export default function CommercialPlans({ onSolicitar }) {
+  const [aba, setAba] = useState("pix");
+  const manutencao = aba === "manutencao";
+  const selecionar = (proposta) => {
+    onSolicitar(proposta);
+    document.getElementById("contato")?.scrollIntoView({ behavior: "smooth" });
+  };
+  const navegar = (event) => {
+    const atual = ABAS.findIndex((item) => item.id === aba);
+    let proxima;
+    if (event.key === "ArrowRight") proxima = (atual + 1) % ABAS.length;
+    if (event.key === "ArrowLeft")
+      proxima = (atual - 1 + ABAS.length) % ABAS.length;
+    if (event.key === "Home") proxima = 0;
+    if (event.key === "End") proxima = ABAS.length - 1;
+    if (proxima === undefined) return;
+    event.preventDefault();
+    setAba(ABAS[proxima].id);
+    event.currentTarget.querySelectorAll('[role="tab"]')[proxima]?.focus();
+  };
+  return (
+    <section id="planos" className="commercial-section scroll-mt-20">
+      <div className="mx-auto max-w-7xl px-6 py-24">
+        <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <div className="max-w-2xl">
+            <p className="section-kicker text-blue-600">
+              Design cuidado. Investimento acessível.
+            </p>
+            <h2 className="mt-4 text-4xl font-semibold leading-tight tracking-tight text-slate-950 sm:text-5xl">
+              Uma presença melhor.
+              <br />
+              Um plano que cabe.
+            </h2>
+          </div>
+          <p className="max-w-sm text-base leading-relaxed text-slate-600">
+            Escolha como começar. Veja o valor da criação, as parcelas e o
+            acompanhamento mensal em separado.
+          </p>
+        </div>
+        <div
+          role="tablist"
+          aria-label="Preços e formas de pagamento"
+          onKeyDown={navegar}
+          className="mt-10 flex flex-wrap gap-2 rounded-2xl bg-slate-200/65 p-1.5 sm:w-fit"
+        >
+          {ABAS.map((item) => (
+            <button
+              key={item.id}
+              id={"preco-aba-" + item.id}
+              role="tab"
+              aria-selected={aba === item.id}
+              aria-controls="preco-painel"
+              tabIndex={aba === item.id ? 0 : -1}
+              type="button"
+              onClick={() => setAba(item.id)}
+              className={
+                "flex-1 rounded-xl px-5 py-3 text-sm font-semibold transition-colors sm:flex-none " +
+                (aba === item.id
+                  ? "bg-slate-950 text-white shadow-sm"
+                  : "text-slate-600 hover:bg-white/70")
+              }
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+        <div
+          id="preco-painel"
+          role="tabpanel"
+          tabIndex={0}
+          aria-labelledby={"preco-aba-" + aba}
+          className="mt-9"
+        >
+          <p className="mb-5 text-sm text-slate-600">
+            {manutencao
+              ? "Acompanhamento opcional, com pagamento mensal por Pix ou cartão a combinar."
+              : aba === "pix"
+                ? "Valor à vista no Pix. Escopo e condições confirmados na proposta."
+                : "Parcelamento em 10 vezes. O valor total no cartão aparece em cada plano."}
+          </p>
+          <div
+            className={
+              "grid gap-4 sm:grid-cols-2 " +
+              (manutencao ? "lg:grid-cols-3" : "xl:grid-cols-4")
+            }
+          >
+            {(manutencao ? MANUTENCOES : TIPOS).map((item) => (
+              <article
+                key={item.id}
+                className={
+                  "pricing-card " +
+                  (item.featured ? "pricing-card-featured" : "")
+                }
+              >
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <h3 className="text-lg font-semibold text-slate-950">
+                    {item.label}
+                  </h3>
+                  {item.featured && (
+                    <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-blue-700">
+                      Recomendado
+                    </span>
+                  )}
+                </div>
+                <p className="mt-3 min-h-16 text-sm leading-relaxed text-slate-600">
+                  {item.description}
+                </p>
+                <div className="mt-6 border-t border-slate-200 pt-6">
+                  {!manutencao && (
+                    <p className="text-xs font-medium text-slate-500">
+                      A partir de
+                    </p>
+                  )}
+                  <p className="mt-1 text-3xl font-semibold tracking-tight text-slate-950">
+                    {manutencao ? (
+                      formatarBRL(item.valor)
+                    ) : aba === "cartao" ? (
+                      <>
+                        <span className="text-lg font-normal">
+                          {MAX_PARCELAS}×{" "}
+                        </span>
+                        {formatarBRL(item.cartao / MAX_PARCELAS)}
+                      </>
+                    ) : (
+                      formatarBRL(item.base)
+                    )}
+                  </p>
+                  <p className="mt-2 text-sm text-slate-500">
+                    {manutencao
+                      ? "por mês"
+                      : aba === "cartao"
+                        ? "Total no cartão: " + formatarBRL(item.cartao)
+                        : "à vista no Pix"}
+                  </p>
+                </div>
+                <Features items={item.features} />
+                <button
+                  type="button"
+                  onClick={() =>
+                    selecionar(
+                      manutencao
+                        ? criarPropostaManutencao(item.id)
+                        : criarPropostaCriacao({
+                            tipoId: item.id,
+                            pagamentoId: aba,
+                          }),
+                    )
+                  }
+                  className={
+                    "mt-auto w-full rounded-xl px-4 py-3.5 text-sm font-semibold transition-colors " +
+                    (item.featured
+                      ? "bg-blue-600 text-white hover:bg-blue-700"
+                      : "bg-slate-100 text-slate-950 hover:bg-slate-200")
+                  }
+                >
+                  {manutencao ? "Consultar este plano" : "Solicitar proposta"}{" "}
+                  <span aria-hidden="true">↗</span>
+                </button>
+              </article>
+            ))}
+          </div>
+          <p className="mt-6 max-w-4xl text-sm leading-relaxed text-slate-500">
+            {manutencao
+              ? "Cada solicitação cobre uma pequena atualização de conteúdo. Novas páginas, funcionalidades e reformulações são orçadas à parte. A mensalidade começa após a entrega ou o início do acompanhamento combinado."
+              : "Valores iniciais para o escopo descrito. Domínio, hospedagem e taxas de serviços externos são combinados na proposta. Integrações e recursos adicionais podem alterar o orçamento."}
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}

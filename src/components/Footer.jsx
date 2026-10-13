@@ -1,5 +1,6 @@
 const LINKS = [
   { href: "#solucoes", label: "Soluções" },
+  { href: "#planos", label: "Preços e manutenção" },
   { href: "#demonstracao", label: "Demonstração" },
   { href: "#simulador", label: "Simulador" },
   { href: "#contato", label: "Contato" },
