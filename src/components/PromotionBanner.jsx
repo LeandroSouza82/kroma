@@ -150,9 +150,15 @@ function PromotionDialog({ onFechar, onSolicitar }) {
             </strong>
             <span>
               {cartao
-                ? "Total da criação: " + formatarBRL(oferta.cartao)
+                ? "Total no cartão: " + formatarBRL(oferta.cartao)
                 : "Pagamento único de " + formatarBRL(oferta.base)}
             </span>
+            {cartao && oferta.cartao > oferta.base && (
+              <span>
+                Inclui {formatarBRL(oferta.cartao - oferta.base, true)} de
+                acréscimo sobre {formatarBRL(oferta.base)} à vista.
+              </span>
+            )}
           </div>
           <ul className="promo-features">
             <li>
@@ -175,7 +181,7 @@ function PromotionDialog({ onFechar, onSolicitar }) {
             href={PROMOCAO.paymentUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`Pagar landing page de ${formatarBRL(oferta.base)} no Mercado Pago (abre em outra aba)`}
+            aria-label="Pagar landing page no Mercado Pago (abre em outra aba)"
             aria-describedby={paymentInfoId}
             onClick={(event) => {
               if (!promocaoAtiva()) {
@@ -314,9 +320,10 @@ export default function PromotionBanner({ onSolicitar }) {
       <div>
         <p>
           <span className="promo-strip-label">Oferta de lançamento</span>{" "}
-          Landing page por <strong>{formatarBRL(PROMOCAO.offer.cartao)}</strong>{" "}
-          · {MAX_PARCELAS}× de{" "}
-          {formatarBRL(PROMOCAO.offer.cartao / MAX_PARCELAS, true)}
+          Landing page por <strong>{formatarBRL(PROMOCAO.offer.base)} no Pix</strong>{" "}
+          · No cartão, {MAX_PARCELAS}× de{" "}
+          {formatarBRL(PROMOCAO.offer.cartao / MAX_PARCELAS, true)}{" "}
+          (total {formatarBRL(PROMOCAO.offer.cartao)})
         </p>
         <span className="promo-strip-date">
           Válida até {validadePromocao()}

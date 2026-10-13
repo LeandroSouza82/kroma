@@ -5,13 +5,14 @@ export const PROMOCAO = {
   startsAt: "2026-10-13T00:00:00-03:00",
   endsAt: "2026-11-16T00:00:00-03:00",
   timeZone: "America/Sao_Paulo",
-  // Link de valor fixo fornecido para esta oferta. Atualize-o se o preço mudar.
+  // Cobrança base de R$299. O parcelamento do link tem acréscimo para o cliente.
   paymentUrl: "https://mpago.li/1cuf8J6",
   offer: {
     id: "landing-promocional",
     label: "Landing page promocional",
     base: 299,
-    cartao: 299,
+    // Total de 10× R$36,07 informado pelo vendedor no checkout deste link.
+    cartao: 360.7,
     limits: { pages: 1, sections: 3, images: 5, revisions: 1 },
     description:
       "Uma página para divulgar seu negócio, serviço ou campanha e levar interessados ao seu WhatsApp.",

@@ -26,16 +26,16 @@ test("campanha desativada e datas inválidas não anunciam oferta vigente", () =
   assert.equal(promocaoAtiva("data inválida"), false);
 });
 
-test("landing page custa 299 ou dez parcelas de 29,90, sem manutenção automática", () => {
+test("landing page custa 299 à vista ou dez parcelas de 36,07 com acréscimo, sem manutenção automática", () => {
   const proposta = criarPropostaCriacao({
     tipoId: PROMOCAO.offer.id,
     pagamentoId: "cartao",
     agora: durante,
   });
-  assert.equal(proposta.estimativa, 299);
+  assert.equal(proposta.estimativa, 360.7);
   assert.equal(proposta.mensalidade, 0);
   assert.equal(proposta.campanhaId, PROMOCAO.id);
-  assert.match(proposta.pagamento, /10× de R\$\s?29,90.*total R\$\s?299/);
+  assert.match(proposta.pagamento, /10× de R\$\s?36,07.*total R\$\s?360,70/);
   assert.equal(
     calcularEstimativa(PROMOCAO.offer.id, [], "normal", "pix", durante),
     299,
@@ -75,7 +75,7 @@ test("o contato preserva o escopo menor, pagamento, prazo e custos separados da 
   );
   assert.match(mensagem, /Landing page promocional/);
   assert.match(mensagem, /Até 3 seções.*Até 5 imagens.*1 rodada/);
-  assert.match(mensagem, /29,90.*299/);
+  assert.match(mensagem, /36,07.*360,70/);
   assert.match(mensagem, /Não incluída; sem plano selecionado/);
   assert.match(mensagem, /15 de novembro de 2026.*horário de Brasília/);
   assert.match(
