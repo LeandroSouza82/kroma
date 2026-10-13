@@ -60,7 +60,15 @@ for (const model of MODELOS_SITE) {
   const line = (x, y, w, fill = "#d6dfec") => rect(x, y, w, 5, fill, 2);
   const button = (x, y, label, w = 200, fill = model.accent) => {
     rect(x, y, w, 46, fill, 10);
-    text(x + w / 2, y + 29, label, 18, "#ffffff", 600, "middle");
+    text(
+      x + w / 2,
+      y + 29,
+      label,
+      label === "Fale pelo WhatsApp" ? 16 : 18,
+      "#ffffff",
+      600,
+      "middle",
+    );
   };
   const photo = (x, y, w, h, dark = false) => {
     const base = dark ? "#243b55" : "#e4ebf3";
@@ -124,8 +132,15 @@ for (const model of MODELOS_SITE) {
   const card = (x, y, w, title, h = 143) => {
     rect(x, y, w, h, "#ffffff", 14, "#dfe5ee");
     rect(x + 20, y + 20, 31, 31, model.accent, 9);
-    text(x + 20, y + (h < 117 ? 70 : 81), title, 25, "#24334c", 600);
-    line(x + 20, y + (h < 117 ? 89 : 102), w - 55);
+    text(
+      x + (h < 117 ? 67 : 20),
+      y + (h < 117 ? 44 : 81),
+      title,
+      25,
+      "#24334c",
+      600,
+    );
+    line(x + 20, y + (h < 117 ? 75 : 102), w - 55);
     if (h > 148) line(x + 20, y + 126, w - 100);
   };
   const contact = (x, y, w, label = "Vamos conversar?") => {
