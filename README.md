@@ -6,7 +6,7 @@ Site de apresentação, planos comerciais e pedidos de orçamento em React e Vit
 
     npm ci
     npm run dev
-    node --test tests/commercial.test.js
+    node --test tests/*.test.js
     npm run build
 
 Copie .env.example para .env.local e configure o projeto Supabase e o WhatsApp de atendimento. O formulário usa a tabela leads_kroma; se a gravação falhar ou a conexão não estiver configurada, oferece a mensagem pelo WhatsApp.
@@ -17,6 +17,7 @@ Copie .env.example para .env.local e configure o projeto Supabase e o WhatsApp d
 - src/data/maintenancePlans.js: mensalidades, limites e descrição dos planos de manutenção.
 - src/data/offerDetails.js: escopo, inclusões, exclusões e condições dos planos, usados nos detalhes e no pedido de proposta.
 - src/data/clientGuide.js: etapas de contratação e perguntas pesquisáveis por assunto, com valores derivados da oferta.
+- src/data/promotion.js: ativação, período em Brasília, preço e limites da campanha de landing page.
 - src/utils/projectProposal.js: condições compartilhadas entre planos, simulador e atendimento.
 
 A oferta inicial de site institucional está em R$700 no Pix ou R$999 no cartão, dividido em 10 parcelas de R$99,90. Os demais preços são referências iniciais editáveis. A manutenção é opcional e não é somada ao custo de criação.
@@ -24,6 +25,16 @@ A oferta inicial de site institucional está em R$700 no Pix ou R$999 no cartão
 Os limites de lançamento foram definidos para revisão comercial: institucional com uma página, cinco seções e dez imagens; evento com uma página, quatro seções e oito imagens; catálogo com uma página e vinte produtos; sistema com três telas para um fluxo de interface, sem dados ou autenticação incluídos. Todos incluem uma rodada de ajustes. As quantidades ficam em limits em projectOptions.js; solicitações mensais ficam em requests em maintenancePlans.js. Ajuste esses limites antes de publicar a oferta, se seu modelo comercial for diferente.
 
 O botão Informações usa um diálogo nativo com fechamento por Escape e retorno de foco. O guia permite buscar sem diferenciar maiúsculas ou acentos e filtrar por assunto. No atendimento, o preço e a mensalidade ficam visíveis e o escopo completo pode ser expandido. A mensagem do WhatsApp preserva a seleção tanto no contato direto quanto na alternativa à gravação do formulário.
+
+## Campanha de landing page
+
+O banner abre na primeira visita de cada sessão enquanto a campanha estiver ativa. Depois de fechar ou solicitar a oferta, o visitante pode reabrir pela faixa abaixo da abertura do site. A identificação da campanha é usada na chave de sessionStorage; altere o id ao lançar uma nova campanha. Se o armazenamento estiver bloqueado, o fechamento funciona e uma recarga pode exibir novamente o banner.
+
+A campanha inicial vai de 13 de outubro até 15 de novembro de 2026, às 23h59, no horário de Brasília. O encerramento é exclusivo em 16/11 à meia-noite. O banner e a faixa deixam de aparecer após esse limite, e o construtor recusa novas propostas promocionais fora do período. enabled permite desativar a campanha. A data, o preço e os limites ficam em promotion.js, e as descrições em offerDetails.js.
+
+Landing page: R$299 no total, em 10 parcelas de R$29,90 no cartão ou R$299 à vista no Pix. Escopo inicial para revisão comercial: uma página, três seções, cinco imagens fornecidas pelo cliente e uma rodada de ajustes. Manutenção, domínio, hospedagem, produção de conteúdo e integrações são cobrados separadamente. Não há preço anterior fictício nem contador reiniciado por visita.
+
+O banner encaminha a seleção ao mesmo formulário e mensagem do WhatsApp utilizados pelos planos regulares, incluindo a validade da oferta. Ele não processa pagamentos. Os diálogos compartilham a abertura e o retorno de foco; o fechamento é controlado pelos botões e pelo evento cancel do Escape, sem atualizar estado durante a limpeza do efeito em StrictMode.
 
 ## Atendimento e demonstrações
 

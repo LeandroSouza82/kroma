@@ -1,5 +1,5 @@
 import {
-  TIPOS,
+  obterTipoProjeto,
   RECURSOS,
   PRAZOS,
   calcularEstimativa,
@@ -8,6 +8,7 @@ import {
 } from "../data/projectOptions.js";
 import { MANUTENCOES } from "../data/maintenancePlans.js";
 import { detalharOferta } from "../data/offerDetails.js";
+import { PROMOCAO, validadePromocao } from "../data/promotion.js";
 
 export function criarPropostaCriacao({
   tipoId,
@@ -15,14 +16,17 @@ export function criarPropostaCriacao({
   prazoId = "normal",
   pagamentoId = "pix",
   manutencaoId = "",
+  agora = Date.now(),
 }) {
   const estimativa = calcularEstimativa(
     tipoId,
     recursoIds,
     prazoId,
     pagamentoId,
+    agora,
   );
-  const tipo = TIPOS.find((item) => item.id === tipoId);
+  const tipo = obterTipoProjeto(tipoId);
+  const promocional = tipoId === PROMOCAO.offer.id;
   const prazo = PRAZOS.find((item) => item.id === prazoId);
   const manutencao = MANUTENCOES.find((item) => item.id === manutencaoId);
   if (manutencaoId && !manutencao)
@@ -48,11 +52,18 @@ export function criarPropostaCriacao({
           manutencao.features[0]
         : "Não incluída; sem plano selecionado"),
     "Domínio, hospedagem e taxas externas cobrados separadamente",
-  ].join(" · ");
+    promocional &&
+      "Oferta de lançamento válida até " +
+        validadePromocao() +
+        " (horário de Brasília). Condição sujeita à confirmação da proposta, com adicionais separados.",
+  ]
+    .filter(Boolean)
+    .join(" · ");
   return {
     contratacao: "criacao",
     tipo: tipo.label,
     tipoId,
+    campanhaId: promocional ? PROMOCAO.id : "",
     escopo,
     estimativa,
     pagamentoId,

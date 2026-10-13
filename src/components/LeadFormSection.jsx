@@ -128,7 +128,7 @@ export default function LeadFormSection({ proposta }) {
               </details>
               <a
                 href={
-                  proposta.contratacao === "manutencao"
+                  proposta.contratacao === "manutencao" || proposta.campanhaId
                     ? "#planos"
                     : "#simulador"
                 }
@@ -221,6 +221,9 @@ export default function LeadFormSection({ proposta }) {
                 >
                   <option value="">Selecione</option>
                   <option value="Manutenção de site">Manutenção de site</option>
+                  {proposta.campanhaId && (
+                    <option value={proposta.tipo}>{proposta.tipo}</option>
+                  )}
                   {TIPOS.map((t) => (
                     <option key={t.id} value={t.label}>
                       {t.label}

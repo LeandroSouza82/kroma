@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import HeroCarousel from "./components/HeroCarousel";
+import PromotionBanner from "./components/PromotionBanner";
 import BentoSolutions from "./components/BentoSolutions";
 import CommercialPlans from "./components/CommercialPlans";
 import InteractiveRSVP from "./components/InteractiveRSVP";
@@ -30,6 +31,7 @@ export default function App() {
       <Navbar />
       <main>
         <HeroCarousel />
+        <PromotionBanner onSolicitar={solicitarProposta} />
         <BentoSolutions />
         <CommercialPlans onSolicitar={solicitarProposta} />
         <InteractiveRSVP />

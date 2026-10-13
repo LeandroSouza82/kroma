@@ -1,4 +1,4 @@
-import { TIPOS } from "./projectOptions.js";
+import { obterTipoProjeto } from "./projectOptions.js";
 import { MANUTENCOES } from "./maintenancePlans.js";
 
 export const CONDICOES_CRIACAO = [
@@ -18,6 +18,22 @@ export const CONDICOES_MANUTENCAO = [
 ];
 
 const DESCRICOES = {
+  "landing-promocional": {
+    overview:
+      "Uma página simples para apresentar um serviço, negócio ou campanha e levar interessados ao WhatsApp. A estrutura é adaptada com a identidade e os materiais do cliente.",
+    included: [
+      "Apresentação da oferta, benefícios e contato na mesma página.",
+      "Adaptação de logo, cores, textos e imagens fornecidos pelo cliente.",
+      "Layout para celular e computador e botão de contato pelo WhatsApp.",
+      "Títulos e descrições básicos para identificar a página nos mecanismos de busca.",
+    ],
+    excluded: [
+      "Manutenção mensal, domínio, hospedagem e taxas de terceiros.",
+      "Painel de edição, formulários com banco de dados e integrações.",
+      "Loja, pagamentos automáticos, agendamento e páginas adicionais.",
+      "Produção de logo, textos, fotos, vídeos, anúncios e SEO contínuo.",
+    ],
+  },
   empresarial: {
     overview:
       "Um site simples para apresentar uma empresa e facilitar o contato. A base visual é adaptada à sua marca, com foco nas informações essenciais.",
@@ -104,7 +120,7 @@ function limitesCriacao(tipo) {
 
 export function detalharOferta(id, categoria = "criacao") {
   if (categoria === "criacao") {
-    const tipo = TIPOS.find((item) => item.id === id);
+    const tipo = obterTipoProjeto(id);
     if (!tipo) throw new RangeError("Oferta de criação inválida.");
     return {
       ...tipo,

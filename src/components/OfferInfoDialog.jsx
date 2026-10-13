@@ -1,4 +1,5 @@
-import { useEffect, useId, useRef } from "react";
+import { useId } from "react";
+import useNativeDialog from "../hooks/useNativeDialog";
 import { MAX_PARCELAS, formatarBRL } from "../data/projectOptions";
 import { detalharOferta } from "../data/offerDetails";
 
@@ -21,26 +22,11 @@ function DetailList({ title, items }) {
 }
 
 export default function OfferInfoDialog({ oferta, onFechar, onSolicitar }) {
-  const dialogRef = useRef(null);
-  const closeRef = useRef(null);
+  const { dialogRef, closeRef } = useNativeDialog();
   const titleId = useId();
   const introId = useId();
   const detalhes = detalharOferta(oferta.id, oferta.category);
   const mensal = detalhes.category === "manutencao";
-
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    const anterior = document.activeElement;
-    const overflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    dialog.showModal();
-    closeRef.current.focus({ preventScroll: true });
-    return () => {
-      if (dialog.open) dialog.close();
-      document.body.style.overflow = overflow;
-      if (anterior?.isConnected) anterior.focus({ preventScroll: true });
-    };
-  }, []);
 
   return (
     <dialog
@@ -52,7 +38,6 @@ export default function OfferInfoDialog({ oferta, onFechar, onSolicitar }) {
         event.preventDefault();
         onFechar();
       }}
-      onClose={onFechar}
     >
       <div className="flex items-start justify-between gap-4">
         <div>

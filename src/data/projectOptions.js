@@ -1,3 +1,5 @@
+import { PROMOCAO, promocaoAtiva } from "./promotion.js";
+
 export const MAX_PARCELAS = 10;
 
 // Fonte única dos valores anunciados; o escopo final é definido na proposta.
@@ -107,13 +109,22 @@ export const PRAZOS = [
   { id: "normal", label: "Padrão — prazo na proposta", fator: 1 },
   { id: "expresso", label: "Entrega prioritária (+30%)", fator: 1.3 },
 ];
+export const obterTipoProjeto = (id) =>
+  TIPOS.find((item) => item.id === id) ||
+  (id === PROMOCAO.offer.id ? PROMOCAO.offer : undefined);
+
 export const calcularEstimativa = (
   tipoId,
   recursoIds = [],
   prazoId = "normal",
   pagamentoId = "pix",
+  agora = Date.now(),
 ) => {
-  const tipo = TIPOS.find((item) => item.id === tipoId);
+  const tipo = obterTipoProjeto(tipoId);
+  if (tipoId === PROMOCAO.offer.id && !promocaoAtiva(agora))
+    throw new RangeError(
+      "A promoção não está vigente. Consulte os planos disponíveis.",
+    );
   const prazo = PRAZOS.find((item) => item.id === prazoId);
   if (!tipo || !prazo || !PAGAMENTOS.some((item) => item.id === pagamentoId))
     throw new RangeError("Opção de orçamento inválida.");
