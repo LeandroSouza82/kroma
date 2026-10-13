@@ -27,7 +27,7 @@ Confira o plano da conta antes da publicação comercial. O [Hobby](https://verc
 - src/data/maintenancePlans.js: mensalidades, limites e descrição dos planos de manutenção.
 - src/data/offerDetails.js: escopo, inclusões, exclusões e condições dos planos, usados nos detalhes e no pedido de proposta.
 - src/data/clientGuide.js: etapas de contratação e perguntas pesquisáveis por assunto, com valores derivados da oferta.
-- src/data/promotion.js: ativação, período em Brasília, preço e limites da campanha de landing page.
+- src/data/promotion.js: ativação, período em Brasília, preço, limites e link de pagamento da campanha de landing page.
 - src/data/siteModels.js: códigos estáveis, descrições, estrutura e caminhos das imagens da galeria.
 - src/utils/siteModelReference.js: referência compartilhada entre cópia, WhatsApp e escopo do pedido.
 - src/utils/projectProposal.js: condições compartilhadas entre planos, simulador e atendimento.
@@ -46,7 +46,11 @@ A campanha inicial vai de 13 de outubro até 15 de novembro de 2026, às 23h59, 
 
 Landing page: R$299 no total, em 10 parcelas de R$29,90 no cartão ou R$299 à vista no Pix. Escopo inicial para revisão comercial: uma página, três seções, cinco imagens fornecidas pelo cliente e uma rodada de ajustes. Manutenção, domínio, hospedagem, produção de conteúdo e integrações são cobrados separadamente. Não há preço anterior fictício nem contador reiniciado por visita.
 
-O banner encaminha a seleção ao mesmo formulário e mensagem do WhatsApp utilizados pelos planos regulares, incluindo a validade da oferta. Ele não processa pagamentos. Os diálogos compartilham a abertura e o retorno de foco; o fechamento é controlado pelos botões e pelo evento cancel do Escape, sem atualizar estado durante a limpeza do efeito em StrictMode.
+O botão Pagar no Mercado Pago abre o link de valor fixo `https://mpago.li/1cuf8J6` em outra aba, exclusivamente para a landing page de R$299. A forma de pagamento e o parcelamento são escolhidos no ambiente do Mercado Pago; a aba Pix/cartão do banner é uma apresentação dos valores e não pré-seleciona o método no checkout externo. O cliente recebe um aviso para conferir opções, parcelas e eventuais juros antes de confirmar. O pedido de proposta continua disponível e encaminha a seleção ao formulário e WhatsApp, incluindo a validade da oferta, sem gerar cobrança.
+
+O link não usa credenciais nem API no site e não confirma automaticamente pagamentos, cria pedidos ou envia a base visual escolhida ao Mercado Pago. Acompanhe os pagamentos na conta Mercado Pago e combine o escopo, o prazo e os materiais com o cliente. Se o preço mudar, gere e configure outro link em `promotion.js`. Configure também a validade e o parcelamento na conta: ocultar a campanha e impedir cliques após o prazo não desativa o link externo. O checkout retornou um erro de acesso no navegador de verificação; o valor, os métodos e as parcelas do link ainda precisam de conferência na conta do vendedor.
+
+Os diálogos compartilham a abertura e o retorno de foco; o fechamento é controlado pelos botões e pelo evento cancel do Escape, sem atualizar estado durante a limpeza do efeito em StrictMode.
 
 ## Galeria de modelos
 
@@ -60,6 +64,6 @@ As imagens públicas ficam em public/modelos e têm título, descrição e códi
 
 ## Atendimento e demonstrações
 
-As opções de pagamento compõem o pedido de orçamento. O site não processa cobranças nem coleta dados de cartão; o pagamento é combinado após a confirmação do escopo. As condições escolhidas seguem no campo escopo existente, sem mudança do esquema do banco.
+Os planos regulares e o simulador compõem um pedido de orçamento, com pagamento combinado após a confirmação do escopo. A promoção de landing page oferece, separadamente, o link de pagamento do Mercado Pago. O site não coleta dados de cartão nem marca pedidos como pagos. As condições escolhidas para uma proposta seguem no campo escopo existente, sem mudança do esquema do banco.
 
 A demonstração RSVP é explicitamente ilustrativa. Credenciamento real e integrações de pagamentos dependem do projeto contratado. As métricas de desempenho devem ser medidas no ambiente publicado antes de serem anunciadas.

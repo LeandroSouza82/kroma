@@ -41,7 +41,7 @@ export const PERGUNTAS = [
         " ou " +
         descreverPagamento(institucional.cartao, "cartao") +
         ". O total no cartão é diferente do valor à vista e aparece antes de você solicitar a proposta.",
-      "Adicionais e prioridade alteram a estimativa. Manutenção, domínio, hospedagem e taxas externas são separados. O site não recebe pagamentos: a forma de cobrança é confirmada na proposta.",
+      "Adicionais e prioridade alteram a estimativa. Manutenção, domínio, hospedagem e taxas externas são separados. Para o institucional, a cobrança é confirmada na proposta. Enquanto estiver vigente, a oferta promocional de landing page tem um link próprio de pagamento no banner.",
     ],
   },
   {

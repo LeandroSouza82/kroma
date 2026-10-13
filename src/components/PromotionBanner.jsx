@@ -74,6 +74,7 @@ function PromotionDialog({ onFechar, onSolicitar }) {
   const { dialogRef, closeRef } = useNativeDialog();
   const titleId = useId();
   const introId = useId();
+  const paymentInfoId = useId();
   const [pagamentoId, setPagamentoId] = useState("cartao");
   const oferta = PROMOCAO.offer;
   const detalhes = detalharOferta(oferta.id);
@@ -168,19 +169,40 @@ function PromotionDialog({ onFechar, onSolicitar }) {
           <p className="promo-separate-costs">
             Manutenção, domínio e hospedagem à parte.
           </p>
+          <a
+            id="promo-pagar"
+            className="promo-cta"
+            href={PROMOCAO.paymentUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Pagar landing page de ${formatarBRL(oferta.base)} no Mercado Pago (abre em outra aba)`}
+            aria-describedby={paymentInfoId}
+            onClick={(event) => {
+              if (!promocaoAtiva()) {
+                event.preventDefault();
+                onFechar();
+              }
+            }}
+          >
+            Pagar no Mercado Pago <span aria-hidden="true">↗</span>
+          </a>
+          <p id={paymentInfoId} className="promo-payment-info">
+            Você escolhe a forma de pagamento no Mercado Pago. Confira as opções,
+            as parcelas e eventuais juros antes de confirmar.
+          </p>
           <button
             id="promo-solicitar"
-            className="promo-cta"
+            className="promo-quote"
             type="button"
             onClick={() => {
               dialogRef.current.close();
               onSolicitar(pagamentoId);
             }}
           >
-            Solicitar esta oferta <span aria-hidden="true">↗</span>
+            Prefiro solicitar uma proposta <span aria-hidden="true">↗</span>
           </button>
           <p className="promo-no-charge">
-            Pedido de proposta. Nenhuma cobrança é feita no site.
+            Solicitar uma proposta não gera cobrança.
           </p>
           <details className="promo-details">
             <summary>
@@ -262,6 +284,7 @@ export default function PromotionBanner({ onSolicitar }) {
 
   const fechar = () => {
     registrarVisualizacao();
+    if (!promocaoAtiva()) setAtivo(false);
     setAberto(false);
   };
   const solicitar = (pagamentoId) => {

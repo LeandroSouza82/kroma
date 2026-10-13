@@ -5,6 +5,8 @@ export const PROMOCAO = {
   startsAt: "2026-10-13T00:00:00-03:00",
   endsAt: "2026-11-16T00:00:00-03:00",
   timeZone: "America/Sao_Paulo",
+  // Link de valor fixo fornecido para esta oferta. Atualize-o se o preço mudar.
+  paymentUrl: "https://mpago.li/1cuf8J6",
   offer: {
     id: "landing-promocional",
     label: "Landing page promocional",
