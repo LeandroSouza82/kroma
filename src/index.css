@@ -65,10 +65,6 @@ body {
   box-shadow: 0 8px 28px rgb(15 23 42 / 3%);
 }
 
-.pricing-card > button {
-  margin-top: auto;
-}
-
 .pricing-card > ul {
   margin-bottom: 2rem;
 }

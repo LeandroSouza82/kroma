@@ -2,6 +2,12 @@ import { useId } from "react";
 import useNativeDialog from "../hooks/useNativeDialog";
 import { formatarBRL } from "../data/projectOptions";
 import { detalharOferta } from "../data/offerDetails";
+import {
+  GESTAO_HOSPEDAGEM,
+  CONDICOES_HOSPEDAGEM,
+  CONDICOES_BANCO_DADOS,
+} from "../data/hostingOptions";
+import InfrastructureCosts from "./InfrastructureCosts";
 
 function DetailList({ title, items }) {
   return (
@@ -27,6 +33,13 @@ export default function OfferInfoDialog({ oferta, onFechar, onSolicitar }) {
   const introId = useId();
   const detalhes = detalharOferta(oferta.id, oferta.category);
   const mensal = detalhes.category === "manutencao";
+  const condicoes = detalhes.conditions.filter(
+    (item) => ![
+      GESTAO_HOSPEDAGEM,
+      CONDICOES_HOSPEDAGEM,
+      CONDICOES_BANCO_DADOS,
+    ].includes(item),
+  );
 
   return (
     <dialog
@@ -109,8 +122,19 @@ export default function OfferInfoDialog({ oferta, onFechar, onSolicitar }) {
         <DetailList title="O que está incluído" items={detalhes.included} />
         <DetailList title="Até onde vai este plano" items={detalhes.limits} />
         <DetailList title="O que não está incluído" items={detalhes.excluded} />
-        <DetailList title="Como funciona" items={detalhes.conditions} />
+        <DetailList title="Como funciona" items={condicoes} />
       </div>
+      <section className="mt-8 border-t border-slate-200 pt-6">
+        <h3 className="text-base font-semibold text-slate-950">
+          Hospedagem, domínio e banco de dados
+        </h3>
+        <p className="mb-4 mt-2 text-sm leading-relaxed text-slate-600">
+          Você pode contratar a gestão da Kroma ou usar suas próprias contas.
+          Confira os custos de referência dos serviços, separados da criação.
+          {mensal && " Os totais abaixo consideram a manutenção deste plano."}
+        </p>
+        <InfrastructureCosts mensalidade={mensal ? detalhes.valor : 0} />
+      </section>
       <div className="mt-8 flex flex-col gap-3 border-t border-slate-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-sm text-xs leading-relaxed text-slate-500">
           Nenhuma cobrança é feita no site. A proposta confirma o escopo

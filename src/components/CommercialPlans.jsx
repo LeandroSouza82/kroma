@@ -7,15 +7,10 @@ import {
 import { MANUTENCOES } from "../data/maintenancePlans";
 import {
   RESUMO_HOSPEDAGEM,
-  RESUMO_BANCO_DADOS,
-  HOSPEDAGEM_BASE,
-  COTACAO_DOLAR,
-  BANCO_DADOS,
-  DETALHAMENTO_HOSPEDAGEM,
-  DETALHAMENTO_CAMBIO,
   calcularMensalidades,
 } from "../data/hostingOptions";
 import OfferInfoDialog from "./OfferInfoDialog";
+import InfrastructureCosts from "./InfrastructureCosts";
 import {
   criarPropostaCriacao,
   criarPropostaManutencao,
@@ -38,63 +33,6 @@ function Features({ items }) {
         </li>
       ))}
     </ul>
-  );
-}
-function MonthlyCosts({ item, manutencao }) {
-  const custos = calcularMensalidades(
-    { tipoId: item.id, mensalidade: manutencao ? item.valor : 0 },
-    "kroma",
-  );
-  return (
-    <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50 p-3">
-      <p className="text-xs font-semibold text-blue-800">
-        Publicação com a Kroma: + {RESUMO_HOSPEDAGEM}
-      </p>
-      <p className="mt-2 text-xs leading-relaxed text-slate-600">
-        Hospedagem: {formatarBRL(HOSPEDAGEM_BASE.hospedagemMensal, true)}/mês.
-        Domínio: {formatarBRL(HOSPEDAGEM_BASE.dominioAnual, true)}/ano,
-        equivalente a {formatarBRL(HOSPEDAGEM_BASE.dominioMensal, true)}/mês.
-      </p>
-      {(custos.bancoDadosMensalidade > 0 || manutencao) && (
-        <>
-          <p className="mt-2 text-xs font-semibold text-blue-800">
-            {manutencao ? "Se houver banco de dados: + " : "Banco de dados: + "}
-            {RESUMO_BANCO_DADOS}
-          </p>
-          <p className="mt-2 text-xs leading-relaxed text-slate-600">
-            Dólar de referência: {formatarBRL(COTACAO_DOLAR.valor, true)} em{" "}
-            {COTACAO_DOLAR.data}. Pode aumentar ou diminuir com o câmbio; taxas
-            e excedentes à parte.
-          </p>
-        </>
-      )}
-      {(manutencao || custos.bancoDadosMensalidade > 0) && (
-        <p className="mt-2 text-sm font-semibold text-slate-950">
-          {manutencao
-            ? "Total estimado para site simples: "
-            : "Total mensal estimado: "}
-          {formatarBRL(custos.mensalidadeTotal, true)}/mês
-        </p>
-      )}
-      {manutencao && (
-        <p className="mt-2 text-xs font-semibold text-blue-800">
-          Para sistema com banco de dados:{" "}
-          {formatarBRL(
-            calcularMensalidades(
-              { tipoId: "sistema", mensalidade: item.valor },
-              "kroma",
-            ).mensalidadeTotal,
-            true,
-          )}
-          /mês.
-        </p>
-      )}
-      <p className="mt-2 text-xs leading-relaxed text-slate-600">
-        Domínio já considerado no total, sem cobrança anual adicional.
-        Manutenção opcional e serviços extras à parte. Você pode contratar esses
-        serviços pela Kroma ou usar suas contas. Veja os limites em Informações.
-      </p>
-    </div>
   );
 }
 export default function CommercialPlans({ onSolicitar }) {
@@ -269,17 +207,9 @@ export default function CommercialPlans({ onSolicitar }) {
                           : aba === "cartao"
                             ? "Total no cartão: " +
                               formatarBRL(item.cartao) +
-                              (item.paymentInterestFree ? " · sem juros" : "")
+                              (item.paymentInterestFree ? " · sem juros" : " · com juros")
                             : "à vista no Pix"}
                       </p>
-                      {!manutencao &&
-                        aba === "cartao" &&
-                        item.cartao > item.base && (
-                          <p className="mt-2 text-xs text-slate-600">
-                            Com juros: {formatarBRL(item.cartao - item.base, true)} de
-                            acréscimo sobre o Pix.
-                          </p>
-                        )}
                     </div>
                     <button
                       type="button"
@@ -303,89 +233,85 @@ export default function CommercialPlans({ onSolicitar }) {
                   </div>
                   {!manutencao && (
                     <p className="mt-4 text-xs font-medium text-slate-600">
-                      Criação pontual · manutenção não incluída
+                      Criação · manutenção à parte
                     </p>
                   )}
-                  <MonthlyCosts item={item} manutencao={manutencao} />
                 </div>
                 <Features items={item.features} />
-                {obterLinkPagamento(item, aba) ? (
-                  <>
+                <div className="plan-actions mt-auto flex flex-col gap-3">
+                  {obterLinkPagamento(item, aba) ? (
                     <a
                       id={"plano-pagar-" + item.id}
                       href={obterLinkPagamento(item, aba)}
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Pagar ${item.label} de ${formatarBRL(item.base)} no Mercado Pago (abre em outra aba)`}
-                      aria-describedby={"plano-pagamento-info-" + item.id}
-                      className="plan-pay mt-auto block w-full rounded-xl bg-blue-600 px-4 py-3.5 text-center text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+                      aria-describedby="planos-pagamento-info"
+                      className="plan-pay block w-full rounded-xl bg-blue-600 px-4 py-3.5 text-center text-sm font-semibold text-white transition-colors hover:bg-blue-700"
                     >
                       Pagar no Mercado Pago <span aria-hidden="true">↗</span>
                     </a>
-                    <p
-                      id={"plano-pagamento-info-" + item.id}
-                      className="mt-3 text-xs leading-relaxed text-slate-600"
-                    >
-                      {item.paymentInterestFree
-                        ? "À vista ou em até 10 parcelas sem juros. Você escolhe a forma de pagamento no Mercado Pago e confere o total antes de confirmar."
-                        : "Escolha Pix ou até " + item.numeroParcelas + " parcelas com juros no Mercado Pago. Confira as condições e o total antes de confirmar."}{" "}
-                      Este link paga somente a criação. As mensalidades são
-                      contratadas separadamente.
-                    </p>
-                  </>
-                ) : !manutencao ? (
-                  <>
-                    <button
-                      id={"plano-pagar-" + item.id}
-                      type="button"
-                      disabled
-                      aria-label={
-                        "Pagar " +
-                        item.label +
-                        " no Mercado Pago (link solicitado no atendimento)"
-                      }
-                      aria-describedby={"plano-pagamento-info-" + item.id}
-                      className="plan-pay plan-pay-pending mt-auto w-full cursor-not-allowed rounded-xl bg-blue-600 px-4 py-3.5 text-sm font-semibold text-white"
-                    >
-                      Pagar no Mercado Pago <span aria-hidden="true">↗</span>
-                    </button>
-                    <p
-                      id={"plano-pagamento-info-" + item.id}
-                      className="mt-3 text-xs leading-relaxed text-slate-600"
-                    >
-                      Link de pagamento ainda não cadastrado. Solicite uma
-                      proposta para receber o link de pagamento deste plano no
-                      atendimento.
-                    </p>
-                  </>
-                ) : null}
-                <button
-                  type="button"
-                  onClick={() =>
-                    selecionar(
-                      manutencao
-                        ? criarPropostaManutencao(item.id)
-                        : criarPropostaCriacao({
-                            tipoId: item.id,
-                            pagamentoId: aba,
-                          }),
-                    )
-                  }
-                  className={
-                    "plan-request w-full rounded-xl px-4 py-3.5 text-sm font-semibold transition-colors " +
-                    (!manutencao
-                      ? "mt-3 border border-blue-200 bg-white text-blue-700 hover:bg-blue-50"
-                      : item.featured
-                        ? "mt-auto bg-blue-600 text-white hover:bg-blue-700"
-                        : "mt-auto bg-slate-100 text-slate-950 hover:bg-slate-200")
-                  }
-                >
-                  {manutencao ? "Consultar este plano" : "Solicitar proposta"}{" "}
-                  <span aria-hidden="true">↗</span>
-                </button>
+                  ) : !manutencao ? (
+                    <>
+                      <button
+                        id={"plano-pagar-" + item.id}
+                        type="button"
+                        disabled
+                        aria-label={
+                          "Pagar " +
+                          item.label +
+                          " no Mercado Pago (link solicitado no atendimento)"
+                        }
+                        aria-describedby={"plano-pagamento-info-" + item.id}
+                        className="plan-pay plan-pay-pending w-full cursor-not-allowed rounded-xl bg-blue-600 px-4 py-3.5 text-sm font-semibold text-white"
+                      >
+                        Pagar no Mercado Pago <span aria-hidden="true">↗</span>
+                      </button>
+                      <p
+                        id={"plano-pagamento-info-" + item.id}
+                        className="mt-3 text-xs leading-relaxed text-slate-600"
+                      >
+                        Link de pagamento ainda não cadastrado. Solicite uma
+                        proposta para receber o link de pagamento deste plano no
+                        atendimento.
+                      </p>
+                    </>
+                  ) : null}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      selecionar(
+                        manutencao
+                          ? criarPropostaManutencao(item.id)
+                          : criarPropostaCriacao({
+                              tipoId: item.id,
+                              pagamentoId: aba,
+                            }),
+                      )
+                    }
+                    className={
+                      "plan-request w-full rounded-xl px-4 py-3.5 text-sm font-semibold transition-colors " +
+                      (!manutencao
+                        ? "border border-blue-200 bg-white text-blue-700 hover:bg-blue-50"
+                        : item.featured
+                          ? "bg-blue-600 text-white hover:bg-blue-700"
+                          : "bg-slate-100 text-slate-950 hover:bg-slate-200")
+                    }
+                  >
+                    {manutencao ? "Consultar este plano" : "Solicitar proposta"}{" "}
+                    <span aria-hidden="true">↗</span>
+                  </button>
+                </div>
               </article>
             ))}
           </div>
+          {!manutencao && (
+            <p id="planos-pagamento-info" className="mt-6 max-w-4xl text-xs leading-relaxed text-slate-600">
+              Escolha a forma de pagamento e confira as parcelas, os juros e o
+              total no Mercado Pago. Os links cobram somente a criação;
+              mensalidades e adicionais são contratados separadamente.
+            </p>
+          )}
           <p className="mt-6 max-w-4xl text-sm leading-relaxed text-slate-500">
             {manutencao
               ? "Cada solicitação cobre uma pequena atualização de conteúdo. Novas páginas, funcionalidades e reformulações são orçadas à parte. A mensalidade começa após a entrega ou o início do acompanhamento combinado."
@@ -420,41 +346,8 @@ export default function CommercialPlans({ onSolicitar }) {
           <summary className="cursor-pointer font-semibold text-blue-700">
             Veja a conta: hospedagem, domínio e variação do dólar
           </summary>
-          <p className="mt-4">{DETALHAMENTO_HOSPEDAGEM}</p>
-          <p className="mt-3">{DETALHAMENTO_CAMBIO}</p>
-          <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
-            <a
-              href={HOSPEDAGEM_BASE.hospedagemUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-700 underline"
-            >
-              Tabela da Locaweb Go ↗
-            </a>
-            <a
-              href={HOSPEDAGEM_BASE.dominioUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-700 underline"
-            >
-              Domínio no Registro.br ↗
-            </a>
-            <a
-              href={BANCO_DADOS.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-700 underline"
-            >
-              Preço do Supabase ↗
-            </a>
-            <a
-              href={COTACAO_DOLAR.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-700 underline"
-            >
-              Fonte da cotação usada ↗
-            </a>
+          <div className="mt-5">
+            <InfrastructureCosts />
           </div>
         </details>
         <div className="mt-8 flex flex-col gap-3 border-t border-slate-200 pt-6 text-sm sm:flex-row sm:items-center sm:justify-between">
