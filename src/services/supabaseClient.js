@@ -1,10 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
+import { SITE } from "../data/siteInfo";
 
 const url = import.meta.env.VITE_SUPABASE_URL;
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export const supabaseConfigurado = Boolean(url && anonKey);
-export const WHATSAPP_NUMERO = import.meta.env.VITE_WHATSAPP_NUMBER || "5548996525008";
+export const WHATSAPP_NUMERO = SITE.whatsapp;
 
 const supabase = supabaseConfigurado ? createClient(url, anonKey) : null;
 

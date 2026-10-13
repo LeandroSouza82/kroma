@@ -12,6 +12,8 @@ import ProjectCalculator from "./components/ProjectCalculator";
 import ClientGuide from "./components/ClientGuide";
 import LeadFormSection from "./components/LeadFormSection";
 import Footer from "./components/Footer";
+import TrustSection from "./components/TrustSection";
+import { SITE } from "./data/siteInfo";
 
 const propostaInicial = {
   id: 0,
@@ -23,14 +25,11 @@ const propostaInicial = {
   mensalidade: 0,
 };
 
-export default function App() {
+export default function App({ renderedAt = Date.now() }) {
   const [proposta, setProposta] = useState(propostaInicial);
   const [modeloId, setModeloId] = useState("");
   const [hospedagemId, setHospedagemId] = useState("");
-  const siteUrl =
-    typeof window === "undefined"
-      ? ""
-      : window.location.origin + import.meta.env.BASE_URL;
+  const siteUrl = SITE.url;
   const propostaCompleta = anexarModeloProposta(proposta, modeloId, siteUrl);
   const modelo = modeloId ? obterModeloSite(modeloId) : null;
 
@@ -42,7 +41,7 @@ export default function App() {
       <Navbar />
       <main>
         <HeroCarousel />
-        <PromotionBanner onSolicitar={solicitarProposta} />
+        <PromotionBanner onSolicitar={solicitarProposta} initialNow={renderedAt} />
         <BentoSolutions />
         <SiteModelsGallery
           modeloId={modeloId}
@@ -56,6 +55,7 @@ export default function App() {
           hospedagemId={hospedagemId}
           onHospedagemChange={setHospedagemId}
         />
+        <TrustSection />
         <ClientGuide />
         <LeadFormSection
           key={proposta.id}
@@ -66,7 +66,7 @@ export default function App() {
           onHospedagemChange={setHospedagemId}
         />
       </main>
-      <Footer />
+      <Footer initialYear={new Date(renderedAt).getUTCFullYear()} />
     </>
   );
 }

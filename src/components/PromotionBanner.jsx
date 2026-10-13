@@ -254,11 +254,14 @@ function PromotionDialog({ onFechar, onSolicitar }) {
   );
 }
 
-export default function PromotionBanner({ onSolicitar }) {
-  const [ativo, setAtivo] = useState(() => promocaoAtiva());
-  const [aberto, setAberto] = useState(
-    () => promocaoAtiva() && !vistaNestaSessao(),
-  );
+export default function PromotionBanner({ onSolicitar, initialNow = Date.now() }) {
+  const [ativo, setAtivo] = useState(() => promocaoAtiva(initialNow));
+  const [aberto, setAberto] = useState(false);
+  const [aviso, setAviso] = useState(false);
+
+  useEffect(() => {
+    if (promocaoAtiva() && !vistaNestaSessao()) setAviso(true);
+  }, []);
 
   useEffect(() => {
     if (!PROMOCAO.enabled) return;
@@ -267,7 +270,10 @@ export default function PromotionBanner({ onSolicitar }) {
       const agora = Date.now();
       const vigente = promocaoAtiva(agora);
       setAtivo(vigente);
-      if (!vigente) setAberto(false);
+      if (!vigente) {
+        setAberto(false);
+        setAviso(false);
+      }
       const proximoLimite =
         agora < Date.parse(PROMOCAO.startsAt)
           ? Date.parse(PROMOCAO.startsAt)
@@ -293,6 +299,12 @@ export default function PromotionBanner({ onSolicitar }) {
     registrarVisualizacao();
     if (!promocaoAtiva()) setAtivo(false);
     setAberto(false);
+    setAviso(false);
+  };
+  const abrir = () => {
+    if (!promocaoAtiva()) return;
+    setAviso(false);
+    setAberto(true);
   };
   const solicitar = (pagamentoId) => {
     const agora = Date.now();
@@ -333,13 +345,20 @@ export default function PromotionBanner({ onSolicitar }) {
           id="promo-abrir"
           type="button"
           aria-haspopup="dialog"
-          onClick={() => {
-            if (promocaoAtiva()) setAberto(true);
-          }}
+          onClick={abrir}
         >
           Ver oferta <span aria-hidden="true">↗</span>
         </button>
       </div>
+      {aviso && !aberto && (
+        <aside className="promo-notice" aria-label="Aviso da oferta de landing page">
+          <button type="button" className="promo-notice-close" onClick={fechar} aria-label="Fechar aviso da promoção">×</button>
+          <p className="promo-notice-label">Oferta de lançamento</p>
+          <p className="promo-notice-title">Landing page · até {PROMOCAO.offer.numeroParcelas}× {formatarBRL(PROMOCAO.offer.cartao / PROMOCAO.offer.numeroParcelas, true)}</p>
+          <p className="promo-notice-total">Total {formatarBRL(PROMOCAO.offer.cartao)} com juros · {formatarBRL(PROMOCAO.offer.base)} no Pix</p>
+          <button type="button" onClick={abrir} aria-haspopup="dialog" className="promo-notice-open">Ver oferta ↗</button>
+        </aside>
+      )}
       {aberto && <PromotionDialog onFechar={fechar} onSolicitar={solicitar} />}
     </section>
   );

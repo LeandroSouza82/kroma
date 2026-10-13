@@ -140,7 +140,7 @@ export default function InteractiveRSVP() {
               </button>
             </div>
           ) : (
-            <form onSubmit={confirmar} className="space-y-5">
+            <form onSubmit={confirmar} className="space-y-5 requires-js">
               <div>
                 <label htmlFor="rsvp-nome" className="mb-2 block text-sm font-medium text-white/70">
                   Nome completo

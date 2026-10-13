@@ -15,7 +15,7 @@ Copie .env.example para .env.local e configure o projeto Supabase e o WhatsApp d
 
 O projeto usa Vite, com instalação por `npm ci`, build por `npm run build` e saída em `dist`. Esses valores ficam em `vercel.json`; a pasta raiz é a raiz do repositório. Use Node.js 22.12 ou superior, conforme a versão instalada do Vite. O diretório `.vercel` gerado pela CLI é ignorado pelo Git.
 
-Ao importar `LeandroSouza82/kroma`, confira a branch antes de publicar: as alterações de planos, campanha e modelos estão em `feat/planos-acessiveis-pagamentos`, no PR #1. Faça primeiro uma implantação Preview dessa branch. A branch `main` ainda contém a versão anterior; publicar a versão atual em produção depende de integrar o PR.
+Ao importar `LeandroSouza82/kroma`, confira a branch antes de publicar: a versão atual está em `feat/planos-acessiveis-pagamentos`, no PR #1. A produção é implantada explicitamente dessa branch; o PR continua em rascunho e `main` contém a versão anterior. Para a publicação automática pela branch de produção, a integração do PR é uma etapa separada.
 
 Configure `VITE_WHATSAPP_NUMBER` para o número de atendimento, com código do país e apenas dígitos. Para gravar os pedidos no Supabase, configure também `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` nos ambientes desejados, com as permissões apropriadas na tabela `leads_kroma`. Sem essa conexão, o formulário oferece a alternativa de contato pelo WhatsApp. Variáveis `VITE_*` fazem parte do JavaScript entregue ao visitante; nunca use a chave `service_role`. Mudanças nessas variáveis exigem novo build.
 
@@ -49,7 +49,7 @@ O botão Informações usa um diálogo nativo com fechamento por Escape e retorn
 
 ## Campanha de landing page
 
-O banner abre na primeira visita de cada sessão enquanto a campanha estiver ativa. Depois de fechar ou solicitar a oferta, o visitante pode reabrir pela faixa abaixo da abertura do site. A identificação da campanha é usada na chave de sessionStorage; altere o id ao lançar uma nova campanha. Se o armazenamento estiver bloqueado, o fechamento funciona e uma recarga pode exibir novamente o banner.
+Um aviso compacto aparece na primeira visita de cada sessão enquanto a campanha estiver ativa, sem bloquear a página. O banner completo abre somente por Ver oferta, no aviso ou na faixa abaixo da abertura do site. Depois de fechar ou solicitar a oferta, o visitante pode reabrir pela faixa. A identificação da campanha é usada na chave de sessionStorage; altere o id ao lançar uma nova campanha. Se o armazenamento estiver bloqueado, o fechamento funciona e uma recarga pode exibir novamente o banner.
 
 A campanha inicial vai de 13 de outubro até 15 de novembro de 2026, às 23h59, no horário de Brasília. O encerramento é exclusivo em 16/11 à meia-noite. O banner e a faixa deixam de aparecer após esse limite, e o construtor recusa novas propostas promocionais fora do período. enabled permite desativar a campanha. A data, o preço e os limites ficam em promotion.js, e as descrições em offerDetails.js.
 
@@ -107,3 +107,20 @@ As imagens públicas ficam em public/modelos e têm título, descrição e códi
 Os planos regulares e o simulador compõem um pedido de orçamento, com pagamento combinado após a confirmação do escopo. O institucional à vista, os dois planos maiores e a promoção de landing page oferecem seus próprios links do Mercado Pago. O site não coleta dados de cartão nem marca pedidos como pagos. As condições escolhidas para uma proposta seguem no campo escopo existente, sem mudança do esquema do banco.
 
 A demonstração RSVP é explicitamente ilustrativa. Credenciamento real e integrações de pagamentos dependem do projeto contratado. As métricas de desempenho devem ser medidas no ambiente publicado antes de serem anunciadas.
+
+
+## Busca, confiança e privacidade
+
+npm run build gera o bundle e depois pré-renderiza a página inicial com React. O conteúdo já chega no HTML; o navegador hidrata a mesma árvore e mantém os controles interativos. O aviso compacto da promoção aparece após a montagem, respeitando a sessão e a validade; o diálogo completo abre somente após o clique. O conteúdo principal permanece acessível na entrada, conforme a recomendação do Google sobre intersticiais, e a primeira árvore do HTML e do navegador coincide. O timestamp público do render é usado na primeira renderização.
+
+siteInfo.js centraliza marca, endereço e WhatsApp. O endereço principal padrão é https://kroma-web-rho.vercel.app/. VITE_SITE_URL permite configurar um domínio HTTPS próprio quando ele estiver conectado; canonical, metadados sociais, dados estruturados, sitemap e referências dos modelos acompanham esse endereço. Não use um endereço de preview como canônico.
+
+O build gera /sobre/, /privacidade/, /condicoes/, /robots.txt e /sitemap.xml. As páginas institucionais têm HTML próprio, títulos e descrições exclusivos e links reais no rodapé e na seção Informação e confiança. A política descreve o canal de recebimento configurado, o armazenamento da sessão promocional e os provedores externos de fontes e imagens. O formulário aponta para a política antes do envio. Sem JavaScript, os formulários interativos ficam ocultos e o visitante pode ler os planos e usar o WhatsApp.
+
+Os dados estruturados da página inicial identificam Organization e WebSite, usando somente a marca e o contato informados. Não há avaliações, CNPJ, endereço físico, certificações ou aprovação do Google inventados. O logo em SVG e a imagem social PNG usam a marca existente. A imagem social pode ser regenerada com Python e Pillow por scripts/generate-social-image.py.
+
+vercel.json configura URLs de diretórios com barra final e cabeçalhos para limitar enquadramento e objetos incorporados, evitar inferência de MIME, controlar referência e desativar câmera, microfone e geolocalização não utilizados. O HTTPS é fornecido pela hospedagem; um texto sobre HTTPS não substitui um certificado válido nem é garantia de segurança absoluta.
+
+A inclusão na pesquisa não é automática nem garantida. O responsável verifica a propriedade na sua conta do Google Search Console e envia o sitemap. Se usar a verificação por meta tag, configure somente o token fornecido para sua propriedade em VITE_GOOGLE_SITE_VERIFICATION e faça novo build. Nenhum token fictício é publicado. Não foi vinculada uma conta do Search Console nem enviada uma solicitação de indexação por este código.
+
+Para verificar os artefatos de busca e os testes comerciais: npm run build && node --test tests/*.test.js. Os testes de SEO leem a saída em dist, portanto exigem o build. Confira também as páginas públicas, os códigos HTTP e o funcionamento da hidratação após publicar.

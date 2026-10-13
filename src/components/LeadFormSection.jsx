@@ -248,7 +248,7 @@ export default function LeadFormSection({
               </a>
             </div>
           ) : (
-            <form onSubmit={enviar} noValidate className="space-y-5">
+            <form onSubmit={enviar} noValidate className="space-y-5 requires-js">
               <Campo id="lead-nome" label="Nome" erro={erros.nome}>
                 <input
                   id="lead-nome"
@@ -322,6 +322,12 @@ export default function LeadFormSection({
                   className={`${classeCampo("mensagem")} resize-none`}
                 />
               </Campo>
+              <p className="text-xs leading-relaxed text-white/60">
+                Usamos os dados informados para atender ao seu pedido. Consulte a{" "}
+                <a href="/privacidade/" target="_blank" rel="noopener noreferrer" className="text-accent-light underline underline-offset-4">
+                  política de privacidade
+                </a>. Evite enviar senhas ou dados de cartão.
+              </p>
               <button
                 id="lead-enviar"
                 type="submit"
