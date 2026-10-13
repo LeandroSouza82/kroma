@@ -54,6 +54,14 @@ O link não usa credenciais nem API no site e não confirma automaticamente paga
 
 Os diálogos compartilham a abertura e o retorno de foco; o fechamento é controlado pelos botões e pelo evento cancel do Escape, sem atualizar estado durante a limpeza do efeito em StrictMode.
 
+## Pagamento do institucional
+
+O institucional à vista tem o link `https://mpago.li/17uiB8D`, fornecido pelo vendedor para R$699,90. O botão Pagar no Mercado Pago aparece no cartão desse serviço na aba Pix e abre em outra aba, com noopener/noreferrer. O cliente recebe um aviso para conferir métodos e eventuais acréscimos no checkout. Solicitar proposta permanece disponível, sem cobrança.
+
+O link e o valor externo ficam em `paymentUrl` e `paymentAmount` no plano de `projectOptions.js`. `obterLinkPagamento` libera o link somente para a aba à vista, com valor igual ao preço anunciado. Se o preço mudar, o link deixa de ser apresentado até ser substituído por uma cobrança correspondente. O total de R$998,90 da aba cartão, os demais serviços, a manutenção e as estimativas com adicionais seguem por proposta e não usam essa cobrança de R$699,90.
+
+Não há pré-seleção do método no checkout, coleta de cartão ou confirmação automática de pagamento no site. O checkout retornou erro de acesso no navegador de verificação; o valor foi confirmado pelo vendedor e não conferido diretamente neste ambiente. Acompanhe os pagamentos na conta Mercado Pago e combine escopo, prazo e materiais com o cliente.
+
 ## Galeria de modelos
 
 A aba Modelos apresenta seis desenhos estáticos de estruturas, com abertura ampla ou compacta, menu no topo, lateral ou após o destaque, galeria e conteúdo em blocos. Cada base tem código estável KW-01 a KW-06, imagem ampliável, referência para copiar e mensagem pronta para abrir no WhatsApp. A escolha fica no estado do projeto e acompanha o próximo pedido de proposta, sem mudar preço, pagamento ou manutenção. Não é persistida após recarregar a página.
@@ -66,6 +74,6 @@ As imagens públicas ficam em public/modelos e têm título, descrição e códi
 
 ## Atendimento e demonstrações
 
-Os planos regulares e o simulador compõem um pedido de orçamento, com pagamento combinado após a confirmação do escopo. A promoção de landing page oferece, separadamente, o link de pagamento do Mercado Pago. O site não coleta dados de cartão nem marca pedidos como pagos. As condições escolhidas para uma proposta seguem no campo escopo existente, sem mudança do esquema do banco.
+Os planos regulares e o simulador compõem um pedido de orçamento, com pagamento combinado após a confirmação do escopo. O institucional à vista e a promoção de landing page oferecem seus próprios links do Mercado Pago. O site não coleta dados de cartão nem marca pedidos como pagos. As condições escolhidas para uma proposta seguem no campo escopo existente, sem mudança do esquema do banco.
 
 A demonstração RSVP é explicitamente ilustrativa. Credenciamento real e integrações de pagamentos dependem do projeto contratado. As métricas de desempenho devem ser medidas no ambiente publicado antes de serem anunciadas.

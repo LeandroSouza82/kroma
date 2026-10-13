@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { TIPOS, MAX_PARCELAS, formatarBRL } from "../data/projectOptions";
+import {
+  TIPOS,
+  MAX_PARCELAS,
+  formatarBRL,
+  obterLinkPagamento,
+} from "../data/projectOptions";
 import { MANUTENCOES } from "../data/maintenancePlans";
 import OfferInfoDialog from "./OfferInfoDialog";
 import {
@@ -198,6 +203,28 @@ export default function CommercialPlans({ onSolicitar }) {
                   )}
                 </div>
                 <Features items={item.features} />
+                {obterLinkPagamento(item, aba) && (
+                  <>
+                    <a
+                      id={"plano-pagar-" + item.id}
+                      href={obterLinkPagamento(item, aba)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Pagar ${item.label} de ${formatarBRL(item.base)} no Mercado Pago (abre em outra aba)`}
+                      aria-describedby={"plano-pagamento-info-" + item.id}
+                      className="plan-pay mt-auto block w-full rounded-xl bg-blue-600 px-4 py-3.5 text-center text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+                    >
+                      Pagar no Mercado Pago <span aria-hidden="true">↗</span>
+                    </a>
+                    <p
+                      id={"plano-pagamento-info-" + item.id}
+                      className="mt-3 text-xs leading-relaxed text-slate-600"
+                    >
+                      Link para o valor à vista. Confira no Mercado Pago as
+                      opções de pagamento e eventuais acréscimos.
+                    </p>
+                  </>
+                )}
                 <button
                   type="button"
                   onClick={() =>
@@ -211,10 +238,12 @@ export default function CommercialPlans({ onSolicitar }) {
                     )
                   }
                   className={
-                    "plan-request mt-auto w-full rounded-xl px-4 py-3.5 text-sm font-semibold transition-colors " +
-                    (item.featured
-                      ? "bg-blue-600 text-white hover:bg-blue-700"
-                      : "bg-slate-100 text-slate-950 hover:bg-slate-200")
+                    "plan-request w-full rounded-xl px-4 py-3.5 text-sm font-semibold transition-colors " +
+                    (obterLinkPagamento(item, aba)
+                      ? "mt-3 border border-blue-200 bg-white text-blue-700 hover:bg-blue-50"
+                      : item.featured
+                        ? "mt-auto bg-blue-600 text-white hover:bg-blue-700"
+                        : "mt-auto bg-slate-100 text-slate-950 hover:bg-slate-200")
                   }
                 >
                   {manutencao ? "Consultar este plano" : "Solicitar proposta"}{" "}

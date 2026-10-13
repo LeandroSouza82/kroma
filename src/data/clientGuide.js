@@ -41,7 +41,10 @@ export const PERGUNTAS = [
         " ou " +
         descreverPagamento(institucional.cartao, "cartao") +
         ". O total no cartão é diferente do valor à vista e aparece antes de você solicitar a proposta.",
-      "Adicionais e prioridade alteram a estimativa. Manutenção, domínio, hospedagem e taxas externas são separados. Para o institucional, a cobrança é confirmada na proposta. Enquanto estiver vigente, a oferta promocional de landing page tem um link próprio de pagamento no banner.",
+      "O botão Pagar no Mercado Pago do institucional à vista abre um link de " +
+        formatarBRL(institucional.base) +
+        " para o escopo inicial. Você escolhe a forma de pagamento no Mercado Pago e confere as condições antes de confirmar. Parcelamento nesse ambiente pode ter acréscimo.",
+      "Adicionais e prioridade alteram a estimativa. Manutenção, domínio, hospedagem e taxas externas são separados. As propostas com adicionais, o preço anunciado na aba cartão e a manutenção têm pagamento confirmado no atendimento. Enquanto estiver vigente, a oferta promocional de landing page tem um link próprio no banner.",
     ],
   },
   {

@@ -9,6 +9,8 @@ export const TIPOS = [
     label: "Site institucional",
     base: 699.9,
     cartao: 998.9,
+    paymentUrl: "https://mpago.li/17uiB8D",
+    paymentAmount: 699.9,
     limits: { pages: 1, sections: 5, images: 10, revisions: 1 },
     featured: true,
     description:
@@ -112,6 +114,16 @@ export const PRAZOS = [
 export const obterTipoProjeto = (id) =>
   TIPOS.find((item) => item.id === id) ||
   (id === PROMOCAO.offer.id ? PROMOCAO.offer : undefined);
+
+export function obterLinkPagamento(plano, pagamentoId) {
+  if (
+    pagamentoId !== "pix" ||
+    !plano?.paymentUrl ||
+    plano.paymentAmount !== plano.base
+  )
+    return "";
+  return plano.paymentUrl;
+}
 
 export const calcularEstimativa = (
   tipoId,

@@ -7,6 +7,7 @@ import {
   TIPOS,
   calcularParcelamento,
   RECURSOS,
+  obterLinkPagamento,
 } from "../src/data/projectOptions.js";
 import {
   criarPropostaCriacao,
@@ -24,6 +25,16 @@ test("oferta institucional anuncia 699,90 no Pix e 10 vezes de 99,89 no cartão"
     descreverPagamento(998.9, "cartao"),
     /10× de R\$\s?99,89.*total R\$\s?998,90/,
   );
+});
+test("link de 699,90 é exclusivo do institucional à vista e não cobra outro valor ou plano", () => {
+  const institucional = TIPOS.find((item) => item.id === "empresarial");
+  assert.equal(obterLinkPagamento(institucional, "pix"), "https://mpago.li/17uiB8D");
+  assert.equal(obterLinkPagamento(institucional, "cartao"), "");
+  assert.equal(obterLinkPagamento(institucional, "manutencao"), "");
+  assert.equal(obterLinkPagamento({ ...institucional, base: 700 }, "pix"), "");
+  for (const plano of TIPOS.filter((item) => item.id !== institucional.id)) {
+    assert.equal(obterLinkPagamento(plano, "pix"), "");
+  }
 });
 test("os adicionais e a prioridade seguem a forma de pagamento escolhida", () => {
   assert.equal(
