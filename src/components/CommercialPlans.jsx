@@ -6,6 +6,11 @@ import {
   obterLinkPagamento,
 } from "../data/projectOptions";
 import { MANUTENCOES } from "../data/maintenancePlans";
+import {
+  RESUMO_HOSPEDAGEM,
+  RESUMO_BANCO_DADOS,
+  calcularMensalidades,
+} from "../data/hostingOptions";
 import OfferInfoDialog from "./OfferInfoDialog";
 import {
   criarPropostaCriacao,
@@ -29,6 +34,48 @@ function Features({ items }) {
         </li>
       ))}
     </ul>
+  );
+}
+function MonthlyCosts({ item, manutencao }) {
+  const custos = calcularMensalidades(
+    { tipoId: item.id, mensalidade: manutencao ? item.valor : 0 },
+    "kroma",
+  );
+  return (
+    <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50 p-3">
+      <p className="text-xs font-semibold text-blue-800">
+        Publicação com a Kroma: + {RESUMO_HOSPEDAGEM}
+      </p>
+      {custos.bancoDadosMensalidade > 0 && (
+        <p className="mt-2 text-xs font-semibold text-blue-800">
+          Banco de dados: + {RESUMO_BANCO_DADOS}
+        </p>
+      )}
+      {(manutencao || custos.bancoDadosMensalidade > 0) && (
+        <p className="mt-2 text-sm font-semibold text-slate-950">
+          {manutencao ? "Total para site simples: " : "Total mensal: "}
+          {formatarBRL(custos.mensalidadeTotal, true)}/mês
+        </p>
+      )}
+      {manutencao && (
+        <p className="mt-2 text-xs font-semibold text-blue-800">
+          Para sistema com banco de dados:{" "}
+          {formatarBRL(
+            calcularMensalidades(
+              { tipoId: "sistema", mensalidade: item.valor },
+              "kroma",
+            ).mensalidadeTotal,
+            true,
+          )}
+          /mês.
+        </p>
+      )}
+      <p className="mt-2 text-xs leading-relaxed text-slate-600">
+        Domínio incluído, sem cobrança anual adicional. Manutenção opcional e
+        serviços extras à parte. Você pode contratar esses serviços pela Kroma
+        ou usar suas contas. Veja os limites em Informações.
+      </p>
+    </div>
   );
 }
 export default function CommercialPlans({ onSolicitar }) {
@@ -232,6 +279,7 @@ export default function CommercialPlans({ onSolicitar }) {
                       Criação pontual · manutenção não incluída
                     </p>
                   )}
+                  <MonthlyCosts item={item} manutencao={manutencao} />
                 </div>
                 <Features items={item.features} />
                 {obterLinkPagamento(item, aba) ? (
@@ -253,7 +301,9 @@ export default function CommercialPlans({ onSolicitar }) {
                     >
                       {item.paymentInterestFree
                         ? "À vista ou em até 10 parcelas sem juros. Você escolhe a forma de pagamento no Mercado Pago e confere o total antes de confirmar."
-                        : "Link para o valor à vista. Confira no Mercado Pago as opções de pagamento e eventuais acréscimos."}
+                        : "Link para o valor à vista. Confira no Mercado Pago as opções de pagamento e eventuais acréscimos."}{" "}
+                      Este link paga somente a criação. As mensalidades são
+                      contratadas separadamente.
                     </p>
                   </>
                 ) : !manutencao ? (
@@ -321,9 +371,15 @@ export default function CommercialPlans({ onSolicitar }) {
               Quer que a Kroma Web cuide da hospedagem e do domínio?
             </p>
             <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
-              Podemos cuidar da contratação, configuração e gestão. Os custos
-              são definidos na proposta, separados da criação e da manutenção.
-              O domínio fica em nome do cliente.
+              {RESUMO_HOSPEDAGEM} No sistema com banco de dados, o total básico
+              é{" "}
+              {formatarBRL(
+                calcularMensalidades({ tipoId: "sistema" }, "kroma")
+                  .mensalidadeTotal,
+                true,
+              )}
+              /mês. Manutenção de conteúdo é opcional. O domínio fica em nome do
+              cliente.
             </p>
           </div>
           <a

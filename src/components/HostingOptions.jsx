@@ -4,6 +4,12 @@ import {
   CUSTOS_HOSPEDAGEM,
   TITULARIDADE_HOSPEDAGEM,
   ENCERRAMENTO_HOSPEDAGEM,
+  RESUMO_HOSPEDAGEM,
+  DOMINIO_INCLUIDO,
+  LIMITES_HOSPEDAGEM,
+  RESUMO_BANCO_DADOS,
+  LIMITES_BANCO_DADOS,
+  precisaBancoDados,
 } from "../data/hostingOptions";
 
 export default function HostingOptions({
@@ -11,12 +17,17 @@ export default function HostingOptions({
   label = "Domínio e hospedagem (opcional)",
   value,
   onChange,
+  tipoId,
+  recursoIds = [],
 }) {
   const selecionada = obterOpcaoHospedagem(value);
   const descricaoId = id + "-descricao";
   return (
     <div>
-      <label htmlFor={id} className="mb-3 block text-sm font-semibold text-white">
+      <label
+        htmlFor={id}
+        className="mb-3 block text-sm font-semibold text-white"
+      >
         {label}
       </label>
       <select
@@ -33,7 +44,10 @@ export default function HostingOptions({
           </option>
         ))}
       </select>
-      <p id={descricaoId} className="mt-3 text-sm leading-relaxed text-white/65">
+      <p
+        id={descricaoId}
+        className="mt-3 text-sm leading-relaxed text-white/65"
+      >
         {selecionada
           ? selecionada.description
           : "Podemos cuidar desses serviços ou publicar nas suas contas. A escolha e os valores são confirmados na proposta."}
@@ -41,6 +55,30 @@ export default function HostingOptions({
       <p className="mt-2 text-xs leading-relaxed text-white/60">
         {CUSTOS_HOSPEDAGEM}
       </p>
+      {value !== "cliente" && (
+        <div className="mt-3 rounded-xl border border-accent-light/25 bg-base p-4">
+          <p className="text-sm font-semibold text-accent-light">
+            {value === "kroma" ? "Gestão selecionada: " : "Gestão opcional: "}
+            {RESUMO_HOSPEDAGEM}
+          </p>
+          <p className="mt-2 text-xs leading-relaxed text-white/65">
+            {DOMINIO_INCLUIDO}
+          </p>
+          <p className="mt-2 text-xs leading-relaxed text-white/65">
+            {LIMITES_HOSPEDAGEM}
+          </p>
+          {precisaBancoDados({ tipoId, recursoIds }) && (
+            <>
+              <p className="mt-3 text-sm font-semibold text-accent-light">
+                Banco de dados: + {RESUMO_BANCO_DADOS}
+              </p>
+              <p className="mt-2 text-xs leading-relaxed text-white/65">
+                {LIMITES_BANCO_DADOS}
+              </p>
+            </>
+          )}
+        </div>
+      )}
       <details className="mt-3 text-xs leading-relaxed text-white/65">
         <summary className="cursor-pointer font-semibold text-accent-light">
           Titularidade, acessos e encerramento

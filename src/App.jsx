@@ -6,7 +6,6 @@ import BentoSolutions from "./components/BentoSolutions";
 import SiteModelsGallery from "./components/SiteModelsGallery";
 import { anexarModeloProposta } from "./utils/siteModelReference";
 import { obterModeloSite } from "./data/siteModels";
-import { anexarHospedagemProposta } from "./data/hostingOptions";
 import CommercialPlans from "./components/CommercialPlans";
 import InteractiveRSVP from "./components/InteractiveRSVP";
 import ProjectCalculator from "./components/ProjectCalculator";
@@ -32,10 +31,7 @@ export default function App() {
     typeof window === "undefined"
       ? ""
       : window.location.origin + import.meta.env.BASE_URL;
-  const propostaCompleta = anexarHospedagemProposta(
-    anexarModeloProposta(proposta, modeloId, siteUrl),
-    hospedagemId,
-  );
+  const propostaCompleta = anexarModeloProposta(proposta, modeloId, siteUrl);
   const modelo = modeloId ? obterModeloSite(modeloId) : null;
 
   const solicitarProposta = (dados) =>

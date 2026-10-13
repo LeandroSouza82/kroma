@@ -12,7 +12,10 @@ import { MANUTENCOES } from "../data/maintenancePlans";
 import { criarPropostaCriacao } from "../utils/projectProposal";
 import OfferInfoDialog from "./OfferInfoDialog";
 import HostingOptions from "./HostingOptions";
-import { obterOpcaoHospedagem } from "../data/hostingOptions";
+import {
+  obterOpcaoHospedagem,
+  anexarHospedagemProposta,
+} from "../data/hostingOptions";
 
 const opcao = (ativa) =>
   "rounded-xl border px-4 py-3 text-left text-sm font-medium transition-colors " +
@@ -43,13 +46,14 @@ export default function ProjectCalculator({
   const [pagamentoId, setPagamentoId] = useState("pix");
   const [manutencaoId, setManutencaoId] = useState("");
   const [oferta, setOferta] = useState(null);
-  const proposta = criarPropostaCriacao({
+  const propostaBase = criarPropostaCriacao({
     tipoId,
     recursoIds,
     prazoId,
     pagamentoId,
     manutencaoId,
   });
+  const proposta = anexarHospedagemProposta(propostaBase, hospedagemId);
   const tipo = TIPOS.find((item) => item.id === tipoId);
   const parcelas = calcularParcelamento(proposta.estimativa);
   const hospedagem = obterOpcaoHospedagem(hospedagemId);
@@ -61,7 +65,7 @@ export default function ProjectCalculator({
         : [...atuais, id],
     );
   const solicitar = () => {
-    onSolicitar(proposta);
+    onSolicitar(propostaBase);
     document.getElementById("contato")?.scrollIntoView({ behavior: "smooth" });
   };
   return (
@@ -199,6 +203,8 @@ export default function ProjectCalculator({
             label="6 · Domínio e hospedagem (opcional)"
             value={hospedagemId}
             onChange={onHospedagemChange}
+            tipoId={tipoId}
+            recursoIds={recursoIds}
           />
         </div>
         <aside
@@ -260,9 +266,30 @@ export default function ProjectCalculator({
               {hospedagem?.summary || "A definir no atendimento"}
             </p>
             <p className="mt-1 text-xs leading-relaxed text-white/60">
-              Orçamento separado, confirmado antes da contratação.
+              {proposta.hospedagemMensalidade > 0
+                ? formatarBRL(proposta.hospedagemMensalidade, true) +
+                  "/mês · cobrança separada da criação e da manutenção."
+                : "Orçamento separado, confirmado antes da contratação."}
             </p>
           </div>
+          {proposta.bancoDadosMensalidade > 0 && (
+            <div className="mt-6 rounded-xl border border-line bg-base p-4">
+              <p className="text-xs uppercase tracking-wide text-white/40">
+                Banco de dados · Supabase
+              </p>
+              <p className="mt-2 text-base font-semibold text-white">
+                {formatarBRL(proposta.bancoDadosMensalidade, true)}/mês
+              </p>
+              <p className="mt-1 text-xs leading-relaxed text-white/60">
+                Pacote básico, com limites definidos na proposta.
+              </p>
+            </div>
+          )}
+          {proposta.hospedagemMensalidade > 0 && (
+            <p className="mt-4 text-sm font-semibold text-accent-light">
+              Total mensal: {formatarBRL(proposta.mensalidadeTotal, true)}/mês
+            </p>
+          )}
           <button
             id="simulador-solicitar"
             type="button"

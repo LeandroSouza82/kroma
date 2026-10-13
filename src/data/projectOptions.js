@@ -96,7 +96,7 @@ export const RECURSOS = [
     valor: 349.9,
     cartao: 489.9,
     scope:
-      "Um formulário com gravação de dados e validação básica. Relatórios, automações, autenticação e custos do serviço externo são avaliados separadamente.",
+      "Um formulário com gravação de dados e validação básica. A mensalidade do banco de dados aparece separadamente ao escolher a gestão da Kroma. Relatórios, automações e autenticação são avaliados à parte.",
   },
   {
     id: "pix",

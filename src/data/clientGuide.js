@@ -5,6 +5,12 @@ import {
   CUSTOS_HOSPEDAGEM,
   TITULARIDADE_HOSPEDAGEM,
   ENCERRAMENTO_HOSPEDAGEM,
+  CONDICOES_HOSPEDAGEM,
+  CONDICOES_BANCO_DADOS,
+  RESUMO_HOSPEDAGEM,
+  RESUMO_BANCO_DADOS,
+  DOMINIO_INCLUIDO,
+  calcularMensalidades,
 } from "./hostingOptions.js";
 
 const institucional = TIPOS.find((item) => item.id === "empresarial");
@@ -220,9 +226,58 @@ export const PERGUNTAS = [
     answer: [
       GESTAO_HOSPEDAGEM,
       CUSTOS_HOSPEDAGEM,
+      CONDICOES_HOSPEDAGEM,
+      CONDICOES_BANCO_DADOS,
       TITULARIDADE_HOSPEDAGEM,
       ENCERRAMENTO_HOSPEDAGEM,
       "Escolha Quero que a Kroma Web cuide no simulador ou no formulário de contato. Essa preferência acompanha o pedido de proposta e a mensagem do WhatsApp; ela não confirma uma contratação nem gera cobrança.",
+    ],
+  },
+  {
+    id: "custos-mensais-publicacao",
+    category: "Domínio e hospedagem",
+    question: "Quanto pago por mês para ter o site publicado com a Kroma Web?",
+    answer: [
+      RESUMO_HOSPEDAGEM,
+      DOMINIO_INCLUIDO,
+      "Sistema / dashboard e projetos com banco de dados acrescentam " +
+        RESUMO_BANCO_DADOS +
+        " Total básico do sistema: " +
+        formatarBRL(
+          calcularMensalidades({ tipoId: "sistema" }, "kroma").mensalidadeTotal,
+          true,
+        ) +
+        "/mês, sem manutenção de conteúdo.",
+      "Com manutenção de conteúdo, os totais mensais para um site simples são: " +
+        MANUTENCOES.map(
+          (item) =>
+            item.label +
+            " — " +
+            formatarBRL(
+              calcularMensalidades({ mensalidade: item.valor }, "kroma")
+                .mensalidadeTotal,
+              true,
+            ) +
+            "/mês",
+        ).join("; ") +
+        ".",
+      "Para um sistema com banco de dados e manutenção, os totais mensais são: " +
+        MANUTENCOES.map(
+          (item) =>
+            item.label +
+            " — " +
+            formatarBRL(
+              calcularMensalidades(
+                { tipoId: "sistema", mensalidade: item.valor },
+                "kroma",
+              ).mensalidadeTotal,
+              true,
+            ) +
+            "/mês",
+        ).join("; ") +
+        ".",
+      "A criação é paga uma vez, à vista ou parcelada, e tem preço próprio. O link do Mercado Pago paga somente a criação. As mensalidades começam no início do serviço combinado e são contratadas separadamente. Se você usar suas próprias contas, paga seus fornecedores diretamente e não contrata esses pacotes de infraestrutura da Kroma.",
+      CONDICOES_BANCO_DADOS,
     ],
   },
   {

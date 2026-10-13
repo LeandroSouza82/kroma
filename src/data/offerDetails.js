@@ -1,6 +1,11 @@
 import { obterTipoProjeto } from "./projectOptions.js";
 import { MANUTENCOES } from "./maintenancePlans.js";
-import { GESTAO_HOSPEDAGEM } from "./hostingOptions.js";
+import {
+  GESTAO_HOSPEDAGEM,
+  BANCO_DADOS,
+  CONDICOES_HOSPEDAGEM,
+  CONDICOES_BANCO_DADOS,
+} from "./hostingOptions.js";
 
 export const CONDICOES_CRIACAO = [
   "Criação é um serviço pontual. A manutenção mensal é opcional e cobrada separadamente.",
@@ -9,6 +14,7 @@ export const CONDICOES_CRIACAO = [
   "A proposta confirma escopo, cronograma e pagamento antes do início. O prazo considera o recebimento dos materiais e o retorno do cliente.",
   "Domínio, hospedagem e serviços externos têm custos próprios. Responsáveis, valores e renovações são informados antes da contratação.",
   GESTAO_HOSPEDAGEM,
+  CONDICOES_HOSPEDAGEM,
 ];
 export const CONDICOES_MANUTENCAO = [
   "Uma solicitação corresponde a uma pequena atualização em conteúdo existente: um texto, uma foto, um horário ou um link.",
@@ -130,7 +136,10 @@ export function detalharOferta(id, categoria = "criacao") {
       ...DESCRICOES[id],
       category: categoria,
       limits: limitesCriacao(tipo),
-      conditions: CONDICOES_CRIACAO,
+      conditions:
+        id === BANCO_DADOS.tipoId
+          ? [...CONDICOES_CRIACAO, CONDICOES_BANCO_DADOS]
+          : CONDICOES_CRIACAO,
     };
   }
   if (categoria !== "manutencao")

@@ -3,6 +3,7 @@ import { MAX_PARCELAS, formatarBRL } from "../data/projectOptions";
 import { PROMOCAO, promocaoAtiva, validadePromocao } from "../data/promotion";
 import { detalharOferta } from "../data/offerDetails";
 import { criarPropostaCriacao } from "../utils/projectProposal";
+import { RESUMO_HOSPEDAGEM } from "../data/hostingOptions";
 import useNativeDialog from "../hooks/useNativeDialog";
 
 const SESSION_KEY = "kroma:promocao:" + PROMOCAO.id;
@@ -173,7 +174,7 @@ function PromotionDialog({ onFechar, onSolicitar }) {
             </li>
           </ul>
           <p className="promo-separate-costs">
-            Manutenção, domínio e hospedagem à parte.
+            Publicação opcional: {RESUMO_HOSPEDAGEM} Manutenção à parte.
           </p>
           <a
             id="promo-pagar"

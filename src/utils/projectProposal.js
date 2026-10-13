@@ -63,6 +63,7 @@ export function criarPropostaCriacao({
     contratacao: "criacao",
     tipo: tipo.label,
     tipoId,
+    recursoIds: [...recursoIds],
     campanhaId: promocional ? PROMOCAO.id : "",
     escopo,
     estimativa,

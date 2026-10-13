@@ -3,6 +3,7 @@ import { TIPOS, formatarBRL } from "../data/projectOptions";
 import { criarLead, linkWhatsApp } from "../services/supabaseClient";
 import { montarMensagemContato } from "../utils/projectProposal";
 import HostingOptions from "./HostingOptions";
+import { anexarHospedagemProposta } from "../data/hostingOptions";
 
 const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -38,7 +39,7 @@ function Campo({ id, label, erro, children }) {
 }
 
 export default function LeadFormSection({
-  proposta,
+  proposta: propostaBase,
   modelo,
   onRemoverModelo,
   hospedagemId,
@@ -47,9 +48,17 @@ export default function LeadFormSection({
   const [form, setForm] = useState({
     nome: "",
     contato: "",
-    tipoProjeto: proposta.tipo,
-    mensagem: proposta.mensagem,
+    tipoProjeto: propostaBase.tipo,
+    mensagem: propostaBase.mensagem,
   });
+  const tipoId =
+    propostaBase.tipoId ||
+    TIPOS.find((item) => item.label === form.tipoProjeto)?.id ||
+    "";
+  const proposta = anexarHospedagemProposta(
+    { ...propostaBase, tipoId },
+    hospedagemId,
+  );
   const [erros, setErros] = useState({});
   const [enviando, setEnviando] = useState(false);
   const [resultado, setResultado] = useState(null);
@@ -153,8 +162,23 @@ export default function LeadFormSection({
               )}
               {proposta.hospedagemId && (
                 <p className="mt-3 text-white/75">
-                  Domínio e hospedagem: {proposta.hospedagemLabel}. Valor definido
-                  na proposta, separado da criação e da manutenção.
+                  Domínio e hospedagem: {proposta.hospedagemLabel}.{" "}
+                  {proposta.hospedagemMensalidade > 0
+                    ? formatarBRL(proposta.hospedagemMensalidade, true) +
+                      "/mês, separado da criação e da manutenção."
+                    : "Valor definido na proposta, separado da criação e da manutenção."}
+                </p>
+              )}
+              {proposta.bancoDadosMensalidade > 0 && (
+                <p className="mt-3 text-white/75">
+                  Banco de dados · Supabase:{" "}
+                  {formatarBRL(proposta.bancoDadosMensalidade, true)}/mês.
+                </p>
+              )}
+              {proposta.hospedagemMensalidade > 0 && (
+                <p className="mt-3 font-semibold text-accent-light">
+                  Total mensal: {formatarBRL(proposta.mensalidadeTotal, true)}
+                  /mês
                 </p>
               )}
               <details className="mt-4 border-t border-line pt-4">
@@ -274,6 +298,8 @@ export default function LeadFormSection({
                 id="lead-hospedagem"
                 value={hospedagemId}
                 onChange={onHospedagemChange}
+                tipoId={tipoId}
+                recursoIds={propostaBase.recursoIds}
               />
               <Campo
                 id="lead-mensagem"
