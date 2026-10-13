@@ -11,6 +11,16 @@ Site de apresentação, planos comerciais e pedidos de orçamento em React e Vit
 
 Copie .env.example para .env.local e configure o projeto Supabase e o WhatsApp de atendimento. O formulário usa a tabela leads_kroma; se a gravação falhar ou a conexão não estiver configurada, oferece a mensagem pelo WhatsApp.
 
+## Hospedagem na Vercel
+
+O projeto usa Vite, com instalação por `npm ci`, build por `npm run build` e saída em `dist`. Esses valores ficam em `vercel.json`; a pasta raiz é a raiz do repositório. Use Node.js 22.12 ou superior, conforme a versão instalada do Vite. O diretório `.vercel` gerado pela CLI é ignorado pelo Git.
+
+Ao importar `LeandroSouza82/kroma`, confira a branch antes de publicar: as alterações de planos, campanha e modelos estão em `feat/planos-acessiveis-pagamentos`, no PR #1. Faça primeiro uma implantação Preview dessa branch. A branch `main` ainda contém a versão anterior; publicar a versão atual em produção depende de integrar o PR.
+
+Configure `VITE_WHATSAPP_NUMBER` para o número de atendimento, com código do país e apenas dígitos. Para gravar os pedidos no Supabase, configure também `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` nos ambientes desejados, com as permissões apropriadas na tabela `leads_kroma`. Sem essa conexão, o formulário oferece a alternativa de contato pelo WhatsApp. Variáveis `VITE_*` fazem parte do JavaScript entregue ao visitante; nunca use a chave `service_role`. Mudanças nessas variáveis exigem novo build.
+
+Confira o plano da conta antes da publicação comercial. O [Hobby](https://vercel.com/docs/plans/hobby) é gratuito e destinado a uso pessoal não comercial. As [regras de uso](https://vercel.com/docs/limits/fair-use-guidelines) exigem Pro ou Enterprise para divulgação de serviços e sites desenvolvidos mediante pagamento. Preparar essa configuração não contrata nem altera o plano da conta.
+
 ## Onde editar a oferta
 
 - src/data/projectOptions.js: tipos de projeto, preços Pix/cartão, adicionais, prazo e número de parcelas.
