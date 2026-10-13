@@ -53,7 +53,7 @@ test("nova proposta promocional é recusada fora do período sem alterar os plan
     );
     assert.equal(
       calcularEstimativa("empresarial", [], "normal", "pix", agora),
-      700,
+      699.9,
     );
   }
 });

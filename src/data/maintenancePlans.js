@@ -2,7 +2,7 @@ const planos = [
   {
     id: "essencial",
     label: "Essencial",
-    valor: 99,
+    valor: 98.9,
     requests: 1,
     description: "Para manter as informações importantes em dia.",
     features: [
@@ -14,7 +14,7 @@ const planos = [
   {
     id: "acompanhamento",
     label: "Acompanhamento",
-    valor: 150,
+    valor: 149.9,
     requests: 3,
     featured: true,
     description: "Para negócios que atualizam sua presença com frequência.",
@@ -27,7 +27,7 @@ const planos = [
   {
     id: "evolucao",
     label: "Evolução",
-    valor: 249,
+    valor: 248.9,
     requests: 6,
     description: "Mais espaço para cuidar do conteúdo do seu negócio.",
     features: [

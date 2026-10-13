@@ -40,8 +40,8 @@ test("a base escolhida acompanha o orçamento sem alterar pagamento ou manutenç
     manutencaoId: "acompanhamento",
   });
   const comModelo = anexarModeloProposta(proposta, "kw-01");
-  assert.equal(comModelo.estimativa, 999);
-  assert.equal(comModelo.mensalidade, 150);
+  assert.equal(comModelo.estimativa, 998.9);
+  assert.equal(comModelo.mensalidade, 149.9);
   assert.equal(comModelo.pagamento, proposta.pagamento);
   assert.match(comModelo.escopo, /Base visual escolhida:.*KW-01/s);
   assert.equal(proposta.modeloId, undefined);

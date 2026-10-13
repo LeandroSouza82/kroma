@@ -32,7 +32,9 @@ Confira o plano da conta antes da publicação comercial. O [Hobby](https://verc
 - src/utils/siteModelReference.js: referência compartilhada entre cópia, WhatsApp e escopo do pedido.
 - src/utils/projectProposal.js: condições compartilhadas entre planos, simulador e atendimento.
 
-A oferta inicial de site institucional está em R$700 no Pix ou R$999 no cartão, dividido em 10 parcelas de R$99,90. Os demais preços são referências iniciais editáveis. A manutenção é opcional e não é somada ao custo de criação.
+A oferta inicial de site institucional está em R$699,90 no Pix ou R$998,90 no cartão, dividido em 10 parcelas de R$99,89. Os demais preços são referências iniciais editáveis. A manutenção é opcional e não é somada ao custo de criação.
+
+Os preços em reais inteiros foram reduzidos em R$0,10: criação, totais no cartão, adicionais e manutenção. O banner promocional mantém R$299 à vista e 10× R$36,07 no cartão. Valores já com centavos foram mantidos. As parcelas derivam do total; quando a estimativa com prioridade não se divide igualmente em dez valores de centavos, a última parcela ajusta o arredondamento e aparece no simulador e na proposta.
 
 Os limites de lançamento foram definidos para revisão comercial: institucional com uma página, cinco seções e dez imagens; evento com uma página, quatro seções e oito imagens; catálogo com uma página e vinte produtos; sistema com três telas para um fluxo de interface, sem dados ou autenticação incluídos. Todos incluem uma rodada de ajustes. As quantidades ficam em limits em projectOptions.js; solicitações mensais ficam em requests em maintenancePlans.js. Ajuste esses limites antes de publicar a oferta, se seu modelo comercial for diferente.
 

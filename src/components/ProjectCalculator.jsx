@@ -6,6 +6,7 @@ import {
   PAGAMENTOS,
   MAX_PARCELAS,
   formatarBRL,
+  calcularParcelamento,
 } from "../data/projectOptions";
 import { MANUTENCOES } from "../data/maintenancePlans";
 import { criarPropostaCriacao } from "../utils/projectProposal";
@@ -44,6 +45,7 @@ export default function ProjectCalculator({ onSolicitar }) {
     manutencaoId,
   });
   const tipo = TIPOS.find((item) => item.id === tipoId);
+  const parcelas = calcularParcelamento(proposta.estimativa);
   const recursos = RECURSOS.filter((item) => recursoIds.includes(item.id));
   const alternar = (id) =>
     setRecursoIds((atuais) =>
@@ -204,13 +206,20 @@ export default function ProjectCalculator({ onSolicitar }) {
             <p className="mt-2 text-4xl font-semibold tracking-tight text-white">
               {pagamentoId === "cartao" ? (
                 <>
-                  <span className="text-xl font-normal">{MAX_PARCELAS}× </span>
-                  {formatarBRL(proposta.estimativa / MAX_PARCELAS, true)}
+                  <span className="text-xl font-normal">
+                    {parcelas.iguais ? MAX_PARCELAS : MAX_PARCELAS - 1}×{" "}
+                  </span>
+                  {formatarBRL(parcelas.parcela, true)}
                 </>
               ) : (
                 formatarBRL(proposta.estimativa)
               )}
             </p>
+            {pagamentoId === "cartao" && !parcelas.iguais && (
+              <p className="mt-2 text-sm text-white/55">
+                Última parcela: {formatarBRL(parcelas.ultima, true)}
+              </p>
+            )}
             <p className="mt-2 text-sm text-white/55">
               {pagamentoId === "cartao"
                 ? "Total no cartão: " + formatarBRL(proposta.estimativa)

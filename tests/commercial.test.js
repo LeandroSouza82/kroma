@@ -5,6 +5,8 @@ import {
   descreverPagamento,
   MAX_PARCELAS,
   TIPOS,
+  calcularParcelamento,
+  RECURSOS,
 } from "../src/data/projectOptions.js";
 import {
   criarPropostaCriacao,
@@ -14,13 +16,13 @@ import {
 import { detalharOferta } from "../src/data/offerDetails.js";
 import { filtrarPerguntas } from "../src/data/clientGuide.js";
 
-test("oferta institucional anuncia 700 no Pix e 10 vezes de 99,90 no cartão", () => {
-  assert.equal(calcularEstimativa("empresarial"), 700);
-  assert.equal(calcularEstimativa("empresarial", [], "normal", "cartao"), 999);
-  assert.equal(999 / MAX_PARCELAS, 99.9);
+test("oferta institucional anuncia 699,90 no Pix e 10 vezes de 99,89 no cartão", () => {
+  assert.equal(calcularEstimativa("empresarial"), 699.9);
+  assert.equal(calcularEstimativa("empresarial", [], "normal", "cartao"), 998.9);
+  assert.equal(calcularParcelamento(998.9).parcela, 99.89);
   assert.match(
-    descreverPagamento(999, "cartao"),
-    /10× de R\$\s?99,90.*total R\$\s?999/,
+    descreverPagamento(998.9, "cartao"),
+    /10× de R\$\s?99,89.*total R\$\s?998,90/,
   );
 });
 test("os adicionais e a prioridade seguem a forma de pagamento escolhida", () => {
@@ -31,7 +33,7 @@ test("os adicionais e a prioridade seguem a forma de pagamento escolhida", () =>
       "expresso",
       "pix",
     ),
-    3094,
+    3093.35,
   );
   assert.equal(
     calcularEstimativa(
@@ -40,11 +42,11 @@ test("os adicionais e a prioridade seguem a forma de pagamento escolhida", () =>
       "expresso",
       "cartao",
     ),
-    4366.7,
+    4366.05,
   );
 });
 test("um adicional duplicado não é cobrado duas vezes", () => {
-  assert.equal(calcularEstimativa("empresarial", ["admin", "admin"]), 1190);
+  assert.equal(calcularEstimativa("empresarial", ["admin", "admin"]), 1189.8);
 });
 test("manutenção opcional permanece separada do total de criação", () => {
   const proposta = criarPropostaCriacao({
@@ -52,20 +54,20 @@ test("manutenção opcional permanece separada do total de criação", () => {
     pagamentoId: "cartao",
     manutencaoId: "acompanhamento",
   });
-  assert.equal(proposta.estimativa, 999);
-  assert.equal(proposta.mensalidade, 150);
+  assert.equal(proposta.estimativa, 998.9);
+  assert.equal(proposta.mensalidade, 149.9);
   assert.match(proposta.escopo, /Pagamento da criação:.*10×/);
-  assert.match(proposta.escopo, /Acompanhamento.*150\/mês/);
+  assert.match(proposta.escopo, /Acompanhamento.*149,90\/mês/);
 });
 test("criação começa sem mensalidade adicionada automaticamente", () => {
   const proposta = criarPropostaCriacao({ tipoId: "evento" });
-  assert.equal(proposta.estimativa, 490);
+  assert.equal(proposta.estimativa, 489.9);
   assert.equal(proposta.mensalidade, 0);
 });
 test("pedido só de manutenção não informa taxa de criação", () => {
   const proposta = criarPropostaManutencao("acompanhamento");
   assert.equal(proposta.estimativa, 0);
-  assert.equal(proposta.mensalidade, 150);
+  assert.equal(proposta.mensalidade, 149.9);
   assert.equal(proposta.tipo, "Manutenção de site");
 });
 test("mensagem de atendimento preserva método, total e manutenção escolhidos", () => {
@@ -84,8 +86,8 @@ test("mensagem de atendimento preserva método, total e manutenção escolhidos"
     proposta,
   );
   assert.match(mensagem, /Nome: Cliente/);
-  assert.match(mensagem, /10× de R\$\s?99,90.*total R\$\s?999/);
-  assert.match(mensagem, /Evolução.*249\/mês/);
+  assert.match(mensagem, /10× de R\$\s?99,89.*total R\$\s?998,90/);
+  assert.match(mensagem, /Evolução.*248,90\/mês/);
 });
 test("configurações desconhecidas não geram um orçamento parcial", () => {
   assert.throws(() => calcularEstimativa("invalido"), RangeError);
@@ -108,9 +110,28 @@ test("configurações desconhecidas não geram um orçamento parcial", () => {
 test("a prioridade preserva os centavos do novo preço no cartão", () => {
   assert.equal(
     calcularEstimativa("empresarial", [], "expresso", "cartao"),
-    1298.7,
+    1298.57,
   );
-  assert.match(descreverPagamento(1298.7, "cartao"), /129,87.*1\.298,70/);
+  assert.match(
+    descreverPagamento(1298.57, "cartao"),
+    /9× de.*129,86.*1× de.*129,83.*1\.298,57/,
+  );
+});
+
+test("parcelas com arredondamento somam exatamente o total, inclusive com adicionais e prioridade", () => {
+  for (const tipo of TIPOS) {
+    for (const prazo of ["normal", "expresso"]) {
+      for (const recursos of [[], RECURSOS.map((item) => item.id)]) {
+        const total = calcularEstimativa(tipo.id, recursos, prazo, "cartao");
+        const parcelas = calcularParcelamento(total);
+        assert.equal(
+          Math.round(parcelas.parcela * 100) * (MAX_PARCELAS - 1) +
+            Math.round(parcelas.ultima * 100),
+          Math.round(total * 100),
+        );
+      }
+    }
+  }
 });
 
 test("o atendimento leva os limites da oferta e os custos externos separados", () => {
@@ -147,7 +168,7 @@ test("a manutenção informa quantidade, limites e ausência de acúmulo", () =>
 test("dúvidas aceitam busca por termos, acentos e assunto sem perder os valores", () => {
   const preco = filtrarPerguntas("INSTITUCIONAL pagar", "Pagamento");
   assert.equal(preco.length, 1);
-  assert.match(preco[0].answer.join(" "), /700.*99,90.*999/);
+  assert.match(preco[0].answer.join(" "), /699,90.*99,89.*998,90/);
   const resultados = filtrarPerguntas("manutencao", "Manutenção");
   assert.ok(resultados.length > 0);
   assert.ok(resultados.every((item) => item.category === "Manutenção"));

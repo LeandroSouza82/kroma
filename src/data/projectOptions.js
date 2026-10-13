@@ -7,8 +7,8 @@ export const TIPOS = [
   {
     id: "empresarial",
     label: "Site institucional",
-    base: 700,
-    cartao: 999,
+    base: 699.9,
+    cartao: 998.9,
     limits: { pages: 1, sections: 5, images: 10, revisions: 1 },
     featured: true,
     description:
@@ -23,8 +23,8 @@ export const TIPOS = [
   {
     id: "evento",
     label: "Evento / convite digital",
-    base: 490,
-    cartao: 690,
+    base: 489.9,
+    cartao: 689.9,
     limits: { pages: 1, sections: 4, images: 8, revisions: 1 },
     description:
       "Um endereço especial para reunir as informações do seu evento.",
@@ -38,8 +38,8 @@ export const TIPOS = [
   {
     id: "ecommerce",
     label: "Loja / catálogo digital",
-    base: 1490,
-    cartao: 1890,
+    base: 1489.9,
+    cartao: 1889.9,
     limits: { pages: 1, products: 20, revisions: 1 },
     description:
       "Apresente seus produtos e facilite os pedidos dos seus clientes.",
@@ -53,8 +53,8 @@ export const TIPOS = [
   {
     id: "sistema",
     label: "Sistema / dashboard",
-    base: 2490,
-    cartao: 2990,
+    base: 2489.9,
+    cartao: 2989.9,
     limits: { screens: 3, flows: 1, revisions: 1 },
     description:
       "Uma interface pensada para o fluxo que a sua operação precisa.",
@@ -75,32 +75,32 @@ export const RECURSOS = [
   {
     id: "admin",
     label: "Painel para editar conteúdo",
-    valor: 490,
-    cartao: 690,
+    valor: 489.9,
+    cartao: 689.9,
     scope:
       "Edição dos textos e imagens de uma área do site, com um acesso administrativo. Novas áreas e níveis de acesso são orçados à parte.",
   },
   {
     id: "supabase",
     label: "Formulários e dados",
-    valor: 350,
-    cartao: 490,
+    valor: 349.9,
+    cartao: 489.9,
     scope:
       "Um formulário com gravação de dados e validação básica. Relatórios, automações, autenticação e custos do serviço externo são avaliados separadamente.",
   },
   {
     id: "pix",
     label: "Integração de pagamentos",
-    valor: 350,
-    cartao: 490,
+    valor: 349.9,
+    cartao: 489.9,
     scope:
       "Um fluxo de pagamento com um provedor, após análise de viabilidade. Taxas do provedor, assinaturas, carrinho, estoque e frete não estão incluídos.",
   },
   {
     id: "3d",
     label: "Animações interativas",
-    valor: 490,
-    cartao: 690,
+    valor: 489.9,
+    cartao: 689.9,
     scope:
       "Uma interação ou animação em uma área da página. Modelagem de objetos 3D, vídeos e produção de imagens são orçados à parte.",
   },
@@ -148,11 +148,26 @@ export const formatarBRL = (valor, centavos = false) =>
     minimumFractionDigits: centavos || !Number.isInteger(valor) ? 2 : 0,
     maximumFractionDigits: 2,
   });
-export const descreverPagamento = (total, pagamentoId) =>
-  pagamentoId === "cartao"
-    ? MAX_PARCELAS +
+export function calcularParcelamento(total) {
+  const totalCentavos = Math.round(total * 100);
+  const parcelaCentavos = Math.round(totalCentavos / MAX_PARCELAS);
+  const ultimaCentavos = totalCentavos - parcelaCentavos * (MAX_PARCELAS - 1);
+  return {
+    parcela: parcelaCentavos / 100,
+    ultima: ultimaCentavos / 100,
+    iguais: parcelaCentavos === ultimaCentavos,
+  };
+}
+
+export function descreverPagamento(total, pagamentoId) {
+  if (pagamentoId !== "cartao") return formatarBRL(total) + " à vista no Pix";
+  const parcelas = calcularParcelamento(total);
+  const descricao = parcelas.iguais
+    ? MAX_PARCELAS + "× de " + formatarBRL(parcelas.parcela, true)
+    : (MAX_PARCELAS - 1) +
       "× de " +
-      formatarBRL(total / MAX_PARCELAS, true) +
-      " no cartão · total " +
-      formatarBRL(total)
-    : formatarBRL(total) + " à vista no Pix";
+      formatarBRL(parcelas.parcela, true) +
+      " + 1× de " +
+      formatarBRL(parcelas.ultima, true);
+  return descricao + " no cartão · total " + formatarBRL(total);
+}
