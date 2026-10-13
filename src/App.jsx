@@ -3,6 +3,9 @@ import Navbar from "./components/Navbar";
 import HeroCarousel from "./components/HeroCarousel";
 import PromotionBanner from "./components/PromotionBanner";
 import BentoSolutions from "./components/BentoSolutions";
+import SiteModelsGallery from "./components/SiteModelsGallery";
+import { anexarModeloProposta } from "./utils/siteModelReference";
+import { obterModeloSite } from "./data/siteModels";
 import CommercialPlans from "./components/CommercialPlans";
 import InteractiveRSVP from "./components/InteractiveRSVP";
 import ProjectCalculator from "./components/ProjectCalculator";
@@ -22,6 +25,13 @@ const propostaInicial = {
 
 export default function App() {
   const [proposta, setProposta] = useState(propostaInicial);
+  const [modeloId, setModeloId] = useState("");
+  const siteUrl =
+    typeof window === "undefined"
+      ? ""
+      : window.location.origin + import.meta.env.BASE_URL;
+  const propostaComModelo = anexarModeloProposta(proposta, modeloId, siteUrl);
+  const modelo = modeloId ? obterModeloSite(modeloId) : null;
 
   const solicitarProposta = (dados) =>
     setProposta((atual) => ({ ...dados, id: atual.id + 1 }));
@@ -33,11 +43,21 @@ export default function App() {
         <HeroCarousel />
         <PromotionBanner onSolicitar={solicitarProposta} />
         <BentoSolutions />
+        <SiteModelsGallery
+          modeloId={modeloId}
+          onEscolher={setModeloId}
+          siteUrl={siteUrl}
+        />
         <CommercialPlans onSolicitar={solicitarProposta} />
         <InteractiveRSVP />
         <ProjectCalculator onSolicitar={solicitarProposta} />
         <ClientGuide />
-        <LeadFormSection key={proposta.id} proposta={proposta} />
+        <LeadFormSection
+          key={proposta.id}
+          proposta={propostaComModelo}
+          modelo={modelo}
+          onRemoverModelo={() => setModeloId("")}
+        />
       </main>
       <Footer />
     </>

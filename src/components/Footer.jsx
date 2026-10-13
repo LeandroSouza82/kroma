@@ -1,5 +1,6 @@
 const LINKS = [
   { href: "#solucoes", label: "Soluções" },
+  { href: "#modelos", label: "Modelos de estrutura" },
   { href: "#planos", label: "Preços e manutenção" },
   { href: "#demonstracao", label: "Demonstração" },
   { href: "#simulador", label: "Simulador" },
@@ -11,7 +12,7 @@ const LINKS = [
 export default function Footer() {
   return (
     <footer className="border-t border-line bg-base">
-      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-12 md:flex-row md:items-center md:justify-between">
+      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-12 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p className="text-lg font-semibold tracking-tight text-white">
             Kroma<span className="text-accent-light">Web</span>

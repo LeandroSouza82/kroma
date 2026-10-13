@@ -5,7 +5,7 @@ import { montarMensagemContato } from "../utils/projectProposal";
 
 const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const validar = ({ nome, contato, tipoProjeto, mensagem }) => {
+const validar = ({ nome, contato, tipoProjeto, mensagem }, modelo) => {
   const erros = {};
   if (nome.trim().length < 2) erros.nome = "Informe seu nome.";
   const digitos = contato.replace(/\D/g, "");
@@ -13,7 +13,7 @@ const validar = ({ nome, contato, tipoProjeto, mensagem }) => {
     erros.contato = "Informe um WhatsApp com DDD ou um e-mail válido.";
   }
   if (!tipoProjeto) erros.tipoProjeto = "Selecione o tipo de site.";
-  if (mensagem.trim().length < 10)
+  if (mensagem.trim().length < 10 && !modelo)
     erros.mensagem = "Descreva sua ideia em pelo menos 10 caracteres.";
   return erros;
 };
@@ -36,7 +36,7 @@ function Campo({ id, label, erro, children }) {
   );
 }
 
-export default function LeadFormSection({ proposta }) {
+export default function LeadFormSection({ proposta, modelo, onRemoverModelo }) {
   const [form, setForm] = useState({
     nome: "",
     contato: "",
@@ -62,11 +62,11 @@ export default function LeadFormSection({ proposta }) {
   const atualizar = (e) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
   const classeCampo = (nome) =>
-    `${campo} ${erros[nome] ? "border-red-400/60" : "border-line"}`;
+    `${campo} ${erros[nome] && !(modelo && nome === "mensagem") ? "border-red-400/60" : "border-line"}`;
 
   const enviar = async (e) => {
     e.preventDefault();
-    const novosErros = validar(form);
+    const novosErros = validar(form, modelo);
     setErros(novosErros);
     if (Object.keys(novosErros).length) return;
 
@@ -104,6 +104,28 @@ export default function LeadFormSection({ proposta }) {
             Em poucas linhas entendemos seu objetivo e retornamos com escopo,
             prazo e investimento claros.
           </p>
+          {modelo && (
+            <div className="lead-model-selection">
+              <img
+                src={import.meta.env.BASE_URL + modelo.imagePath}
+                alt={modelo.alt}
+                width={1200}
+                height={900}
+              />
+              <div>
+                <p>Base visual escolhida</p>
+                <strong>
+                  {modelo.code} · {modelo.label}
+                </strong>
+                <span>
+                  Referência para personalizar. Escopo e preço seguem o plano.
+                </span>
+                <button type="button" onClick={onRemoverModelo}>
+                  Remover base
+                </button>
+              </div>
+            </div>
+          )}
           {(proposta.estimativa > 0 || proposta.mensalidade > 0) && (
             <div className="mt-8 max-w-lg rounded-xl border border-line bg-surface p-5 text-sm">
               <p className="text-white/40">Condições selecionadas</p>
@@ -233,8 +255,12 @@ export default function LeadFormSection({ proposta }) {
               </Campo>
               <Campo
                 id="lead-mensagem"
-                label="Descrição da ideia"
-                erro={erros.mensagem}
+                label={
+                  modelo
+                    ? "O que deseja personalizar? (opcional)"
+                    : "Descrição da ideia"
+                }
+                erro={modelo ? undefined : erros.mensagem}
               >
                 <textarea
                   id="lead-mensagem"

@@ -18,6 +18,8 @@ Copie .env.example para .env.local e configure o projeto Supabase e o WhatsApp d
 - src/data/offerDetails.js: escopo, inclusões, exclusões e condições dos planos, usados nos detalhes e no pedido de proposta.
 - src/data/clientGuide.js: etapas de contratação e perguntas pesquisáveis por assunto, com valores derivados da oferta.
 - src/data/promotion.js: ativação, período em Brasília, preço e limites da campanha de landing page.
+- src/data/siteModels.js: códigos estáveis, descrições, estrutura e caminhos das imagens da galeria.
+- src/utils/siteModelReference.js: referência compartilhada entre cópia, WhatsApp e escopo do pedido.
 - src/utils/projectProposal.js: condições compartilhadas entre planos, simulador e atendimento.
 
 A oferta inicial de site institucional está em R$700 no Pix ou R$999 no cartão, dividido em 10 parcelas de R$99,90. Os demais preços são referências iniciais editáveis. A manutenção é opcional e não é somada ao custo de criação.
@@ -35,6 +37,16 @@ A campanha inicial vai de 13 de outubro até 15 de novembro de 2026, às 23h59, 
 Landing page: R$299 no total, em 10 parcelas de R$29,90 no cartão ou R$299 à vista no Pix. Escopo inicial para revisão comercial: uma página, três seções, cinco imagens fornecidas pelo cliente e uma rodada de ajustes. Manutenção, domínio, hospedagem, produção de conteúdo e integrações são cobrados separadamente. Não há preço anterior fictício nem contador reiniciado por visita.
 
 O banner encaminha a seleção ao mesmo formulário e mensagem do WhatsApp utilizados pelos planos regulares, incluindo a validade da oferta. Ele não processa pagamentos. Os diálogos compartilham a abertura e o retorno de foco; o fechamento é controlado pelos botões e pelo evento cancel do Escape, sem atualizar estado durante a limpeza do efeito em StrictMode.
+
+## Galeria de modelos
+
+A aba Modelos apresenta seis desenhos estáticos de estruturas, com abertura ampla ou compacta, menu no topo, lateral ou após o destaque, galeria e conteúdo em blocos. Cada base tem código estável KW-01 a KW-06, imagem ampliável, referência para copiar e mensagem pronta para abrir no WhatsApp. A escolha fica no estado do projeto e acompanha o próximo pedido de proposta, sem mudar preço, pagamento ou manutenção. Não é persistida após recarregar a página.
+
+Na prévia ampliada, Copiar imagem e Baixar imagem PNG convertem o SVG local em PNG pelo canvas do navegador. A cópia depende da API de clipboard e da permissão do navegador. Se o texto não puder ser copiado automaticamente, a referência aparece em um campo para selecionar e copiar; para imagens, há a alternativa de baixar. Nenhum botão envia mensagem automaticamente ao WhatsApp.
+
+Os desenhos são referências da disposição visual. O número de blocos e os controles ilustrados não adicionam funcionalidades ao escopo do plano. Cores, textos e fotos são personalizáveis. O cliente que já escolheu uma base pode deixar a descrição adicional do formulário vazia, mantendo nome, contato e tipo de projeto obrigatórios.
+
+As imagens públicas ficam em public/modelos e têm título, descrição e código também no desenho. Para regenerar os SVGs a partir dos dados e composições editáveis, execute node scripts/generate-site-models.mjs. A geração não exige novas dependências do projeto. Códigos existentes não devem ser reutilizados para uma estrutura diferente, pois podem já estar em conversas de clientes.
 
 ## Atendimento e demonstrações
 
