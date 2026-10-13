@@ -9,6 +9,7 @@ import {
 } from "../data/projectOptions";
 import { MANUTENCOES } from "../data/maintenancePlans";
 import { criarPropostaCriacao } from "../utils/projectProposal";
+import OfferInfoDialog from "./OfferInfoDialog";
 
 const opcao = (ativa) =>
   "rounded-xl border px-4 py-3 text-left text-sm font-medium transition-colors " +
@@ -34,6 +35,7 @@ export default function ProjectCalculator({ onSolicitar }) {
   const [prazoId, setPrazoId] = useState(PRAZOS[0].id);
   const [pagamentoId, setPagamentoId] = useState("pix");
   const [manutencaoId, setManutencaoId] = useState("");
+  const [oferta, setOferta] = useState(null);
   const proposta = criarPropostaCriacao({
     tipoId,
     recursoIds,
@@ -85,6 +87,14 @@ export default function ProjectCalculator({ onSolicitar }) {
               </button>
             ))}
           </Passo>
+          <button
+            type="button"
+            aria-haspopup="dialog"
+            onClick={() => setOferta({ id: tipoId, category: "criacao" })}
+            className="text-sm font-semibold text-accent-light hover:text-white"
+          >
+            Informações do plano {tipo.label} ⓘ
+          </button>
           <Passo numero={2} titulo="Recursos adicionais">
             {RECURSOS.map((item) => (
               <button
@@ -100,6 +110,9 @@ export default function ProjectCalculator({ onSolicitar }) {
                   {formatarBRL(
                     pagamentoId === "cartao" ? item.cartao : item.valor,
                   )}
+                </span>
+                <span className="mt-3 block text-xs font-normal leading-relaxed text-white/60">
+                  {item.scope}
                 </span>
               </button>
             ))}
@@ -117,6 +130,11 @@ export default function ProjectCalculator({ onSolicitar }) {
               </button>
             ))}
           </Passo>
+          <p className="text-xs leading-relaxed text-white/50">
+            Prioridade acrescenta 30% à criação e depende de disponibilidade. O
+            prazo é confirmado na proposta, após a definição do escopo e dos
+            materiais.
+          </p>
           <Passo numero={4} titulo="Pagamento da criação">
             {PAGAMENTOS.map((item) => (
               <button
@@ -154,6 +172,18 @@ export default function ProjectCalculator({ onSolicitar }) {
                 </option>
               ))}
             </select>
+            {manutencaoId && (
+              <button
+                type="button"
+                aria-haspopup="dialog"
+                onClick={() =>
+                  setOferta({ id: manutencaoId, category: "manutencao" })
+                }
+                className="mt-3 text-sm font-semibold text-accent-light hover:text-white"
+              >
+                Informações da manutenção selecionada ⓘ
+              </button>
+            )}
           </div>
         </div>
         <aside
@@ -175,7 +205,7 @@ export default function ProjectCalculator({ onSolicitar }) {
               {pagamentoId === "cartao" ? (
                 <>
                   <span className="text-xl font-normal">{MAX_PARCELAS}× </span>
-                  {formatarBRL(proposta.estimativa / MAX_PARCELAS)}
+                  {formatarBRL(proposta.estimativa / MAX_PARCELAS, true)}
                 </>
               ) : (
                 formatarBRL(proposta.estimativa)
@@ -212,8 +242,18 @@ export default function ProjectCalculator({ onSolicitar }) {
             Estimativa inicial. Escopo, condições de pagamento e prazo serão
             confirmados no atendimento.
           </p>
+          <p className="mt-3 text-xs leading-relaxed text-white/50">
+            Domínio, hospedagem e taxas externas são separados.{" "}
+            <a href="#duvidas" className="text-accent-light underline">
+              Entenda os custos
+            </a>
+            .
+          </p>
         </aside>
       </div>
+      {oferta && (
+        <OfferInfoDialog oferta={oferta} onFechar={() => setOferta(null)} />
+      )}
     </section>
   );
 }

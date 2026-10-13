@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TIPOS, MAX_PARCELAS, formatarBRL } from "../data/projectOptions";
 import { MANUTENCOES } from "../data/maintenancePlans";
+import OfferInfoDialog from "./OfferInfoDialog";
 import {
   criarPropostaCriacao,
   criarPropostaManutencao,
@@ -27,11 +28,19 @@ function Features({ items }) {
 }
 export default function CommercialPlans({ onSolicitar }) {
   const [aba, setAba] = useState("pix");
+  const [oferta, setOferta] = useState(null);
   const manutencao = aba === "manutencao";
   const selecionar = (proposta) => {
     onSolicitar(proposta);
     document.getElementById("contato")?.scrollIntoView({ behavior: "smooth" });
   };
+  const propostaDaOferta = (item) =>
+    item.category === "manutencao"
+      ? criarPropostaManutencao(item.id)
+      : criarPropostaCriacao({
+          tipoId: item.id,
+          pagamentoId: item.pagamentoId,
+        });
   const navegar = (event) => {
     const atual = ABAS.findIndex((item) => item.id === aba);
     let proxima;
@@ -60,8 +69,8 @@ export default function CommercialPlans({ onSolicitar }) {
             </h2>
           </div>
           <p className="max-w-sm text-base leading-relaxed text-slate-600">
-            Escolha como começar. Veja o valor da criação, as parcelas e o
-            acompanhamento mensal em separado.
+            Escolha como começar. Abra Informações em cada preço para ver o que
+            inclui, os limites e o que é cobrado separadamente.
           </p>
         </div>
         <div
@@ -133,32 +142,60 @@ export default function CommercialPlans({ onSolicitar }) {
                   {item.description}
                 </p>
                 <div className="mt-6 border-t border-slate-200 pt-6">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="min-w-fit flex-1">
+                      {!manutencao && (
+                        <p className="text-xs font-medium text-slate-500">
+                          A partir de
+                        </p>
+                      )}
+                      <p className="mt-1 text-3xl font-semibold tracking-tight text-slate-950">
+                        {manutencao ? (
+                          formatarBRL(item.valor)
+                        ) : aba === "cartao" ? (
+                          <>
+                            <span className="text-lg font-normal">
+                              {MAX_PARCELAS}×{" "}
+                            </span>
+                            {formatarBRL(item.cartao / MAX_PARCELAS, true)}
+                          </>
+                        ) : (
+                          formatarBRL(item.base)
+                        )}
+                      </p>
+                      <p className="mt-2 text-sm text-slate-500">
+                        {manutencao
+                          ? "por mês"
+                          : aba === "cartao"
+                            ? "Total no cartão: " + formatarBRL(item.cartao)
+                            : "à vista no Pix"}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      aria-haspopup="dialog"
+                      aria-label={
+                        "Informações sobre " +
+                        (manutencao ? "manutenção " : "") +
+                        item.label
+                      }
+                      onClick={() =>
+                        setOferta({
+                          id: item.id,
+                          category: manutencao ? "manutencao" : "criacao",
+                          pagamentoId: aba,
+                        })
+                      }
+                      className="plan-info shrink-0 rounded-lg border border-slate-200 px-2 py-2 text-xs font-semibold text-blue-700 hover:border-blue-300 hover:bg-blue-50"
+                    >
+                      Informações <span aria-hidden="true">ⓘ</span>
+                    </button>
+                  </div>
                   {!manutencao && (
-                    <p className="text-xs font-medium text-slate-500">
-                      A partir de
+                    <p className="mt-4 text-xs font-medium text-slate-600">
+                      Criação pontual · manutenção não incluída
                     </p>
                   )}
-                  <p className="mt-1 text-3xl font-semibold tracking-tight text-slate-950">
-                    {manutencao ? (
-                      formatarBRL(item.valor)
-                    ) : aba === "cartao" ? (
-                      <>
-                        <span className="text-lg font-normal">
-                          {MAX_PARCELAS}×{" "}
-                        </span>
-                        {formatarBRL(item.cartao / MAX_PARCELAS)}
-                      </>
-                    ) : (
-                      formatarBRL(item.base)
-                    )}
-                  </p>
-                  <p className="mt-2 text-sm text-slate-500">
-                    {manutencao
-                      ? "por mês"
-                      : aba === "cartao"
-                        ? "Total no cartão: " + formatarBRL(item.cartao)
-                        : "à vista no Pix"}
-                  </p>
                 </div>
                 <Features items={item.features} />
                 <button
@@ -174,7 +211,7 @@ export default function CommercialPlans({ onSolicitar }) {
                     )
                   }
                   className={
-                    "mt-auto w-full rounded-xl px-4 py-3.5 text-sm font-semibold transition-colors " +
+                    "plan-request mt-auto w-full rounded-xl px-4 py-3.5 text-sm font-semibold transition-colors " +
                     (item.featured
                       ? "bg-blue-600 text-white hover:bg-blue-700"
                       : "bg-slate-100 text-slate-950 hover:bg-slate-200")
@@ -192,7 +229,25 @@ export default function CommercialPlans({ onSolicitar }) {
               : "Valores iniciais para o escopo descrito. Domínio, hospedagem e taxas de serviços externos são combinados na proposta. Integrações e recursos adicionais podem alterar o orçamento."}
           </p>
         </div>
+        <div className="mt-8 flex flex-col gap-3 border-t border-slate-200 pt-6 text-sm sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-slate-600">
+            Página, manutenção, domínio: entenda cada parte antes de contratar.
+          </p>
+          <a
+            href="#duvidas"
+            className="shrink-0 font-semibold text-blue-700 hover:text-blue-900"
+          >
+            Ver perguntas e respostas ↗
+          </a>
+        </div>
       </div>
+      {oferta && (
+        <OfferInfoDialog
+          oferta={oferta}
+          onFechar={() => setOferta(null)}
+          onSolicitar={() => selecionar(propostaDaOferta(oferta))}
+        />
+      )}
     </section>
   );
 }

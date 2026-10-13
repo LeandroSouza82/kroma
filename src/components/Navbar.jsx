@@ -2,8 +2,9 @@ import { useState } from "react";
 const LINKS = [
   { href: "#solucoes", label: "Serviços" },
   { href: "#planos", label: "Planos" },
-  { href: "#demonstracao", label: "Demonstração" },
   { href: "#simulador", label: "Simulador" },
+  { href: "#como-funciona", label: "Como funciona" },
+  { href: "#duvidas", label: "Dúvidas" },
 ];
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -43,7 +44,7 @@ export default function Navbar() {
             Kroma<span className="text-accent-light">Web</span>
           </span>
         </a>
-        <ul className="hidden items-center gap-7 md:flex">
+        <ul className="hidden items-center gap-5 lg:flex">
           {LINKS.map((link) => (
             <li key={link.href}>
               <a
@@ -69,7 +70,7 @@ export default function Navbar() {
             aria-expanded={open}
             aria-label={open ? "Fechar menu" : "Abrir menu"}
             onClick={() => setOpen((value) => !value)}
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-line text-white md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-lg border border-line text-white lg:hidden"
           >
             {open ? "×" : "☰"}
           </button>
@@ -79,7 +80,7 @@ export default function Navbar() {
         <nav
           id="mobile-navigation"
           aria-label="Navegação no celular"
-          className="border-t border-line px-6 pb-5 md:hidden"
+          className="border-t border-line px-6 pb-5 lg:hidden"
         >
           {LINKS.map((link) => (
             <a

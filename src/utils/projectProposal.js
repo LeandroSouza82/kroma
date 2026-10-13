@@ -7,6 +7,7 @@ import {
   formatarBRL,
 } from "../data/projectOptions.js";
 import { MANUTENCOES } from "../data/maintenancePlans.js";
+import { detalharOferta } from "../data/offerDetails.js";
 
 export function criarPropostaCriacao({
   tipoId,
@@ -28,16 +29,25 @@ export function criarPropostaCriacao({
     throw new RangeError("Plano de manutenção inválido.");
   const recursos = RECURSOS.filter((item) => recursoIds.includes(item.id));
   const pagamento = descreverPagamento(estimativa, pagamentoId);
+  const detalhes = detalharOferta(tipoId);
   const escopo = [
-    "Recursos: " +
-      (recursos.map((item) => item.label).join(", ") ||
-        "Escopo inicial do plano"),
+    "Escopo base: " + detalhes.overview,
+    "Limites: " + detalhes.limits.join(" "),
+    "Fora do plano base: " + detalhes.excluded.join(" "),
+    "Adicionais: " +
+      (recursos.map((item) => item.label + " — " + item.scope).join("; ") ||
+        "Nenhum"),
     "Prazo: " + prazo.label,
     "Pagamento da criação: " + pagamento,
     "Manutenção: " +
       (manutencao
-        ? manutencao.label + " — " + formatarBRL(manutencao.valor) + "/mês"
-        : "Sem plano selecionado"),
+        ? manutencao.label +
+          " — " +
+          formatarBRL(manutencao.valor) +
+          "/mês — " +
+          manutencao.features[0]
+        : "Não incluída; sem plano selecionado"),
+    "Domínio, hospedagem e taxas externas cobrados separadamente",
   ].join(" · ");
   return {
     contratacao: "criacao",
@@ -64,7 +74,8 @@ export function criarPropostaManutencao(planoId) {
     " · " +
     formatarBRL(plano.valor) +
     "/mês · " +
-    plano.features[0];
+    plano.features[0] +
+    " · Uma solicitação = uma pequena atualização em conteúdo existente, sem acúmulo mensal. Novas páginas e funções, domínio e hospedagem são separados.";
   return {
     contratacao: "manutencao",
     tipo: "Manutenção de site",

@@ -3,6 +3,8 @@ const LINKS = [
   { href: "#planos", label: "Preços e manutenção" },
   { href: "#demonstracao", label: "Demonstração" },
   { href: "#simulador", label: "Simulador" },
+  { href: "#como-funciona", label: "Como funciona" },
+  { href: "#duvidas", label: "Dúvidas" },
   { href: "#contato", label: "Contato" },
 ];
 
@@ -22,7 +24,10 @@ export default function Footer() {
         <ul className="flex flex-wrap gap-x-8 gap-y-3">
           {LINKS.map(({ href, label }) => (
             <li key={href}>
-              <a href={href} className="text-sm text-white/50 transition-colors hover:text-white">
+              <a
+                href={href}
+                className="text-sm text-white/50 transition-colors hover:text-white"
+              >
                 {label}
               </a>
             </li>

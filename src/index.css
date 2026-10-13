@@ -78,6 +78,28 @@ body {
   box-shadow: 0 12px 35px rgb(37 99 235 / 9%);
 }
 
+.offer-dialog {
+  position: fixed;
+  inset: 0;
+  width: min(850px, calc(100% - 2rem));
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid #dce2eb;
+  border-radius: 1.25rem;
+  background: #fff;
+  color: #0f172a;
+  box-shadow: 0 24px 80px rgb(0 0 0 / 25%);
+}
+
+.offer-dialog::backdrop { background: rgb(8 9 13 / 75%); }
+
+.faq-item summary { list-style: none; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item[open] .faq-indicator { transform: rotate(45deg); }
+
 .hero-photo {
   animation: hero-photo-in 1s ease-out both;
 }

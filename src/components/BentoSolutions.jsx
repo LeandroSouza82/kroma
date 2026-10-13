@@ -20,7 +20,9 @@ const Card = ({ className = "", eyebrow, title, children, text }) => (
     <span className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-light">
       {eyebrow}
     </span>
-    <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white">{title}</h3>
+    <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white">
+      {title}
+    </h3>
     <p className="mt-3 text-[15px] leading-relaxed text-white/55">{text}</p>
     {children}
   </article>
@@ -28,7 +30,10 @@ const Card = ({ className = "", eyebrow, title, children, text }) => (
 
 export default function BentoSolutions() {
   return (
-    <section id="solucoes" className="mx-auto max-w-7xl scroll-mt-20 px-6 py-28">
+    <section
+      id="solucoes"
+      className="mx-auto max-w-7xl scroll-mt-20 px-6 py-28"
+    >
       <div className="max-w-2xl">
         <span className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-light">
           Soluções
@@ -36,6 +41,16 @@ export default function BentoSolutions() {
         <h2 className="mt-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
           Uma boa presença, do primeiro clique ao contato.
         </h2>
+        <p className="mt-5 text-base leading-relaxed text-white/60">
+          Cada solução tem um escopo inicial.{" "}
+          <a
+            href="#planos"
+            className="text-accent-light underline underline-offset-4"
+          >
+            Veja os planos e abra Informações
+          </a>{" "}
+          para conhecer inclusões, limites e adicionais.
+        </p>
       </div>
 
       <div className="mt-14 grid gap-4 lg:grid-cols-3">
@@ -47,19 +62,22 @@ export default function BentoSolutions() {
         >
           <div className="mt-auto flex flex-wrap gap-2 pt-8">
             <Chip>Institucional</Chip>
-            <Chip>Multi-idioma</Chip>
-            <Chip>Blog & SEO</Chip>
-            <Chip>Landing Pages</Chip>
+            <Chip>Serviços e fotos</Chip>
+            <Chip>Contato pelo WhatsApp</Chip>
+            <Chip>Layout para celular</Chip>
           </div>
         </Card>
 
         <Card
           className="lg:row-span-2"
           eyebrow="Sistemas"
-          title="Sistemas, SaaS e Dashboards"
-          text="Painéis com dados dinâmicos, autenticação, permissões e automações sob medida para a sua operação."
+          title="Interfaces e dashboards"
+          text="O plano inicial organiza as telas de um fluxo simples. Dados reais, autenticação, permissões e automações exigem um escopo adicional."
         >
-          <div className="mt-auto flex h-40 items-end gap-2 pt-8" aria-hidden="true">
+          <div
+            className="mt-auto flex h-40 items-end gap-2 pt-8"
+            aria-hidden="true"
+          >
             {BARRAS.map((altura, i) => (
               <span
                 key={i}
@@ -73,7 +91,7 @@ export default function BentoSolutions() {
         <Card
           eyebrow="E-commerce"
           title="Lojas e catálogos digitais"
-          text="Seus produtos organizados em uma vitrine própria, com pedidos e pagamentos definidos conforme o projeto."
+          text="O catálogo inicial organiza os produtos e direciona pedidos ao WhatsApp. Carrinho, pagamento automático, estoque e frete recebem um orçamento próprio."
         />
 
         <Card
@@ -90,8 +108,13 @@ export default function BentoSolutions() {
         >
           <dl className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {METRICAS.map(({ valor, rotulo }) => (
-              <div key={rotulo} className="rounded-xl border border-line bg-base p-5">
-                <dt className="text-3xl font-bold tracking-tight text-white">{valor}</dt>
+              <div
+                key={rotulo}
+                className="rounded-xl border border-line bg-base p-5"
+              >
+                <dt className="text-3xl font-bold tracking-tight text-white">
+                  {valor}
+                </dt>
                 <dd className="mt-1 text-sm text-white/50">{rotulo}</dd>
               </div>
             ))}
