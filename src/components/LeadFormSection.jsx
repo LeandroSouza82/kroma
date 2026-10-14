@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TIPOS, formatarBRL } from "../data/projectOptions";
-import { criarLead, linkWhatsApp } from "../services/supabaseClient";
+import { criarLead } from "../services/supabaseClient";
+import { linkContato } from "../utils/contactLink.js";
 import { montarMensagemContato } from "../utils/projectProposal";
 import HostingOptions from "./HostingOptions";
 import { anexarHospedagemProposta } from "../data/hostingOptions";
@@ -63,13 +64,13 @@ export default function LeadFormSection({
   const [erros, setErros] = useState({});
   const [enviando, setEnviando] = useState(false);
   const [resultado, setResultado] = useState(null);
-  const conversa = linkWhatsApp(
+  const conversa = linkContato(
     proposta.escopo
       ? montarMensagemContato(
           {
             ...form,
             nome: form.nome || "A informar",
-            contato: form.contato || "Pelo WhatsApp",
+            contato: form.contato || "Pelo e-mail",
           },
           proposta,
         )
@@ -97,10 +98,9 @@ export default function LeadFormSection({
       mensagem: form.mensagem.trim(),
     });
 
-    const link = linkWhatsApp(montarMensagemContato(form, proposta));
+    const link = linkContato(montarMensagemContato(form, proposta));
     if (error) {
-      window.open(link, "_blank", "noopener");
-      setResultado({ via: "whatsapp", link });
+      setResultado({ via: "email", link });
     } else {
       setResultado({ via: "supabase", link });
     }
@@ -236,12 +236,12 @@ export default function LeadFormSection({
               <h3 className="mt-5 text-2xl font-semibold text-white">
                 {resultado.via === "supabase"
                   ? "Recebemos sua solicitação"
-                  : "Continue pelo WhatsApp"}
+                  : "Envie seu pedido por e-mail"}
               </h3>
               <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-white/55">
                 {resultado.via === "supabase"
                   ? "Vamos analisar sua ideia e conversar sobre o escopo e as condições."
-                  : "Sua consulta está pronta. Use o botão abaixo para enviar a mensagem pelo WhatsApp."}
+                  : "Seu pedido está preparado, mas ainda não foi enviado. Abra o e-mail, revise a mensagem e envie pelo seu aplicativo."}
               </p>
               <a
                 href={resultado.link}
@@ -249,8 +249,8 @@ export default function LeadFormSection({
                 rel="noopener noreferrer"
                 className="mt-6 inline-block rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-light"
               >
-                {resultado.via === "whatsapp"
-                  ? "Abrir WhatsApp"
+                {resultado.via === "email"
+                  ? "Abrir e-mail"
                   : "Conversar sobre esta proposta"}
               </a>
             </div>
@@ -353,7 +353,7 @@ export default function LeadFormSection({
                 rel="noopener noreferrer"
                 className="block text-center text-sm text-accent-light underline underline-offset-4"
               >
-                Prefiro conversar pelo WhatsApp
+                Prefiro conversar por e-mail
               </a>
             </form>
           )}
