@@ -20,7 +20,7 @@ export const CONDICOES_MANUTENCAO = [
   "Uma solicitação corresponde a uma pequena atualização em conteúdo existente: um texto, uma foto, um horário ou um link.",
   "Solicitações são contadas por atualização, mesmo quando enviadas na mesma mensagem. As não utilizadas no mês não se acumulam.",
   "Novas páginas, funções, integrações, reformulações e produção de conteúdo são orçadas separadamente.",
-  "Atendimento por WhatsApp, sem plantão 24 horas. Prazo das atualizações e canal de envio são registrados na proposta.",
+  "Atendimento por e-mail, sem plantão 24 horas. Prazo das atualizações e canal de envio são registrados na proposta.",
   "A cobrança é mensal, separada da criação, e começa após a entrega ou o início do acompanhamento acordado. Pagamento por Pix ou cartão a combinar.",
   "Vencimento, renovação e cancelamento são informados na proposta antes da adesão. Domínio, hospedagem e taxas externas não estão incluídos.",
   GESTAO_HOSPEDAGEM,
