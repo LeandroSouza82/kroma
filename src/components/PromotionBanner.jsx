@@ -208,6 +208,7 @@ function PromotionDialog({ onFechar, onSolicitar }) {
           >
             Prefiro solicitar uma proposta <span aria-hidden="true">↗</span>
           </button>
+          <a className="promo-quote" href="/landing-pages/">Conhecer o serviço de landing pages ↗</a>
           <p className="promo-no-charge">
             Solicitar uma proposta não gera cobrança.
           </p>
