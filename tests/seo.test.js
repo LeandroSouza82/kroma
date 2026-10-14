@@ -54,7 +54,7 @@ test("sitemap e links institucionais apontam para páginas HTML reais e indexáv
   const principal = home.match(/rel="canonical" href="([^"]+)"/)[1];
   const contact = JSON.parse(home.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1])["@graph"][0].contactPoint.url;
   const sitemap = readFileSync(new URL("../dist/sitemap.xml", import.meta.url), "utf8");
-  assert.equal((sitemap.match(/<loc>/g) || []).length, 4);
+  assert.equal((sitemap.match(/<loc>/g) || []).length, 5);
   for (const slug of ["sobre", "privacidade", "condicoes"]) {
     const url = principal + slug + "/";
     assert.ok(sitemap.includes(`<loc>${url}</loc>`));
@@ -67,4 +67,19 @@ test("sitemap e links institucionais apontam para páginas HTML reais e indexáv
   const robots = readFileSync(new URL("../dist/robots.txt", import.meta.url), "utf8");
   assert.match(robots, /User-agent: \*\nAllow: \//);
   assert.ok(robots.includes(`Sitemap: ${principal}sitemap.xml`));
+});
+
+
+test("landing page tem endereço próprio, conteúdo e links de contratação", () => {
+  const home = readFileSync(new URL("../dist/index.html", import.meta.url), "utf8");
+  const principal = home.match(/rel="canonical" href="([^"]+)"/)[1];
+  const html = readFileSync(new URL("../dist/landing-pages/index.html", import.meta.url), "utf8");
+  const sitemap = readFileSync(new URL("../dist/sitemap.xml", import.meta.url), "utf8");
+  assert.ok(sitemap.includes(`<loc>${principal}landing-pages/</loc>`));
+  assert.ok(html.includes(`rel="canonical" href="${principal}landing-pages/"`));
+  assert.equal((html.match(/<h1>/g) || []).length, 1);
+  assert.ok(home.includes('href="/landing-pages/"'));
+  assert.ok(html.includes('href="/#oferta-landing"'));
+  assert.ok(html.includes('Layout responsivo'));
+  assert.ok(html.includes('custos'));
 });
