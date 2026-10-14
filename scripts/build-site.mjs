@@ -89,7 +89,7 @@ for (const page of pages) {
     <main id="conteudo"><p class="eyebrow">${page.eyebrow}</p><h1>${page.title}</h1>
       <p class="updated">Atualizado em <time datetime="${site.updatedAt}">${updateLabel}</time></p>
       ${page.body}
-      <div class="contact"><h2>Fale com a Kroma Web</h2><p>Atendimento sobre projetos, propostas e privacidade.</p><a class="button" href="https://wa.me/${site.whatsapp}" target="_blank" rel="noopener noreferrer">Abrir WhatsApp ↗</a></div>
+      <div class="contact"><h2>Fale com a Kroma Web</h2><p>Atendimento sobre projetos, propostas e privacidade.</p><a class="button" href="https://wa.me/${site.whatsapp}" target="_blank" rel="noopener noreferrer">Abrir WhatsApp ↗</a><p>Ou escreva para <a href="mailto:${escapeHtml(site.email)}">${escapeHtml(site.email)}</a>.</p></div>
     </main>
     <footer><a href="/sobre/">Sobre a Kroma Web</a><a href="/privacidade/">Privacidade</a><a href="/condicoes/">Condições de contratação</a><a href="/">Voltar ao site</a><p>© ${new Date(renderedAt).getFullYear()} Kroma Web</p></footer>
   </body></html>`;
