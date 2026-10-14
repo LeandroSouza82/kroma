@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { CATEGORIAS_FAQ, filtrarPerguntas } from "../../data/clientGuide";
-import { SITE } from "../../data/siteInfo";
+import { linkContato } from "../../utils/contactLink.js";
 import KromaRobot from "./KromaRobot";
 import "./kroma.css";
 
@@ -36,7 +36,7 @@ export default function KromaGuide() {
           <div className="kroma-questions">{filtrarPerguntas(search, category).map(q => <button key={q.id} onClick={() => setAnswer(q)}>{q.question}<span aria-hidden="true">↗</span></button>)}{!filtrarPerguntas(search, category).length && <p>Não encontrei essa dúvida. Experimente outra palavra ou fale com a equipe.</p>}</div>
         </>}
       </div>
-      <footer><a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener noreferrer">Conversar com a equipe ↗</a><span>Respostas do guia do site · sem IA</span></footer>
+      <footer><a href={linkContato()} target="_blank" rel="noopener noreferrer">Conversar com a equipe ↗</a><span>Respostas do guia do site · sem IA</span></footer>
     </section>}
     {!open && greeting && <div className="kroma-greeting"><button className="kroma-greeting-close" aria-label="Fechar cumprimento do Kroma" onClick={() => setGreeting(false)}>×</button><button className="kroma-greeting-text" onClick={() => { setOpen(true); setGreeting(false); }}>Olá! Eu sou o <strong>Kroma</strong> 👋<br/>Como posso ajudar você?</button></div>}
     <button ref={launcher} className="kroma-launcher" aria-label={open ? "Recolher guia Kroma" : "Conversar com Kroma"} aria-expanded={open} onClick={() => { setOpen(v => !v); setGreeting(false); }}><KromaRobot/><span>{open ? "Recolher" : "Posso ajudar?"}</span></button>
