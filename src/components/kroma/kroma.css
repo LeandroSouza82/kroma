@@ -8,12 +8,13 @@
 .kroma-greeting-text { text-align: left; font-size: 13px; line-height: 1.6; cursor: pointer; }
 .kroma-greeting-text strong { color: #2563eb; }
 .kroma-greeting-close { position: absolute; right: 6px; top: 4px; width: 24px; height: 24px; cursor: pointer; color: #536176; }
-.kroma-panel { position: absolute; bottom: 160px; left: 0; width: min(370px, calc(100vw - 32px)); border: 1px solid #c3d4ee; border-radius: 22px; background: #fff; overflow: hidden; box-shadow: 0 16px 55px #0004; }
-.kroma-panel header { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; background: linear-gradient(135deg,#16409d,#2563eb); color: #fff; }
+.kroma-guide-open { z-index: 60; }
+.kroma-panel { display: flex; flex-direction: column; max-height: calc(100dvh - 272px); position: absolute; bottom: 160px; left: 0; width: min(370px, calc(100vw - 32px)); border: 1px solid #c3d4ee; border-radius: 22px; background: #fff; overflow: hidden; box-shadow: 0 16px 55px #0004; }
+.kroma-panel header { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; background: linear-gradient(135deg,#16409d,#2563eb); color: #fff; }
 .kroma-panel header strong { display: block; font-size: 18px; }
 .kroma-panel header span { display: block; font-size: 11px; opacity: .85; margin-top: 2px; }
 .kroma-panel header button { width: 36px; height: 36px; border-radius: 50%; background: #ffffff1c; font-size: 24px; cursor: pointer; }
-.kroma-panel-content { max-height: min(410px, calc(100dvh - 340px)); overflow-y: auto; overscroll-behavior: contain; padding: 16px; }
+.kroma-panel-content { min-height: 0; max-height: min(410px, calc(100dvh - 340px)); overflow-y: auto; overscroll-behavior: contain; padding: 16px; }
 .kroma-welcome { font-size: 13px; line-height: 1.6; color: #536176; }
 .kroma-shortcuts { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0 16px; }
 .kroma-shortcuts a { padding: 9px 10px; border-radius: 10px; background: #edf4ff; color: #16409d; font-size: 11px; font-weight: 650; }
@@ -28,7 +29,7 @@
 .kroma-answer h3 { font-size: 15px; font-weight: 700; margin-top: 14px; }
 .kroma-back,.kroma-answer a { color: #16409d; font-size: 12px; cursor: pointer; }
 .kroma-answer a { display: inline-block; margin-top: 15px; font-weight: 700; }
-.kroma-panel footer { padding: 13px 16px; background: #f5f8fc; border-top: 1px solid #e2e9f3; }
+.kroma-panel footer { flex-shrink: 0; padding: 13px 16px; background: #f5f8fc; border-top: 1px solid #e2e9f3; }
 .kroma-panel footer a { display: block; font-size: 12px; color: #16409d; font-weight: 700; }
 .kroma-panel footer span { display: block; margin-top: 6px; font-size: 10px; color: #64748b; }
 .kroma-body { transform-origin: 90px 180px; animation: kroma-idle 16s ease-in-out 2; }
@@ -49,8 +50,8 @@
   .kroma-launcher > span { font-size: 10px; padding: 4px 8px; }
   .kroma-greeting { left: 90px; bottom: 16px; width: min(240px, calc(100vw - 120px)); padding: 12px 24px 12px 12px; }
   .kroma-greeting-text { font-size: 12px; }
-  .kroma-panel { bottom: 120px; }
-  .kroma-panel-content { max-height: calc(100dvh - 300px); }
+  .kroma-panel { position: fixed; top: calc(96px + env(safe-area-inset-top, 0px)); bottom: calc(132px + env(safe-area-inset-bottom, 0px)); left: 12px; width: calc(100vw - 24px); max-height: none; }
+  .kroma-panel-content { min-height: 0; max-height: calc(100dvh - 300px); }
   body:has(.kroma-guide) .promo-notice { bottom: 132px; }
   body:has(.kroma-guide-open) .promo-notice { display: none; }
 }
