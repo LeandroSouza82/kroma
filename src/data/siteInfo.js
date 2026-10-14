@@ -6,13 +6,9 @@ export function configurarSite(env = {}) {
     url.protocol !== "https:" || url.username || url.password ||
     url.pathname !== "/" || url.search || url.hash
   ) throw new RangeError("Informe o endereço HTTPS principal do site, sem caminhos ou parâmetros.");
-  const whatsapp = env.VITE_WHATSAPP_NUMBER || "5548996525008";
-  if (!/^\d{10,15}$/.test(whatsapp))
-    throw new RangeError("O WhatsApp de atendimento deve conter apenas dígitos, com código do país.");
   return {
     name: "Kroma Web",
     url: url.href,
-    whatsapp,
     email: "contato@kromaweb.com.br",
     title: "Criação de sites, landing pages e sistemas web | Kroma Web",
     description: "Criação de sites, landing pages, catálogos digitais e sistemas web com atendimento online em todo o Brasil. Confira preços, escopos e opções de pagamento.",
@@ -38,10 +34,10 @@ export function dadosEstruturados(site = SITE) {
         email: site.email,
         contactPoint: {
           "@type": "ContactPoint",
-          telephone: "+" + site.whatsapp,
+          email: site.email,
           contactType: "customer service",
           availableLanguage: "pt-BR",
-          url: "https://wa.me/" + site.whatsapp,
+          url: "mailto:" + site.email,
         },
       },
       {
