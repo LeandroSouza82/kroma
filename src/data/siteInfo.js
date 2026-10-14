@@ -17,6 +17,7 @@ export function configurarSite(env = {}) {
     description: "Criação de sites institucionais, landing pages, convites digitais, catálogos e sistemas web. Compare preços, escopos e manutenção e fale com a Kroma Web.",
     updatedAt: "2026-10-13",
     verification: env.VITE_GOOGLE_SITE_VERIFICATION || "",
+    hostingProvider: env.VITE_HOSTING_PROVIDER === "Locaweb" ? "Locaweb" : "Vercel",
   };
 }
 
