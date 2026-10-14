@@ -9,14 +9,16 @@ test("o endereço canônico é HTTPS e não aceita credenciais, caminhos ou par�
   assert.equal(configurarSite({ VITE_SITE_URL: "https://example.com" }).url, "https://example.com/");
   for (const url of ["http://example.com", "https://a:b@example.com", "https://example.com/path", "https://example.com/?x=1", "https://example.com/#top"])
     assert.throws(() => configurarSite({ VITE_SITE_URL: url }), RangeError);
-  assert.throws(() => configurarSite({ VITE_WHATSAPP_NUMBER: "não informado" }), RangeError);
+  assert.equal(configurarSite().email, "contato@kromaweb.com.br");
 });
 
 test("a identificação usa a marca e o contato reais, sem selos, avaliações ou dados cadastrais inventados", () => {
   const site = configurarSite();
   const { "@graph": graph } = dadosEstruturados(site);
   assert.deepEqual(graph.map((item) => item["@type"]), ["Organization", "WebSite"]);
-  assert.equal(graph[0].contactPoint.telephone, "+" + site.whatsapp);
+  assert.equal(graph[0].contactPoint.email, site.email);
+  assert.equal(graph[0].contactPoint.url, "mailto:" + site.email);
+  assert.ok(!("telephone" in graph[0].contactPoint));
   assert.equal(graph[1].url, site.url);
   assert.equal(graph[1].publisher["@id"], graph[0]["@id"]);
   assert.doesNotMatch(JSON.stringify(graph), /aggregateRating|hasCertification|taxID|streetAddress/);
@@ -25,7 +27,7 @@ test("a identificação usa a marca e o contato reais, sem selos, avaliações o
 test("a política descreve o canal realmente configurado para receber os pedidos", () => {
   const site = configurarSite();
   const texto = (configurado) => paginasInstitucionais(site, configurado).find((item) => item.slug === "privacidade").body;
-  assert.match(texto(false), /formulário prepara a mensagem e abre o WhatsApp/);
+  assert.match(texto(false), /formulário prepara uma mensagem por e-mail/);
   assert.doesNotMatch(texto(false), /Supabase como serviço de armazenamento/);
   assert.match(texto(true), /Supabase como serviço de armazenamento/);
   assert.match(texto(false), /armazenamento da sessão.*banner promocional/s);
