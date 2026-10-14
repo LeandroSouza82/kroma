@@ -210,7 +210,7 @@ export const PERGUNTAS = [
     question: "O que conta como uma solicitação de manutenção?",
     answer: [
       "Uma solicitação é uma atualização pequena em conteúdo existente: trocar um texto, uma foto, um horário ou um link. Se uma mensagem pedir três atualizações distintas, serão três solicitações.",
-      "O cliente fornece o novo conteúdo. Solicitações não usadas não acumulam para o mês seguinte. Novas páginas, funções e reformulação do layout precisam de outro orçamento. Há atendimento por WhatsApp, sem plantão 24 horas.",
+      "O cliente fornece o novo conteúdo. Solicitações não usadas não acumulam para o mês seguinte. Novas páginas, funções e reformulação do layout precisam de outro orçamento. Há atendimento por e-mail, sem plantão 24 horas.",
     ],
   },
   {
@@ -233,7 +233,7 @@ export const PERGUNTAS = [
       CONDICOES_BANCO_DADOS,
       TITULARIDADE_HOSPEDAGEM,
       ENCERRAMENTO_HOSPEDAGEM,
-      "Escolha Quero que a Kroma Web cuide no simulador ou no formulário de contato. Essa preferência acompanha o pedido de proposta e a mensagem do WhatsApp; ela não confirma uma contratação nem gera cobrança.",
+      "Escolha Quero que a Kroma Web cuide no simulador ou no formulário de contato. Essa preferência acompanha o pedido de proposta e a mensagem de atendimento; ela não confirma uma contratação nem gera cobrança.",
     ],
   },
   {
