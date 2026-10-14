@@ -1,3 +1,4 @@
+import { linkContato } from "../src/utils/contactLink.js";
 import { PROMOCAO, promocaoAtiva, validadePromocao } from '../src/data/promotion.js';
 import { formatarBRL } from '../src/data/projectOptions.js';
 import { detalharOferta } from '../src/data/offerDetails.js';
@@ -9,7 +10,7 @@ export function paginaLanding(site, seoTags, escapeHtml, agora = Date.now()) {
   const title = 'Criação de landing pages para seu negócio | Kroma Web';
   const description = 'Landing pages com design personalizado, layout para celular e contato pelo WhatsApp. Conheça o escopo, os preços e o atendimento online em todo o Brasil.';
   const url = site.url + 'landing-pages/';
-  const contact = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Olá! Conheci a página de landing pages da Kroma Web e quero conversar sobre meu projeto.')}`;
+  const contact = linkContato('Olá! Conheci a página de landing pages da Kroma Web e quero conversar sobre meu projeto.', site);
   const list = items => items.map(x => `<li>${e(x)}</li>`).join('');
   return `<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080d1a"><title>${e(title)}</title><meta name="description" content="${e(description)}">${seoTags({title,description,url})}<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/landing-pages.css"></head><body>
   <a class="skip" href="#conteudo">Ir para o conteúdo</a>
