@@ -13,9 +13,9 @@ export function configurarSite(env = {}) {
     name: "Kroma Web",
     url: url.href,
     whatsapp,
-    title: "Kroma Web | Criação de sites, landing pages e sistemas",
-    description: "Criação de sites institucionais, landing pages, convites digitais, catálogos e sistemas web. Compare preços, escopos e manutenção e fale com a Kroma Web.",
-    updatedAt: "2026-10-13",
+    title: "Criação de sites, landing pages e sistemas web | Kroma Web",
+    description: "Criação de sites, landing pages, catálogos digitais e sistemas web com atendimento online em todo o Brasil. Confira preços, escopos e opções de pagamento.",
+    updatedAt: "2026-10-14",
     verification: env.VITE_GOOGLE_SITE_VERIFICATION || "",
     hostingProvider: env.VITE_HOSTING_PROVIDER === "Locaweb" ? "Locaweb" : "Vercel",
   };
@@ -31,6 +31,7 @@ export function dadosEstruturados(site = SITE) {
         "@type": "Organization",
         "@id": site.url + "#organization",
         name: site.name,
+        areaServed: { "@type": "Country", name: "Brasil" },
         url: site.url,
         logo: site.url + "logo.svg",
         contactPoint: {

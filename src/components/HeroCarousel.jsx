@@ -39,6 +39,9 @@ export default function HeroCarousel() {
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/65">
             {atual.description}
           </p>
+          <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/75">
+            Criação de sites e sistemas web para empresas e empreendedores, com atendimento online em todo o Brasil.
+          </p>
           <div className="mt-9 flex flex-wrap gap-3">
             <a
               href="#planos"
