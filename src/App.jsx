@@ -13,6 +13,7 @@ import ClientGuide from "./components/ClientGuide";
 import LeadFormSection from "./components/LeadFormSection";
 import Footer from "./components/Footer";
 import TrustSection from "./components/TrustSection";
+import KromaGuide from "./components/kroma/KromaGuide";
 import { SITE } from "./data/siteInfo";
 
 const propostaInicial = {
@@ -66,6 +67,7 @@ export default function App({ renderedAt = Date.now() }) {
           onHospedagemChange={setHospedagemId}
         />
       </main>
+      <KromaGuide />
       <Footer initialYear={new Date(renderedAt).getUTCFullYear()} />
     </>
   );
