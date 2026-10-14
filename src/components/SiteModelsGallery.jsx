@@ -9,7 +9,7 @@ import {
   mensagemModeloSite,
 } from "../utils/siteModelReference";
 import { copiarImagemModelo, baixarImagemModelo } from "../utils/modelImage";
-import { linkWhatsApp } from "../services/supabaseClient";
+import { linkContato } from "../utils/contactLink.js";
 import useNativeDialog from "../hooks/useNativeDialog";
 
 const imageUrl = (modelo) => import.meta.env.BASE_URL + modelo.imagePath;
@@ -166,11 +166,11 @@ function ModelPreview({ modelo, siteUrl, onFechar, onEscolher, escolhido }) {
         </button>
         <a
           className="model-whatsapp-link"
-          href={linkWhatsApp(mensagemModeloSite(modelo.id, siteUrl))}
+          href={linkContato(mensagemModeloSite(modelo.id, siteUrl))}
           target="_blank"
           rel="noopener noreferrer"
         >
-          Enviar referência no WhatsApp ↗
+          Enviar referência por e-mail ↗
         </a>
         <CopyReference modelo={modelo} siteUrl={siteUrl} />
         <ImageActions modelo={modelo} />
@@ -298,11 +298,11 @@ export default function SiteModelsGallery({ modeloId, onEscolher, siteUrl }) {
                   </button>
                   <a
                     className="model-whatsapp-link"
-                    href={linkWhatsApp(mensagemModeloSite(modelo.id, siteUrl))}
+                    href={linkContato(mensagemModeloSite(modelo.id, siteUrl))}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    WhatsApp ↗
+                    E-mail ↗
                   </a>
                 </div>
                 <CopyReference modelo={modelo} siteUrl={siteUrl} />
