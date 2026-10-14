@@ -124,3 +124,9 @@ vercel.json configura URLs de diretórios com barra final e cabeçalhos para lim
 A inclusão na pesquisa não é automática nem garantida. O responsável verifica a propriedade na sua conta do Google Search Console e envia o sitemap. Se usar a verificação por meta tag, configure somente o token fornecido para sua propriedade em VITE_GOOGLE_SITE_VERIFICATION e faça novo build. Nenhum token fictício é publicado. Não foi vinculada uma conta do Search Console nem enviada uma solicitação de indexação por este código.
 
 Para verificar os artefatos de busca e os testes comerciais: npm run build && node --test tests/*.test.js. Os testes de SEO leem a saída em dist, portanto exigem o build. Confira também as páginas públicas, os códigos HTTP e o funcionamento da hidratação após publicar.
+
+## Publicação na Locaweb
+
+Produção publicada em https://kromaweb.com.br/ no plano GO Linux. Para atualizar, execute `VITE_SITE_URL=https://kromaweb.com.br/ VITE_HOSTING_PROVIDER=Locaweb npm run build`, copie `deploy/locaweb.htaccess` para `dist/.htaccess` e envie o conteúdo de `dist` à pasta `public_html` pelo WebFTP ou cliente FTP. Preserve as subpastas assets, modelos, sobre, privacidade e condicoes. Não envie arquivos de configuração com segredos nem node_modules.
+
+O certificado Let's Encrypt está ativo. O .htaccess aplica os cabeçalhos de segurança e redireciona HTTP e www ao endereço HTTPS principal. Antes de reutilizar essa configuração em outro domínio, ajuste o domínio na regra e confirme seu certificado. VITE_HOSTING_PROVIDER informa o provedor real na política de privacidade; o padrão Vercel permanece para os builds nessa plataforma.
