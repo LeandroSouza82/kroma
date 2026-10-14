@@ -1,4 +1,4 @@
-import { SITE } from "../data/siteInfo";
+import { linkContato } from "../utils/contactLink.js";
 
 const ITENS = [
   {
@@ -30,7 +30,7 @@ export default function TrustSection() {
       </h2>
       <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/65">
         Conheça a Kroma Web, entenda como funciona a contratação e fale diretamente
-        pelo WhatsApp de atendimento.
+        pelo e-mail de atendimento.
       </p>
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         {ITENS.map((item) => (
@@ -43,8 +43,8 @@ export default function TrustSection() {
           </article>
         ))}
       </div>
-      <a href={"https://wa.me/" + SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="mt-6 inline-block text-sm font-medium text-white/75 underline underline-offset-4">
-        Atendimento da Kroma Web pelo WhatsApp ↗
+      <a href={linkContato()} target="_blank" rel="noopener noreferrer" className="mt-6 inline-block text-sm font-medium text-white/75 underline underline-offset-4">
+        Atendimento da Kroma Web por e-mail ↗
       </a>
     </section>
   );
