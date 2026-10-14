@@ -8,7 +8,7 @@ const planos = [
     features: [
       "Ajustes de texto ou imagem",
       "Verificação de links e contato",
-      "Suporte por WhatsApp",
+      "Suporte por e-mail",
     ],
   },
   {
@@ -21,7 +21,7 @@ const planos = [
     features: [
       "Atualização de fotos e serviços",
       "Ajustes em horários e informações",
-      "Suporte por WhatsApp",
+      "Suporte por e-mail",
     ],
   },
   {
