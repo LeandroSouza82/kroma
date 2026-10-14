@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { SITE } from "../data/siteInfo.js";
 
 const LINKS = [
   { href: "#solucoes", label: "Soluções" },
@@ -9,6 +10,7 @@ const LINKS = [
   { href: "#como-funciona", label: "Como funciona" },
   { href: "#duvidas", label: "Dúvidas" },
   { href: "#contato", label: "Contato" },
+  { href: `mailto:${SITE.email}`, label: SITE.email },
   { href: "/sites-institucionais/", label: "Sites institucionais" },
   { href: "/landing-pages/", label: "Criação de landing pages" },
   { href: "/sobre/", label: "Sobre a Kroma Web" },
