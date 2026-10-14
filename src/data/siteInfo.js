@@ -13,6 +13,7 @@ export function configurarSite(env = {}) {
     name: "Kroma Web",
     url: url.href,
     whatsapp,
+    email: "contato@kromaweb.com.br",
     title: "Criação de sites, landing pages e sistemas web | Kroma Web",
     description: "Criação de sites, landing pages, catálogos digitais e sistemas web com atendimento online em todo o Brasil. Confira preços, escopos e opções de pagamento.",
     updatedAt: "2026-10-14",
@@ -34,6 +35,7 @@ export function dadosEstruturados(site = SITE) {
         areaServed: { "@type": "Country", name: "Brasil" },
         url: site.url,
         logo: site.url + "logo.svg",
+        email: site.email,
         contactPoint: {
           "@type": "ContactPoint",
           telephone: "+" + site.whatsapp,
