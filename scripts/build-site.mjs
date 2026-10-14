@@ -5,6 +5,7 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import { build, loadEnv } from "vite";
 import { configurarSite, dadosEstruturados } from "../src/data/siteInfo.js";
+import { paginaInstitucional } from "./institutional-page.mjs";
 import { paginaLanding } from "./landing-page.mjs";
 import { paginasInstitucionais } from "./site-content.mjs";
 
@@ -98,7 +99,9 @@ for (const page of pages) {
 }
 await mkdir(resolve(dist, "landing-pages"), { recursive: true });
 await writeFile(resolve(dist, "landing-pages/index.html"), paginaLanding(site, seoTags, escapeHtml, renderedAt));
-const urls = [site.url, site.url + "landing-pages/", ...pages.map((page) => site.url + page.slug + "/")];
+await mkdir(resolve(dist, "sites-institucionais"), { recursive: true });
+await writeFile(resolve(dist, "sites-institucionais/index.html"), paginaInstitucional(site, seoTags, escapeHtml, renderedAt));
+const urls = [site.url, site.url + "sites-institucionais/", site.url + "landing-pages/", ...pages.map((page) => site.url + page.slug + "/")];
 await writeFile(resolve(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((url) => `  <url><loc>${escapeHtml(url)}</loc></url>`).join("\n")}\n</urlset>\n`);
 await writeFile(resolve(dist, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${site.url}sitemap.xml\n`);
 console.log("HTML inicial pré-renderizado; 3 páginas institucionais, metadados, sitemap e robots gerados.");
