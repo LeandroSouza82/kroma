@@ -54,7 +54,7 @@ test("sitemap e links institucionais apontam para páginas HTML reais e indexáv
   const principal = home.match(/rel="canonical" href="([^"]+)"/)[1];
   const contact = JSON.parse(home.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1])["@graph"][0].contactPoint.url;
   const sitemap = readFileSync(new URL("../dist/sitemap.xml", import.meta.url), "utf8");
-  assert.equal((sitemap.match(/<loc>/g) || []).length, 5);
+  assert.equal((sitemap.match(/<loc>/g) || []).length, 6);
   for (const slug of ["sobre", "privacidade", "condicoes"]) {
     const url = principal + slug + "/";
     assert.ok(sitemap.includes(`<loc>${url}</loc>`));
@@ -82,4 +82,17 @@ test("landing page tem endereço próprio, conteúdo e links de contratação", 
   assert.ok(html.includes('href="/#oferta-landing"'));
   assert.ok(html.includes('Layout responsivo'));
   assert.ok(html.includes('custos'));
+});
+
+
+test("site institucional possui conteúdo e canônico próprios", () => {
+  const html = readFileSync(new URL("../dist/sites-institucionais/index.html", import.meta.url), "utf8");
+  const home = readFileSync(new URL("../dist/index.html", import.meta.url), "utf8");
+  const base = home.match(/rel="canonical" href="([^"]+)"/)[1];
+  assert.ok(html.includes(`rel="canonical" href="${base}sites-institucionais/"`));
+  assert.equal((html.match(/<h1>/g) || []).length, 1);
+  assert.ok(home.includes('href="/sites-institucionais/"'));
+  assert.ok(html.includes('699,90'));
+  assert.ok(html.includes('854,64'));
+  assert.ok(html.includes('href="/landing-pages/"'));
 });
