@@ -9,6 +9,7 @@ const LINKS = [
   { href: "#como-funciona", label: "Como funciona" },
   { href: "#duvidas", label: "Dúvidas" },
   { href: "#contato", label: "Contato" },
+  { href: "/sites-institucionais/", label: "Sites institucionais" },
   { href: "/landing-pages/", label: "Criação de landing pages" },
   { href: "/sobre/", label: "Sobre a Kroma Web" },
   { href: "/privacidade/", label: "Privacidade" },
