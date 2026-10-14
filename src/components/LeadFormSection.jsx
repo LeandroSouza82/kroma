@@ -4,6 +4,7 @@ import { criarLead, linkWhatsApp } from "../services/supabaseClient";
 import { montarMensagemContato } from "../utils/projectProposal";
 import HostingOptions from "./HostingOptions";
 import { anexarHospedagemProposta } from "../data/hostingOptions";
+import { SITE } from "../data/siteInfo.js";
 
 const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -119,6 +120,12 @@ export default function LeadFormSection({
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/60">
             Em poucas linhas entendemos seu objetivo e retornamos com escopo,
             prazo e investimento claros.
+          </p>
+          <p className="mt-4 text-sm text-white/60">
+            Prefere conversar por e-mail?{" "}
+            <a href={`mailto:${SITE.email}`} className="text-accent-light underline underline-offset-4 hover:text-white">
+              {SITE.email}
+            </a>
           </p>
           {modelo && (
             <div className="lead-model-selection">
