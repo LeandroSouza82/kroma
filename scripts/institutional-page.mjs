@@ -1,3 +1,4 @@
+import { linkContato } from "../src/utils/contactLink.js";
 import { obterTipoProjeto, formatarBRL } from '../src/data/projectOptions.js';
 import { detalharOferta } from '../src/data/offerDetails.js';
 
@@ -7,7 +8,7 @@ export function paginaInstitucional(site, seoTags, escapeHtml, agora = Date.now(
   const details = detalharOferta(offer.id);
   const title = 'Criação de sites institucionais para empresas | Kroma Web';
   const description = 'Sites institucionais para apresentar sua empresa, serviços e formas de contato. Design personalizado, layout responsivo e atendimento online em todo o Brasil.';
-  const contact = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Olá! Conheci os sites institucionais da Kroma Web e quero uma proposta para minha empresa.')}`;
+  const contact = linkContato('Olá! Conheci os sites institucionais da Kroma Web e quero uma proposta para minha empresa.', site);
   const list = items => items.map(x => `<li>${e(x)}</li>`).join('');
   return `<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080d1a"><title>${e(title)}</title><meta name="description" content="${e(description)}">${seoTags({title,description,url:site.url+'sites-institucionais/'})}<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/landing-pages.css"></head><body>
   <a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="nav"><a class="brand" href="/"><img src="/favicon.svg" width="32" height="32" alt="">Kroma<span>Web</span></a><nav aria-label="Navegação"><a href="#escopo">O que inclui</a><a class="button small" href="${e(contact)}" target="_blank" rel="noopener noreferrer">Conversar ↗</a></nav></header>
