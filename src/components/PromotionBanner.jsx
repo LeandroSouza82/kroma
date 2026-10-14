@@ -258,6 +258,7 @@ export default function PromotionBanner({ onSolicitar, initialNow = Date.now() }
   const [ativo, setAtivo] = useState(() => promocaoAtiva(initialNow));
   const [aberto, setAberto] = useState(false);
   const [aviso, setAviso] = useState(false);
+  const [destaque, setDestaque] = useState(true);
 
   useEffect(() => {
     if (promocaoAtiva() && !vistaNestaSessao()) setAviso(true);
@@ -351,7 +352,13 @@ export default function PromotionBanner({ onSolicitar, initialNow = Date.now() }
         </button>
       </div>
       {aviso && !aberto && (
-        <aside className="promo-notice" aria-label="Aviso da oferta de landing page">
+        <aside
+          className={`promo-notice${destaque ? " promo-notice-attention" : ""}`}
+          aria-label="Aviso da oferta de landing page"
+          onMouseEnter={() => setDestaque(false)}
+          onFocusCapture={() => setDestaque(false)}
+          onPointerDown={() => setDestaque(false)}
+        >
           <button type="button" className="promo-notice-close" onClick={fechar} aria-label="Fechar aviso da promoção">×</button>
           <p className="promo-notice-label">Oferta de lançamento</p>
           <p className="promo-notice-title">Landing page · até {PROMOCAO.offer.numeroParcelas}× {formatarBRL(PROMOCAO.offer.cartao / PROMOCAO.offer.numeroParcelas, true)}</p>
