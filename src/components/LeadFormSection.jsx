@@ -23,19 +23,19 @@ const validar = ({ nome, contato, tipoProjeto, mensagem }, modelo) => {
 };
 
 const campo =
-  "w-full rounded-lg border bg-base px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-white/30 focus:border-accent-light";
+  "w-full rounded-lg border bg-base px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-subtle focus:border-accent-light";
 
 function Campo({ id, label, erro, children }) {
   return (
     <div>
       <label
         htmlFor={id}
-        className="mb-2 block text-sm font-medium text-white/70"
+        className="mb-2 block text-sm font-medium text-muted"
       >
         {label}
       </label>
       {children}
-      {erro && <p className="mt-1.5 text-xs text-red-400">{erro}</p>}
+      {erro && <p className="mt-1.5 text-xs text-danger">{erro}</p>}
     </div>
   );
 }
@@ -114,16 +114,16 @@ export default function LeadFormSection({
           <span className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-light">
             Contato
           </span>
-          <h2 className="mt-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+          <h2 className="mt-4 text-4xl font-bold tracking-tight text-ink sm:text-5xl">
             Conte sua ideia. Respondemos com uma proposta.
           </h2>
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/60">
+          <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted">
             Em poucas linhas entendemos seu objetivo e retornamos com escopo,
             prazo e investimento claros.
           </p>
-          <p className="mt-4 text-sm text-white/60">
+          <p className="mt-4 text-sm text-muted">
             Prefere conversar por e-mail?{" "}
-            <a href={`mailto:${SITE.email}`} className="text-accent-light underline underline-offset-4 hover:text-white">
+            <a href={`mailto:${SITE.email}`} className="text-accent-light underline underline-offset-4 hover:text-ink">
               {SITE.email}
             </a>
           </p>
@@ -153,8 +153,8 @@ export default function LeadFormSection({
             proposta.mensalidade > 0 ||
             proposta.hospedagemId) && (
             <div className="mt-8 max-w-lg rounded-xl border border-line bg-surface p-5 text-sm">
-              <p className="text-white/40">Condições selecionadas</p>
-              <p className="mt-1 font-medium text-white">
+              <p className="text-subtle">Condições selecionadas</p>
+              <p className="mt-1 font-medium text-ink">
                 {proposta.tipo || "Domínio e hospedagem"}
               </p>
               {proposta.estimativa > 0 && (
@@ -168,7 +168,7 @@ export default function LeadFormSection({
                 </p>
               )}
               {proposta.hospedagemId && (
-                <p className="mt-3 text-white/75">
+                <p className="mt-3 text-muted">
                   Domínio e hospedagem: {proposta.hospedagemLabel}.{" "}
                   {proposta.hospedagemMensalidade > 0
                     ? formatarBRL(proposta.hospedagemMensalidade, true) +
@@ -177,7 +177,7 @@ export default function LeadFormSection({
                 </p>
               )}
               {proposta.bancoDadosMensalidade > 0 && (
-                <p className="mt-3 text-white/75">
+                <p className="mt-3 text-muted">
                   Banco de dados · Supabase:{" "}
                   {formatarBRL(proposta.bancoDadosMensalidade, true)}/mês
                   estimados. Pode aumentar ou diminuir conforme o dólar; taxas e
@@ -192,10 +192,10 @@ export default function LeadFormSection({
                 </p>
               )}
               <details className="mt-4 border-t border-line pt-4">
-                <summary className="cursor-pointer text-sm font-medium text-white/75">
+                <summary className="cursor-pointer text-sm font-medium text-muted">
                   Ver escopo completo e limites
                 </summary>
-                <p className="mt-3 text-sm leading-relaxed text-white/55">
+                <p className="mt-3 text-sm leading-relaxed text-subtle">
                   {proposta.escopo}
                 </p>
               </details>
@@ -205,7 +205,7 @@ export default function LeadFormSection({
                     ? "#planos"
                     : "#simulador"
                 }
-                className="mt-4 inline-block text-xs text-white/55 underline underline-offset-4"
+                className="mt-4 inline-block text-xs text-subtle underline underline-offset-4"
               >
                 Ajustar seleção
               </a>
@@ -216,7 +216,7 @@ export default function LeadFormSection({
         <div className="rounded-2xl border border-line bg-surface p-8">
           {resultado ? (
             <div className="animate-pop py-8 text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-400/10 text-emerald-300">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-400/10 text-success">
                 <svg
                   width="24"
                   height="24"
@@ -233,12 +233,12 @@ export default function LeadFormSection({
                   />
                 </svg>
               </div>
-              <h3 className="mt-5 text-2xl font-semibold text-white">
+              <h3 className="mt-5 text-2xl font-semibold text-ink">
                 {resultado.via === "supabase"
                   ? "Recebemos sua solicitação"
                   : "Envie seu pedido por e-mail"}
               </h3>
-              <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-white/55">
+              <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-subtle">
                 {resultado.via === "supabase"
                   ? "Vamos analisar sua ideia e conversar sobre o escopo e as condições."
                   : "Seu pedido está preparado, mas ainda não foi enviado. Abra o e-mail, revise a mensagem e envie pelo seu aplicativo."}
@@ -329,7 +329,7 @@ export default function LeadFormSection({
                   className={`${classeCampo("mensagem")} resize-none`}
                 />
               </Campo>
-              <p className="text-xs leading-relaxed text-white/60">
+              <p className="text-xs leading-relaxed text-muted">
                 Usamos os dados informados para atender ao seu pedido. Consulte a{" "}
                 <a href="/privacidade/" target="_blank" rel="noopener noreferrer" className="text-accent-light underline underline-offset-4">
                   política de privacidade
@@ -343,7 +343,7 @@ export default function LeadFormSection({
               >
                 {enviando ? "Enviando..." : "Enviar solicitação"}
               </button>
-              <p className="text-xs leading-relaxed text-white/45">
+              <p className="text-xs leading-relaxed text-subtle">
                 Este pedido inicia uma conversa sobre o orçamento. O pagamento
                 será combinado após a confirmação do escopo.
               </p>
