@@ -8,7 +8,7 @@ const METRICAS = [
 const BARRAS = [38, 62, 45, 78, 56, 92, 70];
 
 const Chip = ({ children }) => (
-  <span className="rounded-full border border-line bg-white/[0.03] px-3 py-1 text-xs text-white/60">
+  <span className="rounded-full border border-line bg-ink/[0.03] px-3 py-1 text-xs text-muted">
     {children}
   </span>
 );
@@ -20,10 +20,10 @@ const Card = ({ className = "", eyebrow, title, children, text }) => (
     <span className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-light">
       {eyebrow}
     </span>
-    <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white">
+    <h3 className="mt-4 text-2xl font-semibold tracking-tight text-ink">
       {title}
     </h3>
-    <p className="mt-3 text-[15px] leading-relaxed text-white/55">{text}</p>
+    <p className="mt-3 text-[15px] leading-relaxed text-subtle">{text}</p>
     {children}
   </article>
 );
@@ -38,10 +38,10 @@ export default function BentoSolutions() {
         <span className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-light">
           Soluções
         </span>
-        <h2 className="mt-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+        <h2 className="mt-4 text-4xl font-bold tracking-tight text-ink sm:text-5xl">
           Uma boa presença, do primeiro clique ao contato.
         </h2>
-        <p className="mt-5 text-base leading-relaxed text-white/60">
+        <p className="mt-5 text-base leading-relaxed text-muted">
           Cada solução tem um escopo inicial.{" "}
           <a
             href="#planos"
@@ -112,10 +112,10 @@ export default function BentoSolutions() {
                 key={rotulo}
                 className="rounded-xl border border-line bg-base p-5"
               >
-                <dt className="text-3xl font-bold tracking-tight text-white">
+                <dt className="text-3xl font-bold tracking-tight text-ink">
                   {valor}
                 </dt>
-                <dd className="mt-1 text-sm text-white/50">{rotulo}</dd>
+                <dd className="mt-1 text-sm text-subtle">{rotulo}</dd>
               </div>
             ))}
           </dl>
