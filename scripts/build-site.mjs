@@ -48,9 +48,11 @@ await build({
   root,
   configFile: resolve(root, "vite.config.js"),
   logLevel: "error",
-  build: { ssr: "src/App.jsx", outDir: cache, emptyOutDir: true },
+  build: { ssr: true, rollupOptions: { input: { App: resolve(root, "src/App.jsx"), ThemeToggle: resolve(root, "src/components/ThemeToggle.jsx") } }, outDir: cache, emptyOutDir: true },
 });
 const { default: App } = await import(pathToFileURL(resolve(cache, "App.js")).href);
+const { default: ThemeToggle } = await import(pathToFileURL(resolve(cache, "ThemeToggle.js")).href);
+const themeToggle = renderToString(React.createElement(ThemeToggle));
 const markup = renderToString(React.createElement(React.StrictMode, null,
   React.createElement(App, { renderedAt }),
 ));
@@ -83,9 +85,11 @@ for (const page of pages) {
     ${seoTags({ title, description: page.description, url })}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="/informacoes.css" />
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/theme.css" />
   </head><body>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
-    <header><a class="brand" href="/"><img src="/favicon.svg" alt="" width="32" height="32" />Kroma<span>Web</span></a><a class="back-link" href="/#planos">Planos e valores ↗</a></header>
+    <header><a class="brand" href="/"><img src="/favicon.svg" alt="" width="32" height="32" />Kroma<span>Web</span></a><div class="header-actions">${themeToggle}<a class="back-link" href="/#planos">Planos e valores ↗</a></div></header>
     <main id="conteudo"><p class="eyebrow">${page.eyebrow}</p><h1>${page.title}</h1>
       <p class="updated">Atualizado em <time datetime="${site.updatedAt}">${updateLabel}</time></p>
       ${page.body}
@@ -98,9 +102,9 @@ for (const page of pages) {
   await writeFile(resolve(directory, "index.html"), html);
 }
 await mkdir(resolve(dist, "landing-pages"), { recursive: true });
-await writeFile(resolve(dist, "landing-pages/index.html"), paginaLanding(site, seoTags, escapeHtml, renderedAt));
+await writeFile(resolve(dist, "landing-pages/index.html"), paginaLanding(site, seoTags, escapeHtml, renderedAt, themeToggle));
 await mkdir(resolve(dist, "sites-institucionais"), { recursive: true });
-await writeFile(resolve(dist, "sites-institucionais/index.html"), paginaInstitucional(site, seoTags, escapeHtml, renderedAt));
+await writeFile(resolve(dist, "sites-institucionais/index.html"), paginaInstitucional(site, seoTags, escapeHtml, renderedAt, themeToggle));
 const urls = [site.url, site.url + "sites-institucionais/", site.url + "landing-pages/", ...pages.map((page) => site.url + page.slug + "/")];
 await writeFile(resolve(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((url) => `  <url><loc>${escapeHtml(url)}</loc></url>`).join("\n")}\n</urlset>\n`);
 await writeFile(resolve(dist, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${site.url}sitemap.xml\n`);
