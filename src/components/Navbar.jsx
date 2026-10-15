@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ThemeToggle from "./ThemeToggle";
 const LINKS = [
   { href: "#solucoes", label: "Serviços" },
   { href: "#modelos", label: "Modelos" },
@@ -11,19 +12,19 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   return (
     <header
-      className="fixed top-0 z-50 w-full border-b border-white/[0.08] bg-base/85 backdrop-blur-xl"
+      className="fixed top-0 z-50 w-full border-b border-ink/[0.08] bg-base/85 backdrop-blur-xl"
       onKeyDown={(event) => {
         if (event.key === "Escape") setOpen(false);
       }}
     >
       <nav
-        className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-3 px-6"
+        className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6"
         aria-label="Navegação principal"
       >
         <a
           href="#top"
           onClick={() => setOpen(false)}
-          className="flex shrink-0 items-center gap-3"
+          className="flex shrink-0 items-center gap-2 sm:gap-3"
           aria-label="Kroma Web, início"
         >
           <svg
@@ -41,7 +42,7 @@ export default function Navbar() {
               strokeLinecap="round"
             />
           </svg>
-          <span className="text-[17px] font-semibold tracking-tight text-white">
+          <span className="text-[17px] font-semibold tracking-tight text-ink">
             Kroma<span className="text-accent-light">Web</span>
           </span>
         </a>
@@ -50,7 +51,7 @@ export default function Navbar() {
             <li key={link.href}>
               <a
                 href={link.href}
-                className="text-sm font-medium text-white/60 hover:text-white"
+                className="text-sm font-medium text-muted hover:text-ink"
               >
                 {link.label}
               </a>
@@ -58,12 +59,14 @@ export default function Navbar() {
           ))}
         </ul>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <a
             href="#contato"
             onClick={() => setOpen(false)}
-            className="rounded-xl bg-accent px-4 py-2.5 text-xs font-semibold text-white hover:bg-accent-light sm:text-sm"
+            className="rounded-xl bg-accent px-3 py-2.5 text-xs sm:px-4 font-semibold text-white hover:bg-accent-light sm:text-sm"
           >
-            Iniciar projeto ↗
+            <span className="sm:hidden">Projeto ↗</span>
+            <span className="hidden sm:inline">Iniciar projeto ↗</span>
           </a>
           <button
             type="button"
@@ -71,7 +74,7 @@ export default function Navbar() {
             aria-expanded={open}
             aria-label={open ? "Fechar menu" : "Abrir menu"}
             onClick={() => setOpen((value) => !value)}
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-line text-white lg:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-lg border border-line text-ink lg:hidden"
           >
             {open ? "×" : "☰"}
           </button>
@@ -88,7 +91,7 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="block py-3 text-sm font-medium text-white/75"
+              className="block py-3 text-sm font-medium text-muted"
             >
               {link.label}
             </a>
