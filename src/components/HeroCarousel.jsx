@@ -29,17 +29,17 @@ export default function HeroCarousel() {
       <div className="absolute inset-0 bg-gradient-to-r from-base/85 via-base/35 to-transparent" />
       <div className="relative mx-auto flex min-h-[720px] max-w-7xl flex-col justify-center px-6 pb-40 pt-36 lg:min-h-[850px]">
         <div key={atual.id} className="max-w-3xl animate-pop">
-          <p className="section-kicker flex items-center gap-3 text-white/70">
+          <p className="section-kicker flex items-center gap-3 text-muted">
             <span className="h-1.5 w-1.5 rounded-full bg-accent-light" />
             {atual.tag}
           </p>
-          <h1 className="mt-6 max-w-3xl text-5xl font-semibold leading-[1.07] tracking-[-0.045em] text-white sm:text-7xl">
+          <h1 className="mt-6 max-w-3xl text-5xl font-semibold leading-[1.07] tracking-[-0.045em] text-ink sm:text-7xl">
             {atual.title}
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/65">
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
             {atual.description}
           </p>
-          <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/75">
+          <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted">
             Criação de sites e sistemas web para empresas e empreendedores, com atendimento online em todo o Brasil.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
@@ -51,24 +51,24 @@ export default function HeroCarousel() {
             </a>
             <a
               href="#contato"
-              className="rounded-xl border border-white/20 px-6 py-3.5 text-sm font-semibold text-white hover:bg-white/10"
+              className="rounded-xl border border-ink/20 px-6 py-3.5 text-sm font-semibold text-ink hover:bg-ink/10"
             >
               Conversar sobre meu projeto
             </a>
           </div>
-          <p className="mt-6 text-sm text-white/55">
+          <p className="mt-6 text-sm text-subtle">
             {tipo.label} a partir de{" "}
-            <strong className="font-semibold text-white">
+            <strong className="font-semibold text-ink">
               {formatarBRL(tipo.base)} no Pix
             </strong>
-            <span className="mx-2 text-white/25">/</span>opção parcelada no
+            <span className="mx-2 text-subtle">/</span>opção parcelada no
             cartão
           </p>
         </div>
       </div>
-      <div className="absolute inset-x-0 bottom-0 border-t border-white/10 bg-base/30 py-7">
+      <div className="absolute inset-x-0 bottom-0 border-t border-ink/10 bg-base/30 py-7">
         <div className="mx-auto flex max-w-7xl items-end gap-5 px-6">
-          <span className="hidden font-mono text-sm text-white/50 sm:block">
+          <span className="hidden font-mono text-sm text-subtle sm:block">
             {String(index + 1).padStart(2, "0")} / 04
           </span>
           <div className="grid flex-1 grid-cols-4 gap-3">
@@ -84,12 +84,12 @@ export default function HeroCarousel() {
                 <span
                   className={
                     "mb-3 block text-xs font-medium " +
-                    (i === index ? "text-white" : "text-white/45")
+                    (i === index ? "text-ink" : "text-subtle")
                   }
                 >
                   {slide.label}
                 </span>
-                <span className="block h-[2px] overflow-hidden bg-white/15">
+                <span className="block h-[2px] overflow-hidden bg-ink/15">
                   <span
                     key={i === index ? ciclo : "idle"}
                     onAnimationEnd={i === index ? proximo : undefined}
@@ -116,7 +116,7 @@ export default function HeroCarousel() {
             aria-label={
               paused ? "Continuar apresentação" : "Pausar apresentação"
             }
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/25 text-white"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-ink/25 text-ink"
           >
             {paused ? "▶" : "Ⅱ"}
           </button>
