@@ -17,10 +17,10 @@ export default function ClientGuide() {
           <p className="section-kicker text-accent-light">
             Do primeiro passo à entrega
           </p>
-          <h2 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+          <h2 className="mt-4 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
             Saiba como contratar.
           </h2>
-          <p className="mt-5 text-base leading-relaxed text-white/60">
+          <p className="mt-5 text-base leading-relaxed text-muted">
             Você conhece o que está escolhendo antes de enviar o pedido. O
             atendimento confirma os detalhes do seu projeto.
           </p>
@@ -37,10 +37,10 @@ export default function ClientGuide() {
               >
                 0{index + 1}
               </span>
-              <h3 className="mt-5 text-lg font-semibold text-white">
+              <h3 className="mt-5 text-lg font-semibold text-ink">
                 {etapa.title}
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-white/60">
+              <p className="mt-3 text-sm leading-relaxed text-muted">
                 {etapa.text}
               </p>
             </li>
@@ -54,18 +54,18 @@ export default function ClientGuide() {
         <div className="grid gap-10 lg:grid-cols-[300px_1fr] lg:gap-16">
           <div>
             <p className="section-kicker text-accent-light">Tudo explicado</p>
-            <h2 className="mt-4 text-4xl font-semibold tracking-tight text-white">
+            <h2 className="mt-4 text-4xl font-semibold tracking-tight text-ink">
               Antes de contratar,
               <br />
-              <span className="text-white/50">tire suas dúvidas.</span>
+              <span className="text-subtle">tire suas dúvidas.</span>
             </h2>
-            <p className="mt-5 text-sm leading-relaxed text-white/60">
+            <p className="mt-5 text-sm leading-relaxed text-muted">
               Busque por um assunto ou escolha uma categoria. Valores, limites e
               responsabilidades ficam claros aqui.
             </p>
             <a
               href="#planos"
-              className="mt-6 inline-block text-sm font-semibold text-accent-light hover:text-white"
+              className="mt-6 inline-block text-sm font-semibold text-accent-light hover:text-ink"
             >
               Voltar aos planos ↗
             </a>
@@ -73,7 +73,7 @@ export default function ClientGuide() {
           <div>
             <label
               htmlFor={searchId}
-              className="mb-3 block text-sm font-medium text-white"
+              className="mb-3 block text-sm font-medium text-ink"
             >
               Qual informação você procura?
             </label>
@@ -84,13 +84,13 @@ export default function ClientGuide() {
                 value={busca}
                 onChange={(event) => setBusca(event.target.value)}
                 placeholder="Ex.: manutenção, Pix, prazo, hospedagem"
-                className="min-w-0 flex-1 rounded-xl border border-line bg-base px-4 py-3 text-sm text-white placeholder:text-white/40"
+                className="min-w-0 flex-1 rounded-xl border border-line bg-base px-4 py-3 text-sm text-ink placeholder:text-subtle"
               />
               {busca && (
                 <button
                   type="button"
                   onClick={() => setBusca("")}
-                  className="rounded-xl border border-line px-3 text-xs font-semibold text-white/70 hover:text-white"
+                  className="rounded-xl border border-line px-3 text-xs font-semibold text-muted hover:text-ink"
                 >
                   Limpar busca
                 </button>
@@ -110,15 +110,15 @@ export default function ClientGuide() {
                   className={
                     "rounded-full border px-3 py-2 text-xs font-medium transition-colors " +
                     (categoria === item
-                      ? "border-accent-light bg-accent/15 text-white"
-                      : "border-line text-white/60 hover:text-white")
+                      ? "border-accent-light bg-accent/15 text-ink"
+                      : "border-line text-muted hover:text-ink")
                   }
                 >
                   {item || "Todas"}
                 </button>
               ))}
             </div>
-            <p role="status" className="mt-5 text-xs text-white/45">
+            <p role="status" className="mt-5 text-xs text-subtle">
               {perguntas.length}{" "}
               {perguntas.length === 1
                 ? "resposta encontrada"
@@ -130,7 +130,7 @@ export default function ClientGuide() {
                   key={item.id}
                   className="faq-item rounded-xl border border-line bg-base"
                 >
-                  <summary className="flex cursor-pointer items-center justify-between gap-5 px-5 py-5 text-sm font-semibold text-white">
+                  <summary className="flex cursor-pointer items-center justify-between gap-5 px-5 py-5 text-sm font-semibold text-ink">
                     <span>{item.question}</span>
                     <span
                       className="faq-indicator shrink-0 text-xl font-normal text-accent-light"
@@ -139,7 +139,7 @@ export default function ClientGuide() {
                       +
                     </span>
                   </summary>
-                  <div className="space-y-3 px-5 pb-5 text-sm leading-relaxed text-white/65">
+                  <div className="space-y-3 px-5 pb-5 text-sm leading-relaxed text-muted">
                     {item.answer.map((paragraph) => (
                       <p key={paragraph}>{paragraph}</p>
                     ))}
@@ -147,7 +147,7 @@ export default function ClientGuide() {
                 </details>
               ))}
               {!perguntas.length && (
-                <div className="rounded-xl border border-line p-6 text-sm leading-relaxed text-white/65">
+                <div className="rounded-xl border border-line p-6 text-sm leading-relaxed text-muted">
                   Nenhuma resposta para esse filtro. Tente outro termo ou{" "}
                   <button
                     type="button"
@@ -164,13 +164,13 @@ export default function ClientGuide() {
               )}
             </div>
             <div className="mt-6 flex flex-col gap-3 rounded-xl border border-accent-light/20 bg-accent/5 p-5 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm leading-relaxed text-white/65">
+              <p className="text-sm leading-relaxed text-muted">
                 Seu projeto tem algo específico? Envie sua ideia junto com o
                 plano escolhido.
               </p>
               <a
                 href="#simulador"
-                className="shrink-0 text-sm font-semibold text-accent-light hover:text-white"
+                className="shrink-0 text-sm font-semibold text-accent-light hover:text-ink"
               >
                 Montar proposta ↗
               </a>
