@@ -28,7 +28,7 @@ export default function HostingOptions({
     <div>
       <label
         htmlFor={id}
-        className="mb-3 block text-sm font-semibold text-white"
+        className="mb-3 block text-sm font-semibold text-ink"
       >
         {label}
       </label>
@@ -37,7 +37,7 @@ export default function HostingOptions({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         aria-describedby={descricaoId}
-        className="w-full rounded-xl border border-line bg-base px-4 py-3 text-sm text-white"
+        className="w-full rounded-xl border border-line bg-base px-4 py-3 text-sm text-ink"
       >
         <option value="">Definir no atendimento</option>
         {OPCOES_HOSPEDAGEM.map((item) => (
@@ -48,13 +48,13 @@ export default function HostingOptions({
       </select>
       <p
         id={descricaoId}
-        className="mt-3 text-sm leading-relaxed text-white/65"
+        className="mt-3 text-sm leading-relaxed text-muted"
       >
         {selecionada
           ? selecionada.description
           : "Podemos cuidar desses serviços ou publicar nas suas contas. A escolha e os valores são confirmados na proposta."}
       </p>
-      <p className="mt-2 text-xs leading-relaxed text-white/60">
+      <p className="mt-2 text-xs leading-relaxed text-muted">
         {CUSTOS_HOSPEDAGEM}
       </p>
       {value !== "cliente" && (
@@ -63,13 +63,13 @@ export default function HostingOptions({
             {value === "kroma" ? "Gestão selecionada: " : "Gestão opcional: "}
             {RESUMO_HOSPEDAGEM}
           </p>
-          <p className="mt-2 text-xs leading-relaxed text-white/65">
+          <p className="mt-2 text-xs leading-relaxed text-muted">
             {DETALHAMENTO_HOSPEDAGEM}
           </p>
-          <p className="mt-2 text-xs leading-relaxed text-white/65">
+          <p className="mt-2 text-xs leading-relaxed text-muted">
             {DOMINIO_INCLUIDO}
           </p>
-          <p className="mt-2 text-xs leading-relaxed text-white/65">
+          <p className="mt-2 text-xs leading-relaxed text-muted">
             {LIMITES_HOSPEDAGEM}
           </p>
           {precisaBancoDados({ tipoId, recursoIds }) && (
@@ -77,17 +77,17 @@ export default function HostingOptions({
               <p className="mt-3 text-sm font-semibold text-accent-light">
                 Banco de dados: + {RESUMO_BANCO_DADOS}
               </p>
-              <p className="mt-2 text-xs leading-relaxed text-white/65">
+              <p className="mt-2 text-xs leading-relaxed text-muted">
                 {DETALHAMENTO_CAMBIO}
               </p>
-              <p className="mt-2 text-xs leading-relaxed text-white/65">
+              <p className="mt-2 text-xs leading-relaxed text-muted">
                 {LIMITES_BANCO_DADOS}
               </p>
             </>
           )}
         </div>
       )}
-      <details className="mt-3 text-xs leading-relaxed text-white/65">
+      <details className="mt-3 text-xs leading-relaxed text-muted">
         <summary className="cursor-pointer font-semibold text-accent-light">
           Titularidade, acessos e encerramento
         </summary>
