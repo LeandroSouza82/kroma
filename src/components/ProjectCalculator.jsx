@@ -22,13 +22,13 @@ import {
 const opcao = (ativa) =>
   "rounded-xl border px-4 py-3 text-left text-sm font-medium transition-colors " +
   (ativa
-    ? "border-accent-light bg-accent/15 text-white"
-    : "border-line text-white/60 hover:border-white/25 hover:text-white");
+    ? "border-accent-light bg-accent/15 text-ink"
+    : "border-line text-muted hover:border-ink/25 hover:text-ink");
 function Passo({ numero, titulo, children }) {
   return (
     <fieldset>
-      <legend className="mb-4 flex items-center gap-3 text-sm font-semibold text-white">
-        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent text-xs">
+      <legend className="mb-4 flex items-center gap-3 text-sm font-semibold text-ink">
+        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent text-xs text-white">
           {numero}
         </span>
         {titulo}
@@ -77,12 +77,12 @@ export default function ProjectCalculator({
     >
       <div className="max-w-2xl">
         <p className="section-kicker text-accent-light">Do seu jeito</p>
-        <h2 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+        <h2 className="mt-4 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
           Monte o projeto.
           <br />
-          <span className="text-white/50">Veja as condições.</span>
+          <span className="text-subtle">Veja as condições.</span>
         </h2>
-        <p className="mt-5 text-base leading-relaxed text-white/60">
+        <p className="mt-5 text-base leading-relaxed text-muted">
           A estimativa acompanha suas escolhas. Criação e manutenção aparecem
           separadas, para você decidir com clareza.
         </p>
@@ -106,7 +106,7 @@ export default function ProjectCalculator({
             type="button"
             aria-haspopup="dialog"
             onClick={() => setOferta({ id: tipoId, category: "criacao" })}
-            className="text-sm font-semibold text-accent-light hover:text-white"
+            className="text-sm font-semibold text-accent-light hover:text-ink"
           >
             Informações do plano {tipo.label} ⓘ
           </button>
@@ -126,7 +126,7 @@ export default function ProjectCalculator({
                     pagamentoId === "cartao" ? item.cartao : item.valor,
                   )}
                 </span>
-                <span className="mt-3 block text-xs font-normal leading-relaxed text-white/60">
+                <span className="mt-3 block text-xs font-normal leading-relaxed text-muted">
                   {item.scope}
                 </span>
               </button>
@@ -145,7 +145,7 @@ export default function ProjectCalculator({
               </button>
             ))}
           </Passo>
-          <p className="text-xs leading-relaxed text-white/50">
+          <p className="text-xs leading-relaxed text-subtle">
             Prioridade acrescenta 30% à criação e depende de disponibilidade. O
             prazo é confirmado na proposta, após a definição do escopo e dos
             materiais.
@@ -169,16 +169,16 @@ export default function ProjectCalculator({
           <div>
             <label
               htmlFor="simulador-manutencao"
-              className="mb-3 block text-sm font-semibold text-white"
+              className="mb-3 block text-sm font-semibold text-ink"
             >
               5 · Acompanhamento mensal{" "}
-              <span className="font-normal text-white/50">(opcional)</span>
+              <span className="font-normal text-subtle">(opcional)</span>
             </label>
             <select
               id="simulador-manutencao"
               value={manutencaoId}
               onChange={(event) => setManutencaoId(event.target.value)}
-              className="w-full rounded-xl border border-line bg-base px-4 py-3 text-sm text-white"
+              className="w-full rounded-xl border border-line bg-base px-4 py-3 text-sm text-ink"
             >
               <option value="">Sem plano de manutenção</option>
               {MANUTENCOES.map((item) => (
@@ -194,7 +194,7 @@ export default function ProjectCalculator({
                 onClick={() =>
                   setOferta({ id: manutencaoId, category: "manutencao" })
                 }
-                className="mt-3 text-sm font-semibold text-accent-light hover:text-white"
+                className="mt-3 text-sm font-semibold text-accent-light hover:text-ink"
               >
                 Informações da manutenção selecionada ⓘ
               </button>
@@ -213,18 +213,18 @@ export default function ProjectCalculator({
           className="h-fit rounded-2xl border border-accent-light/25 bg-surface p-7 lg:sticky lg:top-28"
           aria-live="polite"
         >
-          <p className="section-kicker text-white/45">Seu projeto</p>
-          <h3 className="mt-5 text-xl font-semibold text-white">
+          <p className="section-kicker text-subtle">Seu projeto</p>
+          <h3 className="mt-5 text-xl font-semibold text-ink">
             {tipo.label}
           </h3>
-          <p className="mt-3 text-sm leading-relaxed text-white/55">
+          <p className="mt-3 text-sm leading-relaxed text-subtle">
             {recursos.length
               ? recursos.map((item) => item.label).join(" · ")
               : "Escopo inicial, sem recursos adicionais."}
           </p>
           <div className="mt-7 border-t border-line pt-6">
-            <p className="text-sm text-white/55">Criação estimada</p>
-            <p className="mt-2 text-4xl font-semibold tracking-tight text-white">
+            <p className="text-sm text-subtle">Criação estimada</p>
+            <p className="mt-2 text-4xl font-semibold tracking-tight text-ink">
               {pagamentoId === "cartao" ? (
                 <>
                   <span className="text-xl font-normal">
@@ -237,44 +237,44 @@ export default function ProjectCalculator({
               )}
             </p>
             {pagamentoId === "cartao" && !parcelas.iguais && (
-              <p className="mt-2 text-sm text-white/55">
+              <p className="mt-2 text-sm text-subtle">
                 Última parcela: {formatarBRL(parcelas.ultima, true)}
               </p>
             )}
-            <p className="mt-2 text-sm text-white/55">
+            <p className="mt-2 text-sm text-subtle">
               {pagamentoId === "cartao"
                 ? "Total no cartão: " + formatarBRL(proposta.estimativa)
                 : "À vista no Pix"}
             </p>
           </div>
           <div className="mt-6 rounded-xl border border-line bg-base p-4">
-            <p className="text-xs uppercase tracking-wide text-white/40">
+            <p className="text-xs uppercase tracking-wide text-subtle">
               Manutenção mensal
             </p>
-            <p className="mt-2 text-base font-semibold text-white">
+            <p className="mt-2 text-base font-semibold text-ink">
               {proposta.mensalidade
                 ? formatarBRL(proposta.mensalidade) + "/mês"
                 : "Não selecionada"}
             </p>
-            <p className="mt-1 text-xs leading-relaxed text-white/45">
+            <p className="mt-1 text-xs leading-relaxed text-subtle">
               Cobrança separada da criação.
             </p>
           </div>
           <div className="mt-6 rounded-xl border border-line bg-base p-4">
-            <p className="text-xs uppercase tracking-wide text-white/40">
+            <p className="text-xs uppercase tracking-wide text-subtle">
               Domínio e hospedagem
             </p>
-            <p className="mt-2 text-base font-semibold text-white">
+            <p className="mt-2 text-base font-semibold text-ink">
               {hospedagem?.summary || "A definir no atendimento"}
             </p>
-            <p className="mt-1 text-xs leading-relaxed text-white/60">
+            <p className="mt-1 text-xs leading-relaxed text-muted">
               {proposta.hospedagemMensalidade > 0
                 ? formatarBRL(proposta.hospedagemMensalidade, true) +
                   "/mês estimados · cobrança separada da criação e da manutenção."
                 : "Orçamento separado, confirmado antes da contratação."}
             </p>
             {proposta.hospedagemMensalidade > 0 && (
-              <p className="mt-2 text-xs leading-relaxed text-white/60">
+              <p className="mt-2 text-xs leading-relaxed text-muted">
                 Hospedagem:{" "}
                 {formatarBRL(HOSPEDAGEM_BASE.hospedagemMensal, true)}/mês +
                 domínio: {formatarBRL(HOSPEDAGEM_BASE.dominioMensal, true)}/mês
@@ -284,13 +284,13 @@ export default function ProjectCalculator({
           </div>
           {proposta.bancoDadosMensalidade > 0 && (
             <div className="mt-6 rounded-xl border border-line bg-base p-4">
-              <p className="text-xs uppercase tracking-wide text-white/40">
+              <p className="text-xs uppercase tracking-wide text-subtle">
                 Banco de dados · Supabase
               </p>
-              <p className="mt-2 text-base font-semibold text-white">
+              <p className="mt-2 text-base font-semibold text-ink">
                 {formatarBRL(proposta.bancoDadosMensalidade, true)}/mês
               </p>
-              <p className="mt-1 text-xs leading-relaxed text-white/60">
+              <p className="mt-1 text-xs leading-relaxed text-muted">
                 US$ {BANCO_DADOS.valorMensalUsd} ×{" "}
                 {formatarBRL(COTACAO_DOLAR.valor, true)}. Referência de{" "}
                 {COTACAO_DOLAR.data}. Pode aumentar ou diminuir conforme o
@@ -312,11 +312,11 @@ export default function ProjectCalculator({
           >
             Solicitar esta proposta ↗
           </button>
-          <p className="mt-4 text-xs leading-relaxed text-white/40">
+          <p className="mt-4 text-xs leading-relaxed text-subtle">
             Estimativa inicial. Escopo, condições de pagamento e prazo serão
             confirmados no atendimento.
           </p>
-          <p className="mt-3 text-xs leading-relaxed text-white/50">
+          <p className="mt-3 text-xs leading-relaxed text-subtle">
             Domínio, hospedagem e taxas externas são separados.{" "}
             <a href="#duvidas" className="text-accent-light underline">
               Entenda os custos
