@@ -25,8 +25,8 @@ export default function HeroCarousel() {
         fetchPriority={index === 0 ? "high" : "auto"}
         className="hero-photo absolute inset-0 h-full w-full object-cover"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-base via-base/65 to-base/35" />
-      <div className="absolute inset-0 bg-gradient-to-r from-base/85 via-base/35 to-transparent" />
+      <div className="hero-shade-vertical absolute inset-0 bg-gradient-to-t from-base via-base/65 to-base/35" />
+      <div className="hero-shade-horizontal absolute inset-0 bg-gradient-to-r from-base/85 via-base/35 to-transparent" />
       <div className="relative mx-auto flex min-h-[720px] max-w-7xl flex-col justify-center px-6 pb-40 pt-36 lg:min-h-[850px]">
         <div key={atual.id} className="max-w-3xl animate-pop">
           <p className="section-kicker flex items-center gap-3 text-muted">
