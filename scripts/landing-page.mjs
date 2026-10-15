@@ -3,7 +3,7 @@ import { PROMOCAO, promocaoAtiva, validadePromocao } from '../src/data/promotion
 import { formatarBRL } from '../src/data/projectOptions.js';
 import { detalharOferta } from '../src/data/offerDetails.js';
 
-export function paginaLanding(site, seoTags, escapeHtml, agora = Date.now()) {
+export function paginaLanding(site, seoTags, escapeHtml, agora = Date.now(), themeToggle = "") {
   const e = escapeHtml;
   const offer = PROMOCAO.offer;
   const details = detalharOferta(offer.id);
@@ -12,9 +12,10 @@ export function paginaLanding(site, seoTags, escapeHtml, agora = Date.now()) {
   const url = site.url + 'landing-pages/';
   const contact = linkContato('Olá! Conheci a página de landing pages da Kroma Web e quero conversar sobre meu projeto.', site);
   const list = items => items.map(x => `<li>${e(x)}</li>`).join('');
-  return `<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080d1a"><title>${e(title)}</title><meta name="description" content="${e(description)}">${seoTags({title,description,url})}<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/landing-pages.css"></head><body>
+  return `<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080d1a"><title>${e(title)}</title><meta name="description" content="${e(description)}">${seoTags({title,description,url})}<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/landing-pages.css"><script src="/theme.js"></script>
+    <link rel="stylesheet" href="/theme.css" /></head><body>
   <a class="skip" href="#conteudo">Ir para o conteúdo</a>
-  <header class="nav"><a class="brand" href="/"><img src="/favicon.svg" width="32" height="32" alt="">Kroma<span>Web</span></a><nav aria-label="Navegação"><a href="#escopo">O que inclui</a><a class="button small" href="${e(contact)}" target="_blank" rel="noopener noreferrer">Conversar ↗</a></nav></header>
+  <header class="nav"><a class="brand" href="/"><img src="/favicon.svg" width="32" height="32" alt="">Kroma<span>Web</span></a><nav aria-label="Navegação">${themeToggle}<a href="#escopo">O que inclui</a><a class="button small" href="${e(contact)}" target="_blank" rel="noopener noreferrer">Conversar ↗</a></nav></header>
   <main id="conteudo">
     <section class="hero wrap"><div class="hero-copy"><p class="eyebrow">LANDING PAGES · KROMA WEB</p><h1>Uma oferta clara.<br>Um próximo clique.<br><span>Seu negócio em destaque.</span></h1><p class="intro">Uma página pensada para apresentar seu serviço ou campanha e facilitar o contato de quem se interessa. Design com a sua identidade, do celular ao computador.</p><div class="actions"><a class="button" href="#investimento">Conhecer a oferta ↗</a><a class="outline" href="${e(contact)}" target="_blank" rel="noopener noreferrer">Falar sobre meu projeto</a></div><p class="note">Atendimento online em todo o Brasil.</p></div>
     <div class="visual" aria-label="Exemplo ilustrativo da estrutura de uma landing page"><div class="browser"><div class="browser-bar"><i></i><i></i><i></i><span>sua marca · sua presença</span></div><div class="mock"><div class="mock-nav"><strong>Sua marca</strong><span>Serviço · Contato</span></div><div class="mock-hero"><span>UMA IDEIA. UM FOCO.</span><h2>Seu serviço.<br>Uma boa escolha.</h2><p>Apresente o que você faz e mostre o caminho para falar com você.</p><span class="mock-button">Quero saber mais ↗</span><div class="orb"></div></div><div class="mock-cards"><div>01<strong>Apresentação</strong></div><div>02<strong>Benefícios</strong></div><div>03<strong>Contato</strong></div></div></div></div><div class="visual-tag">Do primeiro olhar ao contato <span>↗</span></div><p class="caption">Composição ilustrativa. O layout final segue a proposta e os seus materiais.</p></div></section>
