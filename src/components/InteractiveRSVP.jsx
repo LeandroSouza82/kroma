@@ -56,7 +56,7 @@ function QRCodeMock({ semente }) {
 }
 
 const inputClasses =
-  "w-full rounded-lg border border-line bg-base px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-white/30 focus:border-accent-light";
+  "w-full rounded-lg border border-line bg-base px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-subtle focus:border-accent-light";
 
 export default function InteractiveRSVP() {
   const [nome, setNome] = useState("");
@@ -89,10 +89,10 @@ export default function InteractiveRSVP() {
           <span className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-light">
             Demonstração interativa
           </span>
-          <h2 className="mt-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+          <h2 className="mt-4 text-4xl font-bold tracking-tight text-ink sm:text-5xl">
             Uma prévia da experiência do seu evento.
           </h2>
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/60">
+          <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted">
             Experimente a interface de confirmação de presença. Esta demonstração apresenta
             uma credencial ilustrativa; o sistema do seu evento será definido na proposta.
           </p>
@@ -115,8 +115,8 @@ export default function InteractiveRSVP() {
               <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-accent-light">
                 Credencial Digital de Convidado
               </p>
-              <h3 className="mt-2 text-2xl font-semibold text-white">{credencial.nome}</h3>
-              <p className="mt-1 text-sm text-white/50">
+              <h3 className="mt-2 text-2xl font-semibold text-ink">{credencial.nome}</h3>
+              <p className="mt-1 text-sm text-subtle">
                 {credencial.acompanhantes === 0
                   ? "Sem acompanhantes"
                   : `+ ${credencial.acompanhantes} acompanhante${credencial.acompanhantes > 1 ? "s" : ""}`}
@@ -124,17 +124,17 @@ export default function InteractiveRSVP() {
               <div className="mx-auto mt-6 h-44 w-44 rounded-xl bg-white p-3">
                 <QRCodeMock semente={credencial.semente} />
               </div>
-              <p className="mt-4 font-mono text-sm tracking-widest text-white/70">
+              <p className="mt-4 font-mono text-sm tracking-widest text-muted">
                 {credencial.codigo}
               </p>
-              <span className="mt-4 inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-300">
+              <span className="mt-4 inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-success">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                 Confirmação demonstrativa
               </span>
               <button
                 type="button"
                 onClick={reiniciar}
-                className="mt-6 block w-full text-sm font-medium text-white/50 transition-colors hover:text-white"
+                className="mt-6 block w-full text-sm font-medium text-subtle transition-colors hover:text-ink"
               >
                 Nova confirmação
               </button>
@@ -142,7 +142,7 @@ export default function InteractiveRSVP() {
           ) : (
             <form onSubmit={confirmar} className="space-y-5 requires-js">
               <div>
-                <label htmlFor="rsvp-nome" className="mb-2 block text-sm font-medium text-white/70">
+                <label htmlFor="rsvp-nome" className="mb-2 block text-sm font-medium text-muted">
                   Nome completo
                 </label>
                 <input
@@ -155,7 +155,7 @@ export default function InteractiveRSVP() {
                 />
               </div>
               <div>
-                <span className="mb-2 block text-sm font-medium text-white/70">Acompanhantes</span>
+                <span className="mb-2 block text-sm font-medium text-muted">Acompanhantes</span>
                 <div className="grid grid-cols-4 gap-2">
                   {[0, 1, 2, 3].map((n) => (
                     <button
@@ -165,8 +165,8 @@ export default function InteractiveRSVP() {
                       aria-pressed={acompanhantes === n}
                       className={`rounded-lg border py-3 text-sm font-medium transition-colors ${
                         acompanhantes === n
-                          ? "border-accent-light bg-accent/15 text-white"
-                          : "border-line text-white/60 hover:border-white/20"
+                          ? "border-accent-light bg-accent/15 text-ink"
+                          : "border-line text-muted hover:border-ink/20"
                       }`}
                     >
                       {n}
