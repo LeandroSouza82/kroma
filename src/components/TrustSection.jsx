@@ -25,25 +25,25 @@ export default function TrustSection() {
   return (
     <section id="confianca" className="mx-auto max-w-7xl scroll-mt-20 px-6 py-20">
       <p className="section-kicker text-accent-light">Informação e confiança</p>
-      <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+      <h2 className="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
         Clareza antes de começar.
       </h2>
-      <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/65">
+      <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">
         Conheça a Kroma Web, entenda como funciona a contratação e fale diretamente
         pelo e-mail de atendimento.
       </p>
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         {ITENS.map((item) => (
           <article key={item.title} className="flex flex-col rounded-2xl border border-line bg-surface p-6">
-            <h3 className="text-lg font-semibold text-white">{item.title}</h3>
-            <p className="mb-6 mt-3 text-sm leading-relaxed text-white/65">{item.text}</p>
+            <h3 className="text-lg font-semibold text-ink">{item.title}</h3>
+            <p className="mb-6 mt-3 text-sm leading-relaxed text-muted">{item.text}</p>
             <a href={item.href} className="mt-auto text-sm font-semibold text-accent-light underline underline-offset-4">
               {item.label} ↗
             </a>
           </article>
         ))}
       </div>
-      <a href={linkContato()} target="_blank" rel="noopener noreferrer" className="mt-6 inline-block text-sm font-medium text-white/75 underline underline-offset-4">
+      <a href={linkContato()} target="_blank" rel="noopener noreferrer" className="mt-6 inline-block text-sm font-medium text-muted underline underline-offset-4">
         Atendimento da Kroma Web por e-mail ↗
       </a>
     </section>
