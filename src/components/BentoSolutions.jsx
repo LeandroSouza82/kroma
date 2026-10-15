@@ -1,14 +1,14 @@
 const METRICAS = [
-  { valor: "99+", rotulo: "Lighthouse" },
-  { valor: "<1s", rotulo: "Carregamento" },
-  { valor: "SEO", rotulo: "Estruturado" },
-  { valor: "DB", rotulo: "Banco conectado" },
+  { valor: "Design", rotulo: "Identidade do negócio" },
+  { valor: "Mobile", rotulo: "Layout responsivo" },
+  { valor: "SEO", rotulo: "Boas práticas" },
+  { valor: "Suporte", rotulo: "Acompanhamento opcional" },
 ];
 
 const BARRAS = [38, 62, 45, 78, 56, 92, 70];
 
 const Chip = ({ children }) => (
-  <span className="rounded-full border border-line bg-white/[0.03] px-3 py-1 text-xs text-white/60">
+  <span className="rounded-full border border-line bg-ink/[0.03] px-3 py-1 text-xs text-muted">
     {children}
   </span>
 );
@@ -20,46 +20,64 @@ const Card = ({ className = "", eyebrow, title, children, text }) => (
     <span className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-light">
       {eyebrow}
     </span>
-    <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white">{title}</h3>
-    <p className="mt-3 text-[15px] leading-relaxed text-white/55">{text}</p>
+    <h3 className="mt-4 text-2xl font-semibold tracking-tight text-ink">
+      {title}
+    </h3>
+    <p className="mt-3 text-[15px] leading-relaxed text-subtle">{text}</p>
     {children}
   </article>
 );
 
 export default function BentoSolutions() {
   return (
-    <section id="solucoes" className="mx-auto max-w-7xl scroll-mt-20 px-6 py-28">
+    <section
+      id="solucoes"
+      className="mx-auto max-w-7xl scroll-mt-20 px-6 py-28"
+    >
       <div className="max-w-2xl">
         <span className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-light">
           Soluções
         </span>
-        <h2 className="mt-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-          Qualquer site. Um único padrão de excelência.
+        <h2 className="mt-4 text-4xl font-bold tracking-tight text-ink sm:text-5xl">
+          Uma boa presença, do primeiro clique ao contato.
         </h2>
+        <p className="mt-5 text-base leading-relaxed text-muted">
+          Cada solução tem um escopo inicial.{" "}
+          <a
+            href="#planos"
+            className="text-accent-light underline underline-offset-4"
+          >
+            Veja os planos e abra Informações
+          </a>{" "}
+          para conhecer inclusões, limites e adicionais.
+        </p>
       </div>
 
       <div className="mt-14 grid gap-4 lg:grid-cols-3">
         <Card
           className="lg:col-span-2"
           eyebrow="Empresas"
-          title="Empresas & Negócios Locais ou Globais"
-          text="Sites institucionais que comunicam autoridade, posicionam sua marca e transformam tráfego em oportunidades reais de negócio."
+          title="Sites para empresas e negócios locais"
+          text="Seu espaço para apresentar os serviços, mostrar seu trabalho e facilitar o contato de quem procura o que você oferece."
         >
           <div className="mt-auto flex flex-wrap gap-2 pt-8">
             <Chip>Institucional</Chip>
-            <Chip>Multi-idioma</Chip>
-            <Chip>Blog & SEO</Chip>
-            <Chip>Landing Pages</Chip>
+            <Chip>Serviços e fotos</Chip>
+            <Chip>Contato pelo WhatsApp</Chip>
+            <Chip>Layout para celular</Chip>
           </div>
         </Card>
 
         <Card
           className="lg:row-span-2"
           eyebrow="Sistemas"
-          title="Sistemas, SaaS e Dashboards"
-          text="Painéis com dados dinâmicos, autenticação, permissões e automações sob medida para a sua operação."
+          title="Interfaces e dashboards"
+          text="O plano inicial organiza as telas de um fluxo simples. Dados reais, autenticação, permissões e automações exigem um escopo adicional."
         >
-          <div className="mt-auto flex h-40 items-end gap-2 pt-8" aria-hidden="true">
+          <div
+            className="mt-auto flex h-40 items-end gap-2 pt-8"
+            aria-hidden="true"
+          >
             {BARRAS.map((altura, i) => (
               <span
                 key={i}
@@ -72,27 +90,32 @@ export default function BentoSolutions() {
 
         <Card
           eyebrow="E-commerce"
-          title="Lojas Virtuais Ultra Otimizadas"
-          text="Catálogo sofisticado, checkout veloz e integração com pagamentos para vender sem fricção."
+          title="Lojas e catálogos digitais"
+          text="O catálogo inicial organiza os produtos e direciona pedidos ao WhatsApp. Carrinho, pagamento automático, estoque e frete recebem um orçamento próprio."
         />
 
         <Card
           eyebrow="Eventos"
           title="Casamentos, Eventos e Congressos"
-          text="Convites imersivos, RSVP interativo, credenciais com QR Code e controle de listas em tempo real."
+          text="Informações do evento, galerias e contato com a organização. Recursos de confirmação de presença podem ser incluídos na proposta."
         />
 
         <Card
           className="lg:col-span-3"
           eyebrow="Infraestrutura"
-          title="Engenharia técnica de ponta a ponta"
-          text="Performance 99+ no Google Lighthouse, carregamento em menos de 1 segundo, SEO estruturado e conexão nativa com banco de dados."
+          title="Cuidado nos detalhes que fazem diferença"
+          text="Design alinhado à sua marca, atenção ao uso no celular e uma estrutura clara para apresentar o negócio. Recursos e integrações são planejados para cada escopo."
         >
           <dl className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {METRICAS.map(({ valor, rotulo }) => (
-              <div key={rotulo} className="rounded-xl border border-line bg-base p-5">
-                <dt className="text-3xl font-bold tracking-tight text-white">{valor}</dt>
-                <dd className="mt-1 text-sm text-white/50">{rotulo}</dd>
+              <div
+                key={rotulo}
+                className="rounded-xl border border-line bg-base p-5"
+              >
+                <dt className="text-3xl font-bold tracking-tight text-ink">
+                  {valor}
+                </dt>
+                <dd className="mt-1 text-sm text-subtle">{rotulo}</dd>
               </div>
             ))}
           </dl>
